@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,7 +43,7 @@ public class PlayerControl : MonoBehaviour
 
         targetSpeed = inputVector.magnitude < tolerance ? Vector2.zero : maxSpeed * inputVector;
 
-        Vector2 currentSpeed = rb.linearVelocity;        
+        Vector2 currentSpeed = rb.linearVelocity;    
 
         if ((currentSpeed - targetSpeed).magnitude < tolerance)
         {

@@ -2,17 +2,24 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.U2D;
-using System;
 
 public class AIAgent : MonoBehaviour
 {
     AIPath path;
     
-    public GameObject player;
+    public Transform player;
+    public LayerMask obstacleMask;
     public float walkSpeed;
     public float chaseSpeed;
-    public List<Vector3> PatrolWaypoints;
+    public List<Transform> patrolWaypoints;
+
+    public float viewAngle = 120.0f;
+
+
+
+    IState patrolling;
+    IState attacking;
+    IState currentState;
 
     void Awake()
     {
@@ -21,23 +28,41 @@ public class AIAgent : MonoBehaviour
 
     void Start()
     {
-        path.maxSpeed = walkSpeed;
-        StartCoroutine(LookAt(player.transform.position));
+        Initialize();
+        InitializeStates();
+
+        // TransitionTo(patrolling);
+        MoveTo(patrolWaypoints[0].position);
     }
 
-    
-    IEnumerator Observe(Vector3 point, float duration)
+    void Initialize()
+    {
+        path.maxSpeed = walkSpeed;
+    }
+
+    void InitializeStates()
+    {
+        patrolling = new Patrolling(this);
+        attacking = new Attacking(this);
+    }
+
+    //check if detect player
+    public IEnumerator Observe(Vector3 point, float duration = 5f)
     {
         yield return StartCoroutine(LookAt(point)); //StartCoroutine 完成後才會繼續往下
-        while(duration > 0 || !playerInSight())
+    
+        while(duration > 0)
         {
             //randomize a offset from pos every 3 second to simulate reality
+            duration -= Time.deltaTime;
+            yield return null;
         }
     }
 
-    IEnumerator LookAt(Vector3 point)
+    //Face at point
+    public IEnumerator LookAt(Vector3 point)
     {
-        float duration = 1.0f;
+        float duration = 0.5f;
 
         Vector3 direction = point - transform.position;
 
@@ -59,10 +84,41 @@ public class AIAgent : MonoBehaviour
         transform.rotation = endRotation;
     }
 
-    bool playerInSight()
+    public bool IsPlayerInSight()
     {
-        //return true if player is in sightAngle and has no obstacle between sight
+        //is player in viewAngle?
+        Vector2 dirToPlayer = player.position - transform.position;
+        float angle = Vector2.Angle(dirToPlayer, transform.right); //face at right
+        if (viewAngle/2f < angle) return false;
+
+        //is there obstalce between sight?
+        float distanceToPlayer = dirToPlayer.magnitude;
+        RaycastHit2D hit 
+        = Physics2D.Raycast(transform.position, dirToPlayer, distanceToPlayer, obstacleMask);
+        if (hit.collider != null) return false;
+
+        Debug.Log("player in sight");
         return true;
+    }
+
+    public void TransitionTo(IState state)
+    {
+        currentState?.OnExit();
+        currentState = state;
+        state.OnEnter();
+    }
+
+    public void MoveTo(Vector3 point, float speed = 0)
+    {
+        point.z = transform.position.z;
+
+        path.maxSpeed = speed == 0? walkSpeed : speed;
+        path.destination = point;
+    }
+
+    void Update()
+    {
+        if (IsPlayerInSight()) TransitionTo(new Attacking(this));   
     }
 
     //change below to new structure
