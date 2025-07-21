@@ -14,6 +14,8 @@ public class AIAgent : MonoBehaviour
     public List<Transform> patrolWaypoints;
 
     public float viewAngle = 120.0f;
+    
+    bool isDebugMode = true;
 
 
 
@@ -31,12 +33,12 @@ public class AIAgent : MonoBehaviour
         Initialize();
         InitializeStates();
 
-        // TransitionTo(patrolling);
-        MoveTo(patrolWaypoints[0].position);
+        TransitionTo(patrolling);
     }
 
     void Initialize()
     {
+        
         path.maxSpeed = walkSpeed;
     }
 
@@ -46,9 +48,9 @@ public class AIAgent : MonoBehaviour
         attacking = new Attacking(this);
     }
 
-    //check if detect player
     public IEnumerator Observe(Vector3 point, float duration = 5f)
     {
+        if (isDebugMode) Debug.Log($"{gameObject.name} is observing {point}");
         yield return StartCoroutine(LookAt(point)); //StartCoroutine 完成後才會繼續往下
     
         while(duration > 0)
@@ -62,11 +64,12 @@ public class AIAgent : MonoBehaviour
     //Face at point
     public IEnumerator LookAt(Vector3 point)
     {
+        if (isDebugMode) Debug.Log($"{gameObject.name} is looking at {point}");
         float duration = 0.5f;
 
         Vector3 direction = point - transform.position;
 
-        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
 
         Quaternion startRotation = transform.rotation;
         Quaternion endRotation = Quaternion.Euler(0, 0, targetAngle);
@@ -88,7 +91,7 @@ public class AIAgent : MonoBehaviour
     {
         //is player in viewAngle?
         Vector2 dirToPlayer = player.position - transform.position;
-        float angle = Vector2.Angle(dirToPlayer, transform.right); //face at right
+        float angle = Vector2.Angle(dirToPlayer, transform.up); //face up
         if (viewAngle/2f < angle) return false;
 
         //is there obstalce between sight?
@@ -97,12 +100,19 @@ public class AIAgent : MonoBehaviour
         = Physics2D.Raycast(transform.position, dirToPlayer, distanceToPlayer, obstacleMask);
         if (hit.collider != null) return false;
 
-        Debug.Log("player in sight");
+        if (isDebugMode) Debug.Log($"{gameObject.name} has spotted player");
         return true;
     }
 
     public void TransitionTo(IState state)
     {
+        if (currentState != null)
+        {
+            if (isDebugMode) Debug.Log($"{gameObject.name} decides to change from {currentState} to {state}");
+        }else{
+            if (isDebugMode) Debug.Log($"{gameObject.name} change state to {state}");
+        }
+
         currentState?.OnExit();
         currentState = state;
         state.OnEnter();
@@ -110,15 +120,22 @@ public class AIAgent : MonoBehaviour
 
     public void MoveTo(Vector3 point, float speed = 0)
     {
+        if (isDebugMode) Debug.Log($"{gameObject.name} is moving to {point}");
         point.z = transform.position.z;
 
         path.maxSpeed = speed == 0? walkSpeed : speed;
         path.destination = point;
     }
 
+    public bool HasReachPosition(Vector3 point)
+    {
+        return Vector3.Distance(transform.position,  point) < 0.5f;
+    }
+
     void Update()
     {
-        if (IsPlayerInSight()) TransitionTo(new Attacking(this));   
+        if (IsPlayerInSight()) StartCoroutine(LookAt(player.transform.position));
+        // if (IsPlayerInSight()) TransitionTo(new Attacking(this));   
     }
 
     //change below to new structure

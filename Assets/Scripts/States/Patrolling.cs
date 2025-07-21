@@ -1,6 +1,6 @@
-
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -35,12 +35,14 @@ public class Patrolling : IState
             agent.MoveTo(nextPosition);
 
             //wait until reach nextPosition
-            yield return new WaitUntil(
-                () => Vector3.Distance(agent.transform.position,  nextPosition) < 1);
+            yield return new WaitUntil(() => agent.HasReachPosition(nextPosition));
 
-            foreach (var checkPoint in patrolWaypoints[i].GetComponentsInChildren<Transform>())
+            Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
+                .Where(t => t!=patrolWaypoints[i]).ToArray();
+
+            foreach (var viewPoint in viewPoints)
             {
-                yield return agent.StartCoroutine(agent.Observe(checkPoint.position));
+                yield return agent.StartCoroutine(agent.Observe(viewPoint.position));
             }
 
             nextWaypointIndex++;
@@ -54,7 +56,7 @@ public class Patrolling : IState
     {
 
     }
-    public void OnExit()
+    public void OnExit() 
     {
         agent.StopCoroutine(routine);
     }
