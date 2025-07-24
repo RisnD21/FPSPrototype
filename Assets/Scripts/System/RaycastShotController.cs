@@ -26,13 +26,6 @@ public class RaycastShotController : MonoBehaviour
         m_ActiveTrails = new(); 
     }
 
-
-    // public void Initialize()
-    // {
-    //     linePrefab = new();
-    //     PoolSystem.Instance.InitPool(linePrefab, 10);
-    // }
-
     public void SetGunType(string type)
     {
         switch(type)

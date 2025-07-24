@@ -4,8 +4,10 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     Transform muzzle;
+    Transform flash;
 
     public bool autoReload;
+    [SerializeField] string gunType;
     [SerializeField] int damage;
     [SerializeField] float maxShotDistance;
     [SerializeField] int magzineSize;
@@ -17,8 +19,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] float fireShakeDuration;
     [SerializeField] float fireShakeMagnitude;
 
+    AmmoMonitor ammoMonitor;
+
     public bool CanFire => fireCountdown <= 0 && magazineAmmo > 0;
     public bool MustReload {get; private set;}
+    public bool AmmoDepleted {get; private set;}
+
+    bool inDebugMode;
 
     void Awake()
     {
@@ -26,15 +33,15 @@ public class Weapon : MonoBehaviour
         actionStates.Select(this);
 
         muzzle = transform.GetChild(0);
+        flash = transform.GetChild(1);
     }
 
     void Start()
     {
-        RaycastShotController.Instance.SetGunType("handgun");
-        Initialize();
+        RaycastShotController.Instance.SetGunType(gunType);
+        // Initialize();
         Reload();
     }
-
 
     public void Initialize()
     {
@@ -48,27 +55,46 @@ public class Weapon : MonoBehaviour
 
         fireShakeDuration = 0.05f;
         fireShakeMagnitude = 0.05f;
-
-        muzzle = transform.GetChild(0);
     }
+
+    public void RegisterMonitor (AmmoMonitor m)
+    {
+        ammoMonitor = m;
+        UpdateAmmoMonitor(magazineAmmo, reserveAmmo);
+    }
+    void UpdateAmmoMonitor(int current, int reserved)
+    {
+        if(ammoMonitor == null) return;
+        ammoMonitor.SyncAmmo(current, reserved);
+    }
+    
 
     public void Fire()
     {
         if(magazineAmmo == 0)
         {
-            if(reserveAmmo != 0) Debug.Log("Need Reload");
-            else Debug.Log("Ammo Depleted");
+            if(reserveAmmo != 0) 
+            {
+                MustReload = true;
+                if(inDebugMode) Debug.Log("Need Reload");
+            }
+            else 
+            {
+                if(inDebugMode) Debug.Log("Ammo Depleted");
+                AmmoDepleted = true;
+            }
         }
 
         if(!CanFire) return;
 
         magazineAmmo -= 1;
-
+        flash.GetComponent<ParticleSystem>().Play();
         RaycastShot();
         CameraShaker.Instance.Shake(fireShakeDuration, fireShakeMagnitude);
 
         fireCountdown = fireCooldown;
-        Debug.Log($"Current Ammo ({magazineAmmo}/{reserveAmmo})");
+        if(inDebugMode) Debug.Log($"Current Ammo ({magazineAmmo}/{reserveAmmo})");
+        UpdateAmmoMonitor(magazineAmmo, reserveAmmo);
     }
 
     void RaycastShot()
@@ -115,7 +141,9 @@ public class Weapon : MonoBehaviour
         reserveAmmo -= ammoToFill;
         magazineAmmo += ammoToFill;
 
-        Debug.Log($"Current Ammo ({magazineAmmo}/{reserveAmmo})");
+        MustReload = false;
+        if(inDebugMode) Debug.Log($"Current Ammo ({magazineAmmo}/{reserveAmmo})");
+        UpdateAmmoMonitor(magazineAmmo, reserveAmmo);
     }
 
     void Update()

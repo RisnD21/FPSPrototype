@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 //define how different action should behave
+//this is the early version of the state controller
+//(compare to  AIAgent's NPC behavior script)
 public class ActionStates : MonoBehaviour
 {
-
     public enum ActionState
     {
         Idle,

@@ -9,7 +9,7 @@ using UnityEngine;
 //4. TransformData 無需頻繁改動，改為 Structure
 
 
-public class FixTransform : MonoBehaviour
+public class FixRelatedPos : MonoBehaviour
 {
     
     [SerializeField] List<Transform> targets;

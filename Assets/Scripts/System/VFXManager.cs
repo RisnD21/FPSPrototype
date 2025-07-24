@@ -5,6 +5,7 @@ public class VFXManager : MonoBehaviour
     public static VFXManager Instance {get; private set;}
 
     [SerializeField] ParticleSystem impactEffect;
+    [SerializeField] ParticleSystem splashEffect;
 
     void Awake()
     {
@@ -15,15 +16,22 @@ public class VFXManager : MonoBehaviour
     public void Initialize()
     {
         PoolSystem.Instance.InitPool(impactEffect, 10);
+        PoolSystem.Instance.InitPool(splashEffect, 10);
     }
 
     public void SpawnImpactEffect(Vector2 pos, Vector2 normal, string tag)
     {
         // we spawn different effects based on material later on
         // if this project ever reaches refactor stage
-        if(tag == "NPC") Debug.Log("Apply damage!");
+        ParticleSystem effect;
+        if(tag == "NPC" || tag == "Player") 
+        {
+            effect = PoolSystem.Instance.GetInstance<ParticleSystem>(splashEffect);
+        }else{
+            effect = PoolSystem.Instance.GetInstance<ParticleSystem>(impactEffect);
+        }
 
-        var effect = PoolSystem.Instance.GetInstance<ParticleSystem>(impactEffect);
+        
         effect.gameObject.transform.position = pos;
         effect.gameObject.transform.forward = normal;
         effect.gameObject.SetActive(true);

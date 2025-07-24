@@ -1,12 +1,18 @@
-
-using UnityEngine.Timeline;
-
+using System.Collections;
+using UnityEngine;
+// attack：若玩家在射程內，則開火；否則進入追擊模式
 public class Attacking : IState
 {
     AIAgent agent;
-    float patrolCooldown = 30f;
+    IState nextState;
+    float triggerFrequency = 1f;
     
-
+    float timer = 0f;
+    bool hasInitialize;
+    bool readyToFire;
+    bool isAiming;
+    ActionStates actionController;
+    Coroutine coroutine;
     public Attacking(AIAgent agent)
     {
         this.agent = agent;
@@ -14,16 +20,75 @@ public class Attacking : IState
 
     public void OnEnter()
     {
-
+        if(agent.isDebugMode) Debug.Log("Start attacking");
+        Initialize();
+        agent.Halt();
+        coroutine = agent.StartCoroutine(Aim());
     }
-    public void OnUpdate()
+
+    void Initialize()
     {
+        if (!hasInitialize)
+        {
+            actionController = agent.GetComponentInChildren<ActionStates>();
+            if (actionController == null)
+            {
+                Debug.LogError("[Attacking] ActionStates missing");
+            }
 
+            hasInitialize = true;
+        }
+
+        timer = 0;
+        readyToFire = false;
+        isAiming = false;
+        nextState = null;
     }
+
+    IEnumerator Aim()
+    {
+        isAiming = true;
+
+        while (isAiming)
+        {
+            Vector2 aimingDir = agent.player.position - agent.transform.position;
+            if (Vector2.Angle(agent.transform.up, aimingDir) > 1)
+            {
+                yield return agent.StartCoroutine(agent.LookAt(agent.player.position, 0.3f));
+            }
+
+            readyToFire = true;
+            yield return null;
+        }
+    }
+
+    public void OnUpdate()
+    {   
+        UpdateCooldown();
+
+        if(!agent.IsPlayerInSight()) nextState = agent.chasing;
+        if(agent.player == null) nextState = agent.patrolling;
+
+        if(nextState == null) return;
+        agent.TransitionTo(nextState);
+    }
+
+    void UpdateCooldown()
+    {
+        if (timer <= 0 && readyToFire)
+        {
+            actionController.Fire();
+            timer = triggerFrequency;
+            readyToFire = false;
+        }
+
+        timer -= Time.deltaTime;
+    }
+
     public void OnExit()
     {
-
+        if(agent.player != null)
+            agent.lastSeenPlayerPos = agent.player.position;
+        agent.StopCoroutine(coroutine);
     }
-
-    // patrol：定時前往特定地點，地點請於 inspector 中設定
 }

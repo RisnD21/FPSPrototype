@@ -2,6 +2,7 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEditorInternal;
 
 public class AIAgent : MonoBehaviour
 {
@@ -14,14 +15,30 @@ public class AIAgent : MonoBehaviour
     public List<Transform> patrolWaypoints;
 
     public float viewAngle = 120.0f;
+
+    public Vector3 lastSeenPlayerPos;
+    Vector3 destination;
     
-    bool isDebugMode = true;
+    public bool isDebugMode = true;
+    
+    public void OnHit() => beingHit = true;    
+    public bool beingHit;
 
+    public bool HasReachDestination()
+    {
+        if (Vector2.Distance(destination, transform.position) < 2f) 
+        {
+            if (isDebugMode) Debug.Log($"{gameObject.name} has reach destination");
+            return true;
+        }
+        return false;
+    }
 
-
-    IState patrolling;
-    IState attacking;
-    IState currentState;
+    public IState patrolling;
+    public IState attacking;
+    public IState chasing;
+    public IState searching;
+    public IState currentState;
 
     void Awake()
     {
@@ -31,14 +48,12 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         Initialize();
-        InitializeStates();
-
         TransitionTo(patrolling);
     }
 
     void Initialize()
     {
-        
+        InitializeStates();
         path.maxSpeed = walkSpeed;
     }
 
@@ -46,7 +61,11 @@ public class AIAgent : MonoBehaviour
     {
         patrolling = new Patrolling(this);
         attacking = new Attacking(this);
+        chasing = new Chasing(this);
+        searching = new Searching(this);
     }
+
+
 
     public IEnumerator Observe(Vector3 point, float duration = 5f)
     {
@@ -62,10 +81,9 @@ public class AIAgent : MonoBehaviour
     }
 
     //Face at point
-    public IEnumerator LookAt(Vector3 point)
+    public IEnumerator LookAt(Vector3 point, float duration = 0.5f)
     {
         if (isDebugMode) Debug.Log($"{gameObject.name} is looking at {point}");
-        float duration = 0.5f;
 
         Vector3 direction = point - transform.position;
 
@@ -89,6 +107,8 @@ public class AIAgent : MonoBehaviour
 
     public bool IsPlayerInSight()
     {
+        if(player == null) return false;
+
         //is player in viewAngle?
         Vector2 dirToPlayer = player.position - transform.position;
         float angle = Vector2.Angle(dirToPlayer, transform.up); //face up
@@ -100,88 +120,56 @@ public class AIAgent : MonoBehaviour
         = Physics2D.Raycast(transform.position, dirToPlayer, distanceToPlayer, obstacleMask);
         if (hit.collider != null) return false;
 
-        if (isDebugMode) Debug.Log($"{gameObject.name} has spotted player");
+        //too far, can't see
+        if(distanceToPlayer > 20f) return false;
+        // if (isDebugMode) Debug.Log($"{gameObject.name} has spotted player");
         return true;
     }
 
     public void TransitionTo(IState state)
     {
-        if (currentState != null)
-        {
-            if (isDebugMode) Debug.Log($"{gameObject.name} decides to change from {currentState} to {state}");
-        }else{
-            if (isDebugMode) Debug.Log($"{gameObject.name} change state to {state}");
-        }
-
+        if(currentState != null && currentState == state) return;
+        
         currentState?.OnExit();
         currentState = state;
         state.OnEnter();
     }
 
-    public void MoveTo(Vector3 point, float speed = 0)
+    public bool TryMoveTo(Vector3 targetPos, float speed = 0)
     {
-        if (isDebugMode) Debug.Log($"{gameObject.name} is moving to {point}");
-        point.z = transform.position.z;
+        targetPos.z = transform.position.z;
 
-        path.maxSpeed = speed == 0? walkSpeed : speed;
-        path.destination = point;
+        path.maxSpeed = speed == 0 ? walkSpeed : speed;
+
+        if (isDebugMode) Debug.Log($"{gameObject.name} is thinking how to reach {destination}");
+
+        NNConstraint constraint = NNConstraint.Default;
+        constraint.constrainWalkability = true;
+        constraint.walkable = true;
+
+        var fromNode = AstarPath.active.GetNearest(transform.position, constraint).node;
+        var toInfo = AstarPath.active.GetNearest(targetPos, constraint);
+        var toNode = toInfo.node;
+
+        if (fromNode != null && toNode != null && PathUtilities.IsPathPossible(fromNode, toNode))
+        {
+            destination = toInfo.position;
+            path.destination = destination;
+
+            if (isDebugMode) Debug.Log($"{gameObject.name} is moving to {destination}");
+            return true;
+        }
+        else
+        {
+            if (isDebugMode) Debug.LogWarning($"{gameObject.name} can't reach {targetPos}");
+            return false;
+        }
     }
 
-    public bool HasReachPosition(Vector3 point)
-    {
-        return Vector3.Distance(transform.position,  point) < 0.5f;
-    }
+    public void Halt() => path.destination = transform.position;
 
     void Update()
     {
-        if (IsPlayerInSight()) StartCoroutine(LookAt(player.transform.position));
-        // if (IsPlayerInSight()) TransitionTo(new Attacking(this));   
+        currentState?.OnUpdate();
     }
-
-    //change below to new structure
-    // void Chase()
-    // {
-    //     //record playerpos as lastSeenPos
-    //     //if player in attack range, call attack
-    //     path.maxSpeed = chaseSpeed;
-    //     //move to lastSeenPos
-    // }
-
-    // void Attack()
-    // {
-    //     isAiming = true;
-    //     //face at player
-    //     //I'll implement fire part
-    // }
-
-    // void MoveTo(Vector3 pos)
-    // {
-    //     path.destination = pos;
-    // }
-
-    // void Update()
-    // {
-    //     if (playerIsDead) return;
-
-    //     if (isAiming) return;
-    //     if (playerInSight() ) Chase();
-
-    // }
 }
-
-
-//是否在視野內：
-// 1. Raycast 判斷有無障礙物
-// 2. 判斷是否在可視範圍
-// Vector3 dirToTarget = (target.position - eye.position).normalized;
-// if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) 在視線中！
-// 前往指定地點方式： path.destination = target.position;
-// 設定速度的方式：path.maxSpeed
-
-// 邏輯：
-// idle：不定時選定方向，方向請於 inspector 中設定
-// patrol：定時前往特定地點，地點請於 inspector 中設定
-// check playInSight each frame
-// chase：若玩家在視線中，記錄當前位置，前進直到進入射程，進入攻擊模式；否則前往最後紀錄位置
-// attack：若玩家在射程內，則開火；否則進入追擊模式
-// search：往玩家位置看去，若玩家在視線中，進入chase；否則紀錄該方向並微幅隨機張望，10秒後回到待命地點

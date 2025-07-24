@@ -12,16 +12,17 @@ public class PoolSystem : MonoBehaviour
 
     Dictionary<Object, Queue<Object>> m_Pools;
 
-    public bool Contains(Object prefab) => m_Pools.ContainsKey(prefab);
+    public bool Contains(Object prefab)
+    {
+        if (prefab == null)  return false;
+        return m_Pools.ContainsKey(prefab);
+    }
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-    }
 
-    public void Initialize()
-    {
         m_Pools = new();
     }
 

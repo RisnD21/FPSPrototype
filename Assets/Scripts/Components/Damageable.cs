@@ -6,8 +6,16 @@ public class Damageable : MonoBehaviour
     [SerializeField] int maxHealth = 10;
     [SerializeField] HealthBar healthBar;
     [SerializeField] Transform damageTextPos;
+    AIAgent agent;
     int currentHealth;
     bool hasInitialize;
+
+    DropItemOnDeath dropHelper;
+    void Awake()
+    {
+        agent = GetComponentInParent<AIAgent>();
+        dropHelper = GetComponent<DropItemOnDeath>();
+    }
 
     void Start()
     {
@@ -37,6 +45,8 @@ public class Damageable : MonoBehaviour
         if(damageTextPos != null)
             DamageTextManager.Instance.SpawnText(-value, damageTextPos.position);
 
+        if(agent != null) agent.OnHit();
+
         if(currentHealth == 0) KillObject();
     }
 
@@ -53,5 +63,8 @@ public class Damageable : MonoBehaviour
         {
             Destroy(parent.gameObject);
         }
+        if( gameObject!= null) Destroy(gameObject);
+
+        if(dropHelper != null) dropHelper.Drop();
     }
 }

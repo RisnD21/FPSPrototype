@@ -11,18 +11,27 @@ public class PlayerControl : MonoBehaviour
     
     ActionStates actionStates;
 
-    [SerializeField] float maxSpeed = 4.0f;
+    [SerializeField] float walkSpeed = 9.0f;
+    [SerializeField] float sprintSpeed = 16.0f;
     [SerializeField] float acceleration = 10.0f;
     [SerializeField] float tolerance = 0.1f;
     [SerializeField] float turnSpeed = 1.0f;
+    [SerializeField] AmmoMonitor ammoMonitor;
     Vector2 targetSpeed;
+    Weapon currentWeapon;
     
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
-
         actionStates = GetComponent<ActionStates>();
+        currentWeapon = GetComponentInChildren<Weapon>();
+        currentWeapon.RegisterMonitor(ammoMonitor);
+    }
+
+    void Start()
+    {
+        
     }
 
     void FixedUpdate()
@@ -40,6 +49,8 @@ public class PlayerControl : MonoBehaviour
     private void Move()
     {
         Vector2 inputVector = playerInput.InputVector;
+
+        float maxSpeed = playerInput.IsSprint ? sprintSpeed : walkSpeed;
 
         targetSpeed = inputVector.magnitude < tolerance ? Vector2.zero : maxSpeed * inputVector;
 

@@ -13,6 +13,9 @@ public class Patrolling : IState
     int nextWaypointIndex;
     List<Transform> patrolWaypoints;
 
+    IState nextState;
+    bool hasInitialize;
+
     public Patrolling(AIAgent agent)
     {
         this.agent = agent;
@@ -20,9 +23,23 @@ public class Patrolling : IState
 
     public void OnEnter()
     {
-        patrolWaypoints = agent.patrolWaypoints;
-        
+        if(agent.isDebugMode) Debug.Log("Start patrolling");
+
+        Initialize();
+
         routine = agent.StartCoroutine(Patrol());
+    }
+
+    void Initialize()
+    {
+        if (!hasInitialize)
+        {
+            patrolWaypoints = agent.patrolWaypoints;
+
+            hasInitialize = true;
+        }
+        
+        nextState = null;
     }
 
     IEnumerator Patrol()
@@ -32,17 +49,18 @@ public class Patrolling : IState
         for (int i = currentWaypointIndex; i < patrolWaypoints.Count; i++)
         {
             var nextPosition = patrolWaypoints[i].position;
-            agent.MoveTo(nextPosition);
-
-            //wait until reach nextPosition
-            yield return new WaitUntil(() => agent.HasReachPosition(nextPosition));
-
-            Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
-                .Where(t => t!=patrolWaypoints[i]).ToArray();
-
-            foreach (var viewPoint in viewPoints)
+            if(agent.TryMoveTo(nextPosition))
             {
-                yield return agent.StartCoroutine(agent.Observe(viewPoint.position));
+                //wait until reach nextPosition
+                yield return new WaitUntil(() => agent.HasReachDestination());
+
+                Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
+                    .Where(t => t!=patrolWaypoints[i]).ToArray();
+
+                foreach (var viewPoint in viewPoints)
+                {
+                    yield return agent.StartCoroutine(agent.Observe(viewPoint.position));
+                }
             }
 
             nextWaypointIndex++;
@@ -54,7 +72,15 @@ public class Patrolling : IState
 
     public void OnUpdate()
     {
+        if(agent.IsPlayerInSight()) nextState = agent.attacking;
+        else if(agent.beingHit && agent.player != null)
+        {
+            agent.lastSeenPlayerPos = agent.player.position;
+            nextState = agent.chasing;
+        }
 
+        if(nextState == null) return;
+        agent.TransitionTo(nextState);
     }
     public void OnExit() 
     {
