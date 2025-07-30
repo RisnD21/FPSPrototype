@@ -38,6 +38,7 @@ public class ItemManager : MonoBehaviour
         foreach (var item in itemIndex)
         {
             PoolSystem.Instance.InitPool(item.Value, 3);
+            
         }
     }
 
