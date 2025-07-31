@@ -64,12 +64,12 @@ public class ItemManager2 : MonoBehaviour
     /// <summary>
     /// 在世界中生成一個可拾取物件
     /// </summary>
-    public Pickable SpawnPickable(string id, Vector3 position)
+    public void SpawnPickable(string id, Vector3 position)
     {
         if (!entryMap.ContainsKey(id))
         {
             Debug.LogError($"[ItemManager2] 找不到 id={id}");
-            return null;
+            return;
         }
 
         var entry = entryMap[id];
@@ -78,7 +78,7 @@ public class ItemManager2 : MonoBehaviour
         inst.Id = id;
         inst.Manager = this;
         inst.transform.position = position;
-        return inst;
+        return;
     }
 
     /// <summary>

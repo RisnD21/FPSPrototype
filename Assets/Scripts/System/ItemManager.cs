@@ -12,6 +12,7 @@ public class ItemManager : MonoBehaviour
     {
         public string id;
         public Pickable prefab;
+        public Sprite icon;
     }
     [SerializeField] List<ItemEntry> itemList = new();
 

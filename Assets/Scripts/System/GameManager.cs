@@ -6,6 +6,6 @@ public class GameManager : MonoBehaviour
     {
         VFXManager.Instance.Initialize();
         DamageTextManager.Instance.Initialize();
-        ItemManager.Instance.Initialize();
+        ItemManager2.Instance.Initialize();
     }  
 }

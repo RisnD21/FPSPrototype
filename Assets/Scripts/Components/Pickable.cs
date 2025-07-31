@@ -5,12 +5,12 @@ public class Pickable : MonoBehaviour
 {
 
     [HideInInspector] public string Id;
-    [HideInInspector] public ItemManager Manager;
+    [HideInInspector] public ItemManager2 Manager;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("You've collect a fresh soul");
+            ItemManager2.Instance.PickItem(Id, transform.position);
             gameObject.SetActive(false);
         }
     }

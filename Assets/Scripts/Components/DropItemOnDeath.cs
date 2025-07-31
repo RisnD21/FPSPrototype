@@ -8,6 +8,6 @@ public class DropItemOnDeath : MonoBehaviour
     {
         Vector3 pos = transform.position;
         pos.z = 0;
-        ItemManager.Instance.SpawnItem(ItemID, pos);
+        ItemManager2.Instance.SpawnPickable(ItemID, pos);
     }
 }
