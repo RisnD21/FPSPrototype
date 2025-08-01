@@ -11,6 +11,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode reload = KeyCode.R;
     [SerializeField] private KeyCode fire = KeyCode.Mouse0;
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
+    [SerializeField] private KeyCode interact = KeyCode.E;
 
     public Vector2 InputVector => m_inputVector;
     private Vector2 m_inputVector;
@@ -20,6 +21,7 @@ public class PlayerInput : MonoBehaviour
 
     public bool IsFire;
     public bool IsSprint;
+    public bool IsInteract;
 
     public void HandleInput()
     {
@@ -67,6 +69,11 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyUp(sprint))
         {
             IsSprint = false;
+        }
+
+        if (Input.GetKeyDown(interact))
+        {
+            IsInteract = true;
         }
     }
 

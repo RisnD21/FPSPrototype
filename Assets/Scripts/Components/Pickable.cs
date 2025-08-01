@@ -1,17 +1,22 @@
+using QuestDialogueSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class Pickable : MonoBehaviour 
 {
 
-    [HideInInspector] public string Id;
-    [HideInInspector] public ItemManager2 Manager;
+    [HideInInspector] public ItemStack stack;
+    [HideInInspector] public ItemManager Manager;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            ItemManager2.Instance.PickItem(Id, transform.position);
-            gameObject.SetActive(false);
+            if(ItemManager.Instance.TryPickItem(stack, transform.position))
+            {
+                Debug.Log("You've collected a spirit");
+                gameObject.SetActive(false);
+            }
+                
         }
     }
 }

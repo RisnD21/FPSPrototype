@@ -17,6 +17,11 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float tolerance = 0.1f;
     [SerializeField] float turnSpeed = 1.0f;
     [SerializeField] AmmoMonitor ammoMonitor;
+
+    [SerializeField] float interactDistance = 2f;
+    [SerializeField] Vector2 boxSize = new Vector2(1f, 0.5f); // BoxCast 區域大小
+    [SerializeField] LayerMask interactableLayer;
+
     Vector2 targetSpeed;
     Weapon currentWeapon;
     
@@ -44,6 +49,7 @@ public class PlayerControl : MonoBehaviour
         Aim();
         Reload();
         Fire();
+        Interact();
     }
 
     private void Move()
@@ -98,4 +104,25 @@ public class PlayerControl : MonoBehaviour
             playerInput.IsFire = false;
         }    
     } 
+
+    void Interact()
+    {
+        if(!playerInput.IsInteract) return;
+
+        Debug.Log("Trying to interact");
+        Vector2 origin = (Vector2)transform.position;
+        Vector2 direction = transform.up; // ↑ 如果角色前方是 Vector2.up
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        RaycastHit2D hit = Physics2D.BoxCast(origin, boxSize, angle, direction, interactDistance, interactableLayer);
+
+        if (hit.collider != null)
+        {
+            var interactable = hit.collider.GetComponent<IInteractable>();
+            interactable?.Interact();
+            Debug.Log("IIII");
+        }
+
+        playerInput.IsInteract = false;
+    }
 }

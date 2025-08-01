@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea69c725b9690406283ac981b361a9df, type: 3}
+  m_Name: Bef
+  m_EditorClassIdentifier: 
+  pieces:
+  - id: 01
+    portrait: {fileID: 21300000, guid: 3b1b88f6b0d734d918f8d9e8f3afeddb, type: 3}
+    portraitDescription: Capt. Risu
+    text: Now, get me some water, here's the money.
+    audio: {fileID: 0}
+    options:
+    - text: Take Money (10 coins)
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: 2c2fad488f64b42c29ae367a2251e6df, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 11400000, guid: bc1f2b5a809af4fbaa280e2757a96770, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.ReceiveItemOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2

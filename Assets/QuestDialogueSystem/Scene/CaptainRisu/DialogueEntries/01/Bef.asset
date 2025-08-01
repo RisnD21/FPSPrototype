@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea69c725b9690406283ac981b361a9df, type: 3}
+  m_Name: Bef
+  m_EditorClassIdentifier: 
+  pieces:
+  - id: 01
+    portrait: {fileID: 21300000, guid: 3b1b88f6b0d734d918f8d9e8f3afeddb, type: 3}
+    portraitDescription: Cpt. Risu
+    text: "Ah, you\u2019ve come at just the right time, brave one. According to the
+      latest report from the Squirrel Intelligence Division, a certain big red button
+      in our base is currently in a rather... desperate-to-be-pressed state. This
+      isn\u2019t just your first mission\u2014it\u2019s the beginning of trust between
+      us. Now then\u2014"
+    audio: {fileID: 0}
+    options:
+    - text: "Roger that, Captain! I\u2019m on it!"
+      targetID: 02
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+    - text: "Is this a trap? I\u2019m suspicious."
+      targetID: 03
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: e5ac6ada8bdf4407dbea8a132e2301ae, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - text: "Why me? Why don\u2019t you press it yourself?"
+      targetID: 04
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: e5ac6ada8bdf4407dbea8a132e2301ae, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - id: 02
+    portrait: {fileID: 21300000, guid: 3b1b88f6b0d734d918f8d9e8f3afeddb, type: 3}
+    portraitDescription: Capt. Risu
+    text: "Ha! Knew I could count on you. +100 Execution, +50 Courage. The button\u2019s
+      location has been imprinted onto the imaginary map in your head. May your finger
+      be swift! Let me know when you are ready."
+    audio: {fileID: 0}
+    options:
+    - text: I'm Ready
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: e5ac6ada8bdf4407dbea8a132e2301ae, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - id: 03
+    portrait: {fileID: 21300000, guid: 3b1b88f6b0d734d918f8d9e8f3afeddb, type: 3}
+    portraitDescription: Capt. Risu
+    text: "Your skepticism is commendable\u2014but relax, Captain Squirrel may be
+      mischievous, but never betrays his teammates. That button... might just launch
+      a firework or two.(He winks.) Let me know when you are ready."
+    audio: {fileID: 0}
+    options:
+    - text: I'm ready.
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: e5ac6ada8bdf4407dbea8a132e2301ae, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - id: 04
+    portrait: {fileID: 21300000, guid: 3b1b88f6b0d734d918f8d9e8f3afeddb, type: 3}
+    portraitDescription: Capt. Risu
+    text: "Ah, the eternal rookie dilemma... Me? I\u2019ve got a back injury, can\u2019t
+      bend. Plus, I\u2019m a command-type unit, got it? But you\u2014you\u2019re
+      agile, alert, and have a mighty finger! Let me know when you are ready."
+    audio: {fileID: 0}
+    options:
+    - text: I'm ready.
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11400000, guid: e5ac6ada8bdf4407dbea8a132e2301ae, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.StartQuestOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2

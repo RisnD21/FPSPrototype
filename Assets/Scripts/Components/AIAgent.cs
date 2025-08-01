@@ -19,10 +19,10 @@ public class AIAgent : MonoBehaviour
     public Vector3 lastSeenPlayerPos;
     Vector3 destination;
     
-    public bool isDebugMode = true;
+    public bool isDebugMode = false;
     
     public void OnHit() => beingHit = true;    
-    public bool beingHit;
+    [HideInInspector] public bool beingHit;
 
     public bool HasReachDestination()
     {
@@ -122,7 +122,6 @@ public class AIAgent : MonoBehaviour
 
         //too far, can't see
         if(distanceToPlayer > 20f) return false;
-        // if (isDebugMode) Debug.Log($"{gameObject.name} has spotted player");
         return true;
     }
 

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dda2cc785b247debd1e48ffdddbfcb, type: 3}
+  m_Name: Quest03
+  m_EditorClassIdentifier: 
+  id: 03
+  questName: Trade coins for water
+  icon: {fileID: 0}
+  description: A jar of clean water worth 10 coins
+  requireItem: 1
+  requiredItems:
+  - item: {fileID: 11400000, guid: adf9ca9a07ef54828baeda26697b8009, type: 2}
+    count: 10
+  onQuestStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 8d93426c464a94c31905dfd47bb909fd, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 8d03a9f4385c1410491c355a3f0701c4, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.ReceiveItemOnTrigger, Assembly-CSharp
+        m_MethodName: OnTrigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestFail:
+    m_PersistentCalls:
+      m_Calls: []

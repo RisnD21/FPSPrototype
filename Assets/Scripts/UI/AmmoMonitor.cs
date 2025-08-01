@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AmmoMonitor : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI monitor;
+    TextMeshProUGUI monitor;
 
     void Awake()
     {

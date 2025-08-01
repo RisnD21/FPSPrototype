@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dda2cc785b247debd1e48ffdddbfcb, type: 3}
+  m_Name: Quest01
+  m_EditorClassIdentifier: 
+  id: 01
+  questName: Press that big red button!
+  icon: {fileID: 0}
+  description: According to the latest report from the Squirrel Intelligence Division,
+    a certain big red button in our base is currently in a rather... desperate-to-be-pressed
+    state.
+  requireItem: 0
+  requiredItems: []
+  onQuestStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: a9cb9c72e7c2940b5830fe8071ff23f2, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 87b29e3a011124811b95ce678bbbcfbd, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestFail:
+    m_PersistentCalls:
+      m_Calls: []
