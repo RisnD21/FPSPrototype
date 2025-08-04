@@ -21,7 +21,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] AmmoMonitor ammoMonitor;
     [SerializeField] List<GameObject> weapons;
     
-    public bool rifleUnlock;
+    bool rifleUnlock;
 
     float interactDistance = 5f;
     Vector2 boxSize = new Vector2(5f, 4f); // BoxCast 區域大小
@@ -65,6 +65,7 @@ public class PlayerControl : MonoBehaviour
         return true;
     }
 
+    public void UnlockRifle() => rifleUnlock = true;
 
     void FixedUpdate()
     {
