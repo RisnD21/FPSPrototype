@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
     Transform flash;
 
     public bool autoReload;
-    [SerializeField] string gunType;
+    [SerializeField] public string gunType;
     [SerializeField] int damage;
     [SerializeField] float maxShotDistance;
     [SerializeField] int magzineSize;
@@ -29,9 +29,6 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
-        var actionStates = GetComponentInParent<ActionStates>();
-        actionStates.Select(this);
-
         muzzle = transform.GetChild(0);
         flash = transform.GetChild(1);
     }

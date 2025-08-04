@@ -53,7 +53,6 @@ public class Damageable : MonoBehaviour
     void UpdateHealthBar()
     {
         healthBar.SetHealth(currentHealth);
-        Debug.Log($"Soilder, Health({currentHealth}/{maxHealth})");
     }
 
     public void KillObject()

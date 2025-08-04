@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using QuestDialogueSystem;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,27 +19,52 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float tolerance = 0.1f;
     [SerializeField] float turnSpeed = 1.0f;
     [SerializeField] AmmoMonitor ammoMonitor;
+    [SerializeField] List<GameObject> weapons;
+    
+    public bool rifleUnlock;
 
-    [SerializeField] float interactDistance = 2f;
-    [SerializeField] Vector2 boxSize = new Vector2(1f, 0.5f); // BoxCast 區域大小
+    float interactDistance = 5f;
+    Vector2 boxSize = new Vector2(5f, 4f); // BoxCast 區域大小
     [SerializeField] LayerMask interactableLayer;
 
     Vector2 targetSpeed;
-    Weapon currentWeapon;
     
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         actionStates = GetComponent<ActionStates>();
-        currentWeapon = GetComponentInChildren<Weapon>();
-        currentWeapon.RegisterMonitor(ammoMonitor);
+
+        foreach (var weapon in weapons) weapon.SetActive(false);
     }
 
-    void Start()
+    void SelectWeapon()
     {
+        int index = playerInput.weaponIndex;
+        if (index < 0) return;
         
+        playerInput.weaponIndex = -1; // 重設 weaponIndex，避免重複切換
+
+        if (!IsWeaponSelectable(index)) return;
+
+        var weapon = weapons[index].GetComponent<Weapon>();
+        if (actionStates.currentWeapon == weapon) return;
+
+        weapon.RegisterMonitor(ammoMonitor);
+        actionStates.Select(weapon);
     }
+
+    bool IsWeaponSelectable(int index)
+    {
+        // 無效 index
+        if (index < 0 || index >= weapons.Count) return false;
+
+        // 未解鎖條件
+        if (index == 1 && !rifleUnlock) return false;
+
+        return true;
+    }
+
 
     void FixedUpdate()
     {
@@ -50,6 +77,7 @@ public class PlayerControl : MonoBehaviour
         Reload();
         Fire();
         Interact();
+        SelectWeapon();
     }
 
     private void Move()
@@ -76,6 +104,8 @@ public class PlayerControl : MonoBehaviour
 
     void Aim()
     {
+        if(playerInput.IsDialogueMode) return;
+
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0; 
 
@@ -102,7 +132,7 @@ public class PlayerControl : MonoBehaviour
         {
             actionStates.Fire();
             playerInput.IsFire = false;
-        }    
+        } else actionStates.StopFire();
     } 
 
     void Interact()
@@ -111,18 +141,18 @@ public class PlayerControl : MonoBehaviour
 
         Debug.Log("Trying to interact");
         Vector2 origin = (Vector2)transform.position;
-        Vector2 direction = transform.up; // ↑ 如果角色前方是 Vector2.up
+        Vector2 direction = transform.right; // ↑ 如果角色前方是 Vector2.up
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         RaycastHit2D hit = Physics2D.BoxCast(origin, boxSize, angle, direction, interactDistance, interactableLayer);
-
         if (hit.collider != null)
         {
-            var interactable = hit.collider.GetComponent<IInteractable>();
-            interactable?.Interact();
-            Debug.Log("IIII");
+            if(hit.collider.TryGetComponent<QuestNarrator>(out var narrator))
+            {
+                Locator.DialogueRunner.SetPlayerInput(playerInput);
+                narrator.Interact();
+            }
         }
-
         playerInput.IsInteract = false;
     }
 }

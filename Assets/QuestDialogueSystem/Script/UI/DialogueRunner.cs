@@ -19,6 +19,7 @@ namespace QuestDialogueSystem
         [Header("Current State")]
         [SerializeField] ConversationScript currentScript;
         ConversationPiece currentPiece;
+        PlayerInput playerInput;
 
         bool isDebugMode = false;
 
@@ -40,7 +41,7 @@ namespace QuestDialogueSystem
                 Debug.LogError("DialogueRunner: portraitImage not assigned.");
 
             // Optional: 預設關閉對話面板
-            dialogPanel.SetActive(false);
+            SetDialogPanel(false);
         }
 
         void InitializeOptions()
@@ -60,7 +61,7 @@ namespace QuestDialogueSystem
 
         void ShowPiece(ConversationPiece piece)
         {
-            dialogPanel.SetActive(true);
+            SetDialogPanel(true);
             if(isDebugMode) Debug.Log("Showing Dialog");
 
             currentPiece = piece;
@@ -89,6 +90,8 @@ namespace QuestDialogueSystem
                     var optionButton = optionUnit.GetComponent<Button>();
 
                     optionButton.onClick.AddListener(() => HandleOption(option));
+
+                    playerInput.options.Add(optionButton);
                 }
             }
         }
@@ -129,14 +132,25 @@ namespace QuestDialogueSystem
             option.onSelected?.Invoke();
         }
 
-        void ResetDialog()
+        public void ResetDialog()
         {
             if(isDebugMode) Debug.Log("Dialog Reset");
             UpdateDialog("");
             UpdatePortraitImage(defaultPortraitImage);
             UpdatePortraitDescription("");
             InitializeOptions();
-            dialogPanel.SetActive(false);
+            SetDialogPanel(false);
+        }
+
+        public void SetPlayerInput(PlayerInput i)
+        {
+            playerInput = i;
+        }
+
+        void SetDialogPanel(bool status)
+        {
+            dialogPanel.SetActive(status);
+            if(playerInput != null) playerInput.SetDialogMode(status);
         }
     }    
 }

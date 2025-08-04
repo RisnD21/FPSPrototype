@@ -16,9 +16,9 @@ public class ActionStates : MonoBehaviour
 
     Animator m_Animator;
 
-    Weapon currentWeapon;
+    [HideInInspector] public Weapon currentWeapon;
 
-    int fireNameHash = Animator.StringToHash("Firing");
+    int fireNameHash = Animator.StringToHash("FireLoop");
     int reloadNameHash = Animator.StringToHash("Reloading");
     int moveNameHash = Animator.StringToHash("Move");
     
@@ -27,28 +27,37 @@ public class ActionStates : MonoBehaviour
 
     void Awake()
     {
-        Initialize();
+        currentWeapon = GetComponentInChildren<Weapon>(true); //use first weapon by default
+    }
+
+    void Start()
+    {
+        Select(currentWeapon);
     }
 
     public void Select(Weapon weapon)
     {
-        currentWeapon = weapon;
-    }
+        if(weapon == null) return;
+        if(currentWeapon != null) currentWeapon.gameObject.SetActive(false);
 
-    public void Initialize()
-    {
-        //add animator list later on, with corresponding setting
-        m_Animator = GetComponentInChildren<Animator>();
+        weapon.gameObject.SetActive(true);
+
+        currentWeapon = weapon;
+        m_Animator = currentWeapon.GetComponent<Animator>();
     }
 
     public void Fire()
     {
-        if(CurrentAction == ActionState.Firing || CurrentAction == ActionState.Reloading) return;
+        if(CurrentAction == ActionState.Reloading) return;
 
-        m_Animator.SetTrigger("Fire");
-
+        m_Animator.SetBool("Fire", true);
         currentWeapon.Fire();
     }
+
+    public void StopFire()
+    {
+        if(CurrentAction == ActionState.Firing) m_Animator.SetBool("Fire", false);
+    }  
 
     public void Reload()
     {
@@ -70,9 +79,10 @@ public class ActionStates : MonoBehaviour
         UpdateControllerState();
     }
 
-
     void UpdateControllerState()
     {    
+        if(m_Animator == null) return;
+
         var info = m_Animator.GetCurrentAnimatorStateInfo(0);
 
         ActionState newState;

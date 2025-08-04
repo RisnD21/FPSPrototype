@@ -222,7 +222,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: survivor-move_handgun_0_0
+  m_Name: handgunAniim
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isMoving

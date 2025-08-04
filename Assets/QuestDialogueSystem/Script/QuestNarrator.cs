@@ -14,6 +14,11 @@ public class QuestNarrator : MonoBehaviour
     public void Interact()
     {
         if(isDebugMode) Debug.Log("Interacting with " + gameObject.name);
+        if (Locator.DialogueRunner == null)
+        {
+            Debug.LogError("DialogueRunner is null");
+            return;
+        }
 
         SelectEntry();
         SelectScript();
@@ -31,9 +36,19 @@ public class QuestNarrator : MonoBehaviour
     {
         if(isDebugMode) Debug.Log("Showing Script");
         QuestData quest = currentQuestEntry.quest;
+        currentScript = currentQuestEntry.befQuest;
 
-        if(quest == null) Debug.LogError("Quest is null");
-        if(Locator.QuestManager == null) Debug.LogError("QM is null");
+        if(quest == null) 
+        {
+            Debug.LogWarning("Quest is null");
+            return;
+        }
+
+        if(Locator.QuestManager == null)
+        {
+            Debug.LogError("QM is null");
+            return;
+        }
 
         if(Locator.QuestManager.TryGetQuestStatus(quest, out var questStatus))
         {
@@ -48,7 +63,5 @@ public class QuestNarrator : MonoBehaviour
                 return;
             }
         }
-
-        currentScript = currentQuestEntry.befQuest;
     }
 }

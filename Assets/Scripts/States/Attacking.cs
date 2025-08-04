@@ -49,7 +49,7 @@ public class Attacking : IState
     {
         isAiming = true;
 
-        while (isAiming)
+        while (isAiming && agent.player!=null)
         {
             Vector2 aimingDir = agent.player.position - agent.transform.position;
             if (Vector2.Angle(agent.transform.up, aimingDir) > 1)

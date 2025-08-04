@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class MerchantAI : MonoBehaviour, IInteractable
+public class MerchantAI : MonoBehaviour
 {    
     public Transform player;
     public LayerMask obstacleMask;
@@ -57,10 +57,5 @@ public class MerchantAI : MonoBehaviour, IInteractable
         {
             currentRoutine = StartCoroutine(LookAt(player.position, 0.3f));
         }
-    }
-
-    public void Interact()
-    {
-        Debug.Log("(Remain Silent)");
     }
 }

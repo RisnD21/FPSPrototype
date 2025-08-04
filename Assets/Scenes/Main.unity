@@ -1006,11 +1006,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 422959542}
+  - component: {fileID: 422959545}
   - component: {fileID: 422959543}
   - component: {fileID: 422959541}
   - component: {fileID: 422959544}
   m_Layer: 7
-  m_Name: WeaponDealer
+  m_Name: TheDealer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,6 +1140,20 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.26046392, y: 0}
   m_Radius: 4.445464
+--- !u!114 &422959545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422959540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311f1ff74b6c342b98901e50038e00cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questChainEntries:
+  - {fileID: 11400000, guid: 7b7a24e89b1234c4a913c2e133013ac3, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,8 +2527,6 @@ MonoBehaviour:
   tolerance: 0.1
   turnSpeed: 0
   ammoMonitor: {fileID: 406296818}
-  interactDistance: 1
-  boxSize: {x: 1, y: 0.5}
   interactableLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -2537,6 +2550,7 @@ MonoBehaviour:
   fire: 323
   sprint: 304
   interact: 101
+  options: []
   IsReload: 0
   IsFire: 0
   IsSprint: 0
@@ -2646,7 +2660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84ad4189b56c4442395146e00bb36312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
+  maxHealth: 100
   healthBar: {fileID: 1199927023}
   damageTextPos: {fileID: 386563631}
 --- !u!114 &1078737750
@@ -3795,6 +3809,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3519831058535795514, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
+      propertyPath: autoReload
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

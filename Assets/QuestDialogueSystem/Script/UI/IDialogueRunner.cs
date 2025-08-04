@@ -2,7 +2,8 @@ namespace QuestDialogueSystem
 {
     public interface IDialogueRunner
     {
-        public void StartConversation(ConversationScript script);
+        void StartConversation(ConversationScript script);
+        void SetPlayerInput(PlayerInput input); //DialogueRunner should toggle conversation mode
+        void ResetDialog();
     }
 }
-
