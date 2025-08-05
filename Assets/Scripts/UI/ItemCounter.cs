@@ -28,14 +28,14 @@ public class ItemCounter : MonoBehaviour
 
     void Add(ItemStack stack)
     {
-        if(stack.Item != item) return;
+        if(!stack.Item.Equals(item)) return;
         count += stack.Count;
         UpdateMonitor();
     }
 
     void Remove(ItemStack stack)
     {
-        if(stack.Item != item) return;
+        if(!stack.Item.Equals(item)) return;
         count -= stack.Count;
         UpdateMonitor();
     }
@@ -44,5 +44,4 @@ public class ItemCounter : MonoBehaviour
     {
         monitor.text = count.ToString();
     }
-
 }

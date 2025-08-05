@@ -38,6 +38,7 @@ public class PlayerControl : MonoBehaviour
         foreach (var weapon in weapons) weapon.SetActive(false);
     }
 
+
     void SelectWeapon()
     {
         int index = playerInput.weaponIndex;
@@ -48,10 +49,10 @@ public class PlayerControl : MonoBehaviour
         if (!IsWeaponSelectable(index)) return;
 
         var weapon = weapons[index].GetComponent<Weapon>();
-        if (actionStates.currentWeapon == weapon) return;
+        if (actionStates.currentWeapon == weapon && weapon.hasRegister) return;
 
-        weapon.RegisterMonitor(ammoMonitor);
         actionStates.Select(weapon);
+        weapon.RegisterMonitor(ammoMonitor);
     }
 
     bool IsWeaponSelectable(int index)

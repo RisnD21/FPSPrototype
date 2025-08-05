@@ -79,15 +79,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9215581c9bda43a3bd36498ffa65648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoReload: 0
+  autoReload: 1
   gunType: handgun
+  ammoType: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
   damage: 5
   maxShotDistance: 50
-  magzineSize: 7
-  reserveAmmo: 28
+  magzineSize: 15
   fireCooldown: 0.5
+  canShakeCam: 0
   fireShakeDuration: 0.05
   fireShakeMagnitude: 0.05
+  hasRegister: 0
 --- !u!212 &3253865906594027668
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,7 +155,7 @@ Animator:
   m_GameObject: {fileID: 3519831058535795514}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 41d9e86d775074f459b478c8ddba3de2, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3f5907cab33aa41eeb7920c178e24e56, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

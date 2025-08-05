@@ -66,7 +66,7 @@ namespace QuestDialogueSystem
                 if(Inventory != null) 
                 {
                     Inventory.Initialize();
-                    Debug.Log("Inventory initialized successfully");
+                    Debug.Log("Player Inventory initialized successfully");
                 }                
 
             } else 

@@ -36,6 +36,18 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+          - m_Target: {fileID: 11400000, guid: c24f5917c87904fc4a454b67a9f522e4, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+            m_MethodName: Raised
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
     - text: (End Conversation)
       targetID: 
       onSelected:

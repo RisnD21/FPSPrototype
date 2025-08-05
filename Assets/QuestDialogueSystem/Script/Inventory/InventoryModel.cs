@@ -15,6 +15,7 @@ namespace QuestDialogueSystem
         public event Action<ItemStack> OnItemAdd;
         public event Action<ItemStack> OnItemRemove;
 
+        public bool subscribed;
 
         public InventoryModel(int size)
         {
@@ -24,17 +25,21 @@ namespace QuestDialogueSystem
             }
         }
 
+        public void Initialize(){}
 
-        public void Initialize()
-        {
-
-        }
         public void PrintAllSlots()
         {
             foreach (var slot in Slots)
             {
                 Debug.Log(slot);
             }
+        }
+
+        public List<ItemStack> RetriveAllStacks()
+        {
+            List<ItemStack> stacks = slots.Where(x => !x.IsEmpty).Select(x => x.stack).ToList();
+            slots.Clear();
+            return stacks;
         }
 
         public int Count(ItemData item)
@@ -84,7 +89,6 @@ namespace QuestDialogueSystem
                 if (remainder == 0) break;
             }
                 
-
             if (remainder > 0)
             {
                 List<InventorySlot> emptySlots
@@ -104,7 +108,7 @@ namespace QuestDialogueSystem
                 Locator.NotificationUI.PrintTitleMsg(msg);
             }
 
-            OnItemAdd?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
+            if(subscribed) OnItemAdd?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
             return remainder < set.Count;
         }
 
@@ -149,10 +153,11 @@ namespace QuestDialogueSystem
         public bool TryForceRemove(ItemStack set, out int remainder)
         {
             //remove set even if insufficient
+            
 
             remainder = set.Count;
             int remainderBef = remainder;
-
+            if(set.Count <= 0) return true;
             if (Count(set.Item) <= 0) return false;
 
             List<InventorySlot> matchSlots 
@@ -161,7 +166,10 @@ namespace QuestDialogueSystem
             foreach (var slot in matchSlots)
                 TryRemoveFromSlot(new ItemStack(set.Item, remainder), slot, ref remainder);
 
-            OnItemRemove?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
+            if(subscribed) 
+            {
+                OnItemRemove?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
+            }
             return true;
         }
 

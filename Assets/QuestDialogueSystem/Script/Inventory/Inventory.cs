@@ -6,15 +6,28 @@ namespace QuestDialogueSystem
 {
     public class Inventory : MonoBehaviour, IInventory
     {
-        [SerializeField] int inventorySize = 30;
+        [SerializeField] int inventorySize = 8;
+        [SerializeField] bool subscribeThisInventory;
         InventoryModel model;
+
+        bool hasInitialized;
+
+        void Awake()
+        {
+            Initialize();
+        }
 
         public void Initialize()
         {
+            if(hasInitialized) return;
             model = new InventoryModel(inventorySize);
+
+            model.subscribed = subscribeThisInventory;
 
             model.OnItemAdd += stack => OnItemAdd?.Invoke(stack);
             model.OnItemRemove += stack => OnItemRemove?.Invoke(stack);
+
+            hasInitialized = true;
         }
 
         public InventoryModel GetModel() => model;

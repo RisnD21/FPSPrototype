@@ -1,3 +1,4 @@
+using QuestDialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -41,8 +42,9 @@ public class ActionStates : MonoBehaviour
         if(currentWeapon != null) currentWeapon.gameObject.SetActive(false);
 
         weapon.gameObject.SetActive(true);
-
         currentWeapon = weapon;
+        
+        currentWeapon.LoadAmmo(GetComponent<IInventory>());
         m_Animator = currentWeapon.GetComponent<Animator>();
     }
 
@@ -62,7 +64,6 @@ public class ActionStates : MonoBehaviour
     public void Reload()
     {
         if(CurrentAction == ActionState.Reloading || CurrentAction == ActionState.Firing) return;
-
         m_Animator.SetTrigger("Reload"); 
     }
 
@@ -88,13 +89,19 @@ public class ActionStates : MonoBehaviour
         ActionState newState;
         
         if (info.shortNameHash == fireNameHash)
+        {
             newState = ActionState.Firing;
+        }
         else if (info.shortNameHash == reloadNameHash)
+        {
             newState = ActionState.Reloading;
+        }
         else if (info.shortNameHash == moveNameHash)        
             newState = ActionState.Moving;
         else
+        {
             newState = ActionState.Idle;
+        }
 
         if (newState != m_CurrentAction)
         {

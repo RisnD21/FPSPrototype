@@ -13,10 +13,9 @@ public class Pickable : MonoBehaviour
         {
             if(ItemManager.Instance.TryPickItem(stack, transform.position))
             {
-                Debug.Log("You've collected a spirit");
+                Debug.Log($"You've collected {stack}");
                 gameObject.SetActive(false);
-            }
-                
+            }   
         }
     }
 }

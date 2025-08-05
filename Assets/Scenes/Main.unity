@@ -2070,9 +2070,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - id: 01
+  - id: soul
     prefab: {fileID: 1783455825082871142, guid: 9b4601a26e285421aa9df4ced25cde27, type: 3}
     icon: {fileID: 21300000, guid: 747944daf9f07491ab7e973ed426030d, type: 3}
+    poolSize: 5
+  - id: handgunAmmo
+    prefab: {fileID: 87441439092267572, guid: 576943c39ccc241d59d22a130797afea, type: 3}
+    icon: {fileID: 21300000, guid: aeed86078f6b241169432f0bea07beb0, type: 3}
     poolSize: 5
   uiSpritePrefab: {fileID: 116263427650122485, guid: 0dcf018d14cf74810b00046859440440, type: 3}
   uiSpriteParent: {fileID: 1164581321}
@@ -2500,6 +2504,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1078737746}
+  - component: {fileID: 1078737752}
+  - component: {fileID: 1078737751}
   - component: {fileID: 1078737750}
   - component: {fileID: 1078737749}
   - component: {fileID: 1078737745}
@@ -2690,6 +2696,35 @@ MonoBehaviour:
   - {fileID: 1199927019}
   - {fileID: 386563631}
   tolerance: 0.01
+--- !u!114 &1078737751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078737742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571d8478d1b0e47bda7304d9c02c2c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySize: 10
+  subscribeThisInventory: 1
+--- !u!114 &1078737752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078737742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95acd5b35a27946c8b17ff335b30fa01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stacks:
+  - item: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
+    count: 30
 --- !u!1001 &1113799790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3243,6 +3278,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1560787401}
   - component: {fileID: 1560787400}
+  - component: {fileID: 1560787405}
+  - component: {fileID: 1560787404}
   - component: {fileID: 1560787403}
   - component: {fileID: 1560787402}
   - component: {fileID: 1560787399}
@@ -3373,9 +3410,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 909f34fa31818433a888ef20e4766669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropInventoryItemInstead: 1
   items:
   - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
     count: 10
+--- !u!114 &1560787404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560787397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571d8478d1b0e47bda7304d9c02c2c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySize: 8
+  subscribeThisInventory: 0
+--- !u!114 &1560787405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560787397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95acd5b35a27946c8b17ff335b30fa01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stacks:
+  - item: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
+    count: 30
+  - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
+    count: 1
 --- !u!1001 &1589907401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3384,6 +3453,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2772317286383661754, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 1078737751}
     - target: {fileID: 3938085272363385454, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
       propertyPath: inventorySize
       value: 10
@@ -3472,6 +3545,7 @@ PrefabInstance:
     - {fileID: 6788469765965758651, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4817226902485889983, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
+    - {fileID: 8913339616237395965, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7e2190d5971745afac8cb05dc8a697a, type: 3}
@@ -3819,14 +3893,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Handgun
       objectReference: {fileID: 0}
-    - target: {fileID: 3519831058535795514, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: autoReload
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3841,6 +3907,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1807735921}
+  - component: {fileID: 1807735922}
   - component: {fileID: 1807735920}
   m_Layer: 0
   m_Name: EventManager
@@ -3904,6 +3971,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1807735922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807735919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcfe4cf3c7ec446449a2c8b124ba6dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: c24f5917c87904fc4a454b67a9f522e4, type: 2}
+  onEventRaised:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 422959545}
+        m_TargetAssemblyTypeName: QuestNarrator, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &1936442454 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3800160731435376698, guid: 63e464721679040db8b6b49aa849260e, type: 3}
@@ -4173,6 +4268,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1078737746}
     m_Modifications:
+    - target: {fileID: 5837121239210728271, guid: 8c4a7b1a88a0f43f68f277e89c74f0b6, type: 3}
+      propertyPath: ammoType
+      value: 
+      objectReference: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
+    - target: {fileID: 5837121239210728271, guid: 8c4a7b1a88a0f43f68f277e89c74f0b6, type: 3}
+      propertyPath: canShakeCam
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7784689348347114074, guid: 8c4a7b1a88a0f43f68f277e89c74f0b6, type: 3}
       propertyPath: m_Name
       value: Rifle
@@ -4290,25 +4393,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2009906147714175686, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 2009906147714175686, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.47
-      objectReference: {fileID: 0}
     - target: {fileID: 3519831058535795514, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
       propertyPath: m_Name
       value: Handgun
       objectReference: {fileID: 0}
-    - target: {fileID: 3519831058535795514, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
+      propertyPath: autoReload
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
+      propertyPath: canShakeCam
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
-      propertyPath: fireCooldown
-      value: 0.5
+      propertyPath: magzineSize
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

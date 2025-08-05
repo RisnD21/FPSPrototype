@@ -101,10 +101,7 @@ public class ItemManager : MonoBehaviour
             SpawnUIIcon(id, worldPosition);
             return true;
         }else return false;
-        // 呼叫 UI 飛行效果
-        
-        // TODO: 增加背包、音效、數量…等邏輯
-        
+        // TODO: 增加背包、音效、數量…等邏輯        
     }
 
     //--------------- 私有 Method ---------------//

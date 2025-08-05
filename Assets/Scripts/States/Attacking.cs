@@ -81,7 +81,7 @@ public class Attacking : IState
             timer = triggerFrequency;
             readyToFire = false;
         }
-
+        actionController.StopFire();
         timer -= Time.deltaTime;
     }
 
