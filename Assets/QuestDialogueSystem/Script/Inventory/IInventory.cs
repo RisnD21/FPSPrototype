@@ -7,6 +7,8 @@ namespace QuestDialogueSystem
     {
         IReadOnlyList<InventorySlot> Slots{get;}
 
+        void PrintAllSlots();
+
         void Initialize();
         int Count(string id);
         int Count(ItemData item);

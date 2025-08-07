@@ -57,5 +57,8 @@ namespace QuestDialogueSystem
 
         public event Action<ItemStack> OnItemAdd;
         public event Action<ItemStack> OnItemRemove;
+
+
+        public void PrintAllSlots() => model.PrintAllSlots();
     }
 }

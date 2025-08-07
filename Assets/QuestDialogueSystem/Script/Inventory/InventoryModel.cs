@@ -38,8 +38,13 @@ namespace QuestDialogueSystem
         public List<ItemStack> RetriveAllStacks()
         {
             List<ItemStack> stacks = slots.Where(x => !x.IsEmpty).Select(x => x.stack).ToList();
-            slots.Clear();
+            
             return stacks;
+        }
+
+        public void ClearInventory()
+        {
+            slots.Clear();
         }
 
         public int Count(ItemData item)

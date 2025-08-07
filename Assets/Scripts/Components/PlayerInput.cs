@@ -3,6 +3,7 @@ using QuestDialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -15,10 +16,12 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode fire = KeyCode.Mouse0;
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
     [SerializeField] private KeyCode interact = KeyCode.E;
+    [SerializeField] private KeyCode inventory = KeyCode.Tab;
 
     [HideInInspector] public bool IsDialogueMode { get; private set; }
-    [HideInInspector] public List<Button> options;
+    
 
+    [HideInInspector] public List<Button> options;
 
     public Vector2 InputVector => m_inputVector;
     private Vector2 m_inputVector;
@@ -31,11 +34,25 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool IsInteract;
     [HideInInspector] public int weaponIndex;
 
+    public static event Action<MenuType> ToggleMenu;
+    [HideInInspector] bool isMenuMode;
+
     void Awake()
     {
         options = new();
         weaponIndex = 0; //default
     }
+
+    void OnEnable()
+    {
+        UIManager.SetMenuMode += SetMenuMode;
+    }
+
+    void OnDisable()
+    {
+        UIManager.SetMenuMode -= SetMenuMode;
+    }
+
 
     public void HandleInput()
     {
@@ -102,9 +119,14 @@ public class PlayerInput : MonoBehaviour
         } 
     }
 
-    public void HandleDialogueInput()
+    void PauseCharacterControl()
     {
         m_inputVector = Vector2.zero; //stop moving
+    }
+
+    public void HandleDialogueInput()
+    {
+        PauseCharacterControl();
 
         for (int i = 0; i < 9; i++)
         {
@@ -132,9 +154,23 @@ public class PlayerInput : MonoBehaviour
         options.Clear();
     }
 
+    void SetMenuMode(bool status)
+    {
+        isMenuMode = status;
+        Debug.Log("isMenuMode? " + isMenuMode);
+    }
+
+
     private void Update()
     {
-        if(IsDialogueMode) HandleDialogueInput();
+        if (Input.GetKeyDown(inventory))
+        {
+            ToggleMenu?.Invoke(MenuType.Inventory);
+            if(isMenuMode) PauseCharacterControl();
+        }
+
+        if(isMenuMode) return;
+        else if(IsDialogueMode) HandleDialogueInput();
         else HandleInput();
     }
 }

@@ -1,9 +1,11 @@
 using QuestDialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     ItemCounter counter;
+    [SerializeField] InventoryUI inventoryUI;
 
     void Awake()
     {
@@ -15,6 +17,6 @@ public class GameManager : MonoBehaviour
         DamageTextManager.Instance.Initialize();
         ItemManager.Instance.Initialize();
         counter.Initialize();
-
+        inventoryUI.Initialize();
     }  
 }
