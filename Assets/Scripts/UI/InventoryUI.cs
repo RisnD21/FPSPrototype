@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using QuestDialogueSystem;
 using System.Collections.Generic;
+using System.Numerics;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -18,6 +17,8 @@ public class InventoryUI : MonoBehaviour
 
     void Awake()
     {
+        transform.localPosition = UnityEngine.Vector3.zero;
+
         slots = new();
 
         for(int i = 0; i < slotsCount; i++)
@@ -37,6 +38,8 @@ public class InventoryUI : MonoBehaviour
     {
         Locator.Inventory.OnItemAdd += UpdateSlot;
         Locator.Inventory.OnItemRemove += UpdateSlot;
+
+        SyncInventory();
     }
 
     void OnDisable()
@@ -52,7 +55,7 @@ public class InventoryUI : MonoBehaviour
 
     void SyncInventory()
     {
-        if(Locator.Inventory.Slots.Count != slotsCount)
+        if (Locator.Inventory.Slots.Count != slotsCount)
         {
             Debug.LogError("[InventoryUI] Inventory slots amount mismatch");
             return;
