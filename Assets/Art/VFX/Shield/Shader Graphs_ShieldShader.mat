@@ -43,8 +43,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 0.249
+    - _DepthOffset: 0.59
     - _Distortion_Strength: 1
-    - _Fresnel_Effect: 1
+    - _Fresnel_Effect: -0.19
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
