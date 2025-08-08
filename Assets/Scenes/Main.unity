@@ -2663,7 +2663,7 @@ GameObject:
   - component: {fileID: 958185303}
   - component: {fileID: 958185302}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2733,7 +2733,7 @@ Transform:
   m_GameObject: {fileID: 958185301}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.16, y: 11.12, z: 0}
+  m_LocalPosition: {x: 11.65, y: 2.99, z: 0}
   m_LocalScale: {x: 2.2529, y: 2.2529, z: 2.2529}
   m_ConstrainProportionsScale: 0
   m_Children: []
