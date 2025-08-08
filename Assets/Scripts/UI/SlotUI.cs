@@ -5,7 +5,7 @@ using QuestDialogueSystem;
 using UnityEngine.EventSystems;
 
 
-public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     InventorySlot slot;
     [SerializeField] Image icon;
@@ -67,6 +67,15 @@ public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         descriptionPanel.SetActive(false);
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (slot != null && !slot.IsEmpty)
+        {
+            
+        }
     }
 
     public override string ToString()

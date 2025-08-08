@@ -2663,7 +2663,7 @@ GameObject:
   - component: {fileID: 958185303}
   - component: {fileID: 958185302}
   m_Layer: 0
-  m_Name: Shield
+  m_Name: Shield (WIP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
