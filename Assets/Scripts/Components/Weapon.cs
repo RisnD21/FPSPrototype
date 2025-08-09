@@ -13,14 +13,17 @@ public class Weapon : MonoBehaviour
     [SerializeField] int damage;
     [SerializeField] float maxShotDistance;
     [SerializeField] int magzineSize;
+    [SerializeField] GameObject inventoryObj;
     IInventory inventory;
 
     int ReserveAmmo
     {
         get
         {
-            if (inventory == null) Debug.LogError("[Weapon] inventory is null on " + GetComponentInParent<Transform>().gameObject.name);
-
+            if(inventory == null)
+            {
+                inventory = inventoryObj.GetComponent<IInventory>();        
+            }
             return inventory.Count(ammoType);
         }
         set

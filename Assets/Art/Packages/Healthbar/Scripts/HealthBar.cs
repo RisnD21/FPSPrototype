@@ -1,27 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : MonoBehaviour, IHealthListener
 {
+    [SerializeField] Slider slider;
+    [SerializeField] Gradient gradient;
+    [SerializeField] Image fill;
 
-	public Slider slider;
-	public Gradient gradient;
-	public Image fill;
+    public void OnHealthChanged(int current, int max)
+    {
+        if (slider.maxValue != max) slider.maxValue = max;
+        slider.value = current;
+        if (fill != null) fill.color = gradient.Evaluate(slider.normalizedValue);
+    }
 
-	public void SetMaxHealth(int health)
-	{
-		slider.maxValue = health;
-		slider.value = health;
-
-		fill.color = gradient.Evaluate(1f);
-	}
-
-    public void SetHealth(int health)
-	{
-		slider.value = health;
-
-		fill.color = gradient.Evaluate(slider.normalizedValue);
-	}
+    public void OnDamaged(int value) { } // 不用
+    public void OnHealed(int value)  { } // 不用
+    public void OnDeath() { }
 }
