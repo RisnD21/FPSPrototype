@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - NPC
+  - Shield
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Bullet
   - Camera
   - Player
-  - 
+  - Shield
   - 
   - 
   - 

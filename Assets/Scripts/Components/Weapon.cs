@@ -115,7 +115,7 @@ public class Weapon : MonoBehaviour
         Vector3 direction = muzzle.right; 
         direction.z = 0;
 
-        int mask = LayerMask.GetMask("NPC", "Obstacle", "Player");
+        int mask = LayerMask.GetMask("NPC", "Obstacle", "Player", "Shield");
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxShotDistance, mask);
 
         Vector2 endPoint;

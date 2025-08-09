@@ -47,7 +47,13 @@ public class Damageable : MonoBehaviour
 
         if(agent != null) agent.OnHit();
 
-        if(currentHealth == 0) KillObject();
+        if(currentHealth != 0) return;
+
+        if(gameObject.CompareTag("Shield"))
+        {
+            
+        }
+        else KillObject();
     }
 
     void UpdateHealthBar()
