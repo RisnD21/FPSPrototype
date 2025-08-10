@@ -128,8 +128,9 @@ public class Weapon : MonoBehaviour
             VFXManager.Instance.SpawnImpactEffect(hit.point, hit.normal, hit.collider.tag);
             endPoint = hit.point;
 
-            if(hit.collider.TryGetComponent<Damageable>(out var target))
+            if(hit.collider.TryGetComponent<DamagePipeline>(out var target))
             {
+                Debug.Log($"[Weapon] Dealing damage to {target.gameObject.name}");
                 target.TakeDamage(damage);
             }
         } else
