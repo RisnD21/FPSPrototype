@@ -860,7 +860,7 @@ Transform:
   m_GameObject: {fileID: 278426061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.07, y: 10.98, z: 0}
+  m_LocalPosition: {x: -2.92, y: 10.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5072,6 +5072,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
+      propertyPath: maxChatDuration
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
+      propertyPath: minChatDuration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
       propertyPath: patrolWaypoints.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7240,8 +7248,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1078737746}
     - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
+      propertyPath: isDebugMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
       propertyPath: chatTendency
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
+      propertyPath: maxChatDuration
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
+      propertyPath: minChatDuration
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6015555591428813117, guid: eee95230c4eb34f47a807a0ee1991165, type: 3}
       propertyPath: patrolWaypoints.Array.size

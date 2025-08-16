@@ -84,13 +84,14 @@ public class Patrolling : IState
             nextState = agent.chasing;
         }else if(agent.isAlert) nextState = agent.searching;
 
-        if(NeedToChat()) if(agent.TryFindAllyToChat()) nextState = agent.chatting;
+        if (agent.needChat) nextState = agent.chatting;
+        else if (WantToChat() && agent.TryFindAllyToChat()) nextState = agent.chatting;
 
         if(nextState == null) return;
         agent.TransitionTo(nextState);
     }
 
-    bool NeedToChat()
+    bool WantToChat()
     {
         if(chatCountdown > 0)
         {

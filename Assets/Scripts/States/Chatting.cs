@@ -22,7 +22,6 @@ public class Chatting : IState
         if(agent.isDebugMode) Debug.Log($"[Chatting] {agent.gameObject.name} start chatting");
 
         Initialize();
-        agent.BackToNormalState();
 
         routine = agent.StartCoroutine(ChattingWith(agent.allyToChat));
     }
@@ -33,20 +32,23 @@ public class Chatting : IState
         {
             hasInitialize = true;
         }
-        
+
         nextState = null;
+        
+        agent.BackToNormalState();
+        agent.isChatting = true;
+        agent.needChat = false;
     }
 
-    IEnumerator ChattingWith(AIAgent agent)
+    IEnumerator ChattingWith(AIAgent ally)
     {
-        yield return agent.StartCoroutine(agent.LookAt(agent.transform.position));
-        yield return new WaitForSeconds(10f);
-        if(agent.TryFindAllyToChat()) nextState = agent.chatting;
-        else
-        {
-            agent.StopChatting();
-            nextState = agent.patrolling;
-        }
+        Debug.Log($"[Chatting] {agent.gameObject.name} is chatting with {ally.gameObject.name}");
+        
+        yield return agent.StartCoroutine(agent.LookAt(ally.transform.position));
+        yield return new WaitForSeconds(agent.chatDuration);
+
+        Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {agent.chatDuration} sec");
+        nextState = agent.patrolling;
     }
 
     public void OnUpdate()
@@ -64,6 +66,7 @@ public class Chatting : IState
 
     public void OnExit() 
     {
+        agent.StopChatting();
         agent.StopCoroutine(routine);
     }
 }

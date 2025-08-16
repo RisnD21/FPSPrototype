@@ -58,8 +58,12 @@ public class AIAgent : MonoBehaviour
     //Chat Behavior
     HashSet<AIAgent> nearbyAllies;
     public AIAgent allyToChat;
-    bool isChatting;
-    public bool IsChatting => isChatting;
+
+    [HideInInspector] public bool isChatting;
+    [HideInInspector] public bool needChat;
+    [HideInInspector] public float chatDuration;
+    [SerializeField] float minChatDuration;
+    [SerializeField] float maxChatDuration;
     [SerializeField] float chatTendency = 0.5f;
 
     void Awake()
@@ -177,7 +181,7 @@ public class AIAgent : MonoBehaviour
 
         path.maxSpeed = speed == 0 ? walkSpeed : speed;
 
-        if (isDebugMode) Debug.Log($"{gameObject.name} is thinking how to reach {destination}");
+        if (isDebugMode) Debug.Log($"{gameObject.name} is thinking how to reach {targetPos}");
 
         NNConstraint constraint = NNConstraint.Default;
         constraint.constrainWalkability = true;
@@ -248,10 +252,10 @@ public class AIAgent : MonoBehaviour
     public bool TryFindAllyToChat()
     {
         Debug.Log($"[AIAgent] {gameObject.name} is trying to find someone to chat");
-        nearbyAllies.RemoveWhere(a => a == null || Vector3.Distance(transform.position, a.transform.position) > 3f);
+        nearbyAllies.RemoveWhere(a => a == null || Vector3.Distance(transform.position, a.transform.position) > 10f);
 
         var allyList = nearbyAllies
-            .Where(a => CanSee(a.gameObject) && !a.IsChatting)
+            .Where(a => CanSee(a.gameObject) && !a.isChatting)
             .ToList();
 
         if(allyList.Count == 0) return false;
@@ -273,22 +277,28 @@ public class AIAgent : MonoBehaviour
     bool TryStartChat(AIAgent agent)
     {
         Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
-        if(!agent.AcceptToChat(this)) return false;
-        isChatting = true;
+        chatDuration = Random.Range(minChatDuration, maxChatDuration);
+        
+        if (!agent.AcceptToChat(this)) return false;
         allyToChat = agent;
+        needChat = true;
+        
         return true;
     }
 
-    public bool AcceptToChat(AIAgent agent)
+    public bool AcceptToChat(AIAgent ally)
     {
-        if(IsChatting || Random.Range(0f,1f) > chatTendency)
+        if(isChatting || Random.Range(0f,1f) > chatTendency)
         {
-            Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {agent.gameObject.name}");
+            Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}");
             return false;
         }
-        Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {agent.gameObject.name}");
-        allyToChat = agent;
-        isChatting = true;
+        Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {ally.gameObject.name}");        
+        chatDuration = ally.chatDuration;
+
+        Debug.Log($"[AIAgent] {gameObject.name} knows the chat should last for {chatDuration} sec");        
+        allyToChat = ally;
+        needChat = true;
         return true;
     }
 
@@ -297,6 +307,8 @@ public class AIAgent : MonoBehaviour
         Debug.Log($"[AIAgent] {gameObject.name} stop chatting.");
         allyToChat = null;
         isChatting = false;
+        needChat = false;
+        chatDuration = 0f;
     }
 
     public void Halt() => path.destination = transform.position;

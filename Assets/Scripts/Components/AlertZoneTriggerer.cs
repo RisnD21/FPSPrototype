@@ -19,8 +19,8 @@ public class AlertZoneTriggerer : MonoBehaviour
         var hits = Physics2D.OverlapCircleAll(transform.position, col.radius, layerMask);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent(out AIAgent agent))
-                aiAgent.AddNearbyAllies(agent);
+            if (hit.TryGetComponent(out AIAgent agent) && agent != aiAgent)
+                aiAgent.AddNearbyAllies(agent);                
         }
     }
 
