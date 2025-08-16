@@ -5,8 +5,6 @@ using DG.Tweening;
 public class DamageTextManager : MonoBehaviour
 {
     public static DamageTextManager Instance {get; private set;}
-    [SerializeField] Color negative;
-    [SerializeField] Color positive;
 
     [SerializeField] Canvas textContainer;
 
@@ -20,7 +18,7 @@ public class DamageTextManager : MonoBehaviour
     {
         PoolSystem.Instance.InitPool(textContainer, 20);
     }
-    public void SpawnText(int value, Vector3 pos, float duration = 1)
+    public void SpawnText(int value, Color color, Vector3 pos, float duration = 1)
     {
         var canvas = PoolSystem.Instance.GetInstance<Canvas>(textContainer);
         canvas.worldCamera = Camera.main;
@@ -29,7 +27,7 @@ public class DamageTextManager : MonoBehaviour
 
         panel.transform.position = pos;
         panel.transform.position += 0.5f * (Vector3) Random.insideUnitCircle;
-        panel.color = value >= 0 ? positive : negative;
+        panel.color = color;
         panel.text = value.ToString();
 
         UpdateRect(panel, duration);

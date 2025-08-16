@@ -1,13 +1,30 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public interface IDamageHandler
+{
+    // 回傳剩餘要往下傳的傷害
+    int HandleDamage(int amount);
+}
+
 public class DamagePipeline : MonoBehaviour
 {
-    [SerializeField] MonoBehaviour[] handlers;
+    [SerializeField] GameObject[] handlerObjects;
     [SerializeField] Damageable body;
-    IDamageHandler[] _handlers;
+    List<IDamageHandler> _handlers;
 
-    void Awake() => _handlers = handlers?.OfType<IDamageHandler>().ToArray();
+    void Awake()
+    {
+        _handlers = new();
+        if(handlerObjects.Length == 0) return;
+
+        foreach (var handlerGO in handlerObjects)
+        {
+            if(handlerGO.TryGetComponent<IDamageHandler>(out var handler))
+                _handlers.Add(handler);
+        }
+    }
 
     public void TakeDamage(int amount)
     {

@@ -7,7 +7,6 @@ using UnityEngine;
 public class Patrolling : IState
 {
     AIAgent agent;
-
     Coroutine routine;
     
     int nextWaypointIndex;
@@ -16,6 +15,9 @@ public class Patrolling : IState
     IState nextState;
     bool hasInitialize;
 
+    float chatCooldown = 5f;
+    float chatCountdown;
+
     public Patrolling(AIAgent agent)
     {
         this.agent = agent;
@@ -23,11 +25,12 @@ public class Patrolling : IState
 
     public void OnEnter()
     {
-        if(agent.isDebugMode) Debug.Log("Start patrolling");
+        if(agent.isDebugMode) Debug.Log("[Patrolling] Start patrolling");
 
         Initialize();
 
         routine = agent.StartCoroutine(Patrol());
+        agent.BackToNormalState();
     }
 
     void Initialize()
@@ -51,14 +54,16 @@ public class Patrolling : IState
             var nextPosition = patrolWaypoints[i].position;
             if(agent.TryMoveTo(nextPosition))
             {
-                //wait until reach nextPosition
                 yield return new WaitUntil(() => agent.HasReachDestination());
 
+                if (agent.isDebugMode) Debug.Log($"[Patrolling] Reach {patrolWaypoints[i].gameObject.name}");
                 Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
                     .Where(t => t!=patrolWaypoints[i]).ToArray();
 
+                
                 foreach (var viewPoint in viewPoints)
                 {
+                    if (agent.isDebugMode) Debug.Log("[Patrolling] Checking " + viewPoint.gameObject.name);
                     yield return agent.StartCoroutine(agent.Observe(viewPoint.position));
                 }
             }
@@ -77,11 +82,27 @@ public class Patrolling : IState
         {
             agent.lastSeenPlayerPos = agent.player.position;
             nextState = agent.chasing;
-        }
+        }else if(agent.isAlert) nextState = agent.searching;
+
+        if(NeedToChat()) if(agent.TryFindAllyToChat()) nextState = agent.chatting;
 
         if(nextState == null) return;
         agent.TransitionTo(nextState);
     }
+
+    bool NeedToChat()
+    {
+        if(chatCountdown > 0)
+        {
+            chatCountdown -= Time.deltaTime;
+            return false;
+        }else
+        {
+            chatCountdown = chatCooldown;
+            return true;
+        }        
+    }
+
     public void OnExit() 
     {
         agent.StopCoroutine(routine);

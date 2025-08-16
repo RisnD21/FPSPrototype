@@ -31,9 +31,9 @@ public class DropItemOnDeath : MonoBehaviour, IHealthListener
         Drop();
     }
 
-    public void OnHealthChanged(int current, int max) { }
-    public void OnDamaged(int amount) { }
-    public void OnHealed(int amount) { }
+    public void OnHealthChanged(int current, int max, bool hide = false) { }
+    public void OnDamaged(int amount, float duration = 0f, bool hide = false) { }
+    public void OnHealed(int amount, float duration = 0f, bool hide = false) { }
 
     void Drop()
     {

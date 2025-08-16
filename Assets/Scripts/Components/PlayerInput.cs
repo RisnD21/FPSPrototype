@@ -157,7 +157,6 @@ public class PlayerInput : MonoBehaviour
     void SetMenuMode(bool status)
     {
         isMenuMode = status;
-        Debug.Log("isMenuMode? " + isMenuMode);
     }
 
 

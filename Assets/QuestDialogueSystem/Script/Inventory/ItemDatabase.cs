@@ -6,6 +6,9 @@ namespace QuestDialogueSystem
     public static class ItemDatabase
     {
         static Dictionary<string, ItemData> itemMap = new();
+        static Dictionary<string, List<ItemData>> typeMap = new();
+
+        static bool isDebugMode = false;
 
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -28,10 +31,17 @@ namespace QuestDialogueSystem
                 if(!itemMap.ContainsKey(item.itemID))
                 {
                     itemMap[item.itemID] = item;
-                    Debug.Log($"[ItemDatabase] register item: {item.itemID} {item.itemName}");
+                    if (isDebugMode) Debug.Log($"[ItemDatabase] register item: {item.itemID} {item.itemName}");
+
+                    if(!typeMap.TryGetValue(item.itemType, out var list))
+                    {
+                        list = new();
+                        typeMap[item.itemType] = list;
+                    }
+                    list.Add(item);
                 } else 
                 {
-                    Debug.LogWarning("[ItemDatabase] Duplicate Item ID detected" + item.itemID);
+                    Debug.LogWarning("[ItemDatabase] Duplicate Item ID detected " + item.itemID);
                 }
             }
         }
@@ -39,6 +49,7 @@ namespace QuestDialogueSystem
         static void ResetDictionary()
         {
             itemMap.Clear();
+            typeMap.Clear();
         }
 
         public static bool TryGetItemData(string id, out ItemData itemData)
@@ -52,6 +63,21 @@ namespace QuestDialogueSystem
             {
                 itemData = null;
                 Debug.LogWarning("[ItemDatabase] ID Invalid");
+                return false;
+            }
+        }
+
+        public static bool TryGetItemsByType(string type, out List<ItemData> itemDatas)
+        {
+            if(typeMap.ContainsKey(type))
+            {
+                itemDatas = typeMap[type];
+                return true;
+            }
+            else
+            {
+                itemDatas = null;
+                Debug.LogWarning("[ItemDatabase] Type Invalid");
                 return false;
             }
         }

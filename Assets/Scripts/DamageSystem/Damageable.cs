@@ -3,7 +3,7 @@ using System.Linq;
 
 public class Damageable : MonoBehaviour
 {
-    [SerializeField] int maxHealth = 10;
+    public int maxHealth = 10;
     [SerializeField] MonoBehaviour[] listenerBehaviors; //drag IHealthListener
     IHealthListener[] listeners;
     public int Current {get; private set;}
@@ -17,7 +17,20 @@ public class Damageable : MonoBehaviour
         NotifyChanged();
     }
 
-    public void Heal(int value)
+    public void SetMaxHealth(int maxHealth)
+    {
+        this.maxHealth = maxHealth;
+        Current = Mathf.Min(Current, maxHealth);
+        Debug.Log($"Setting health {Current}/{this.maxHealth}");
+        NotifyChanged(true);
+    }
+
+    public void Revive()
+    {
+        isDead = false;
+    }
+
+    public void Heal(int value, float duration = 0f, bool hide = false)
     {
         if(isDead || value <= 0) return;
 
@@ -26,11 +39,11 @@ public class Damageable : MonoBehaviour
         
         int healed = Current - before;
         if(healed <= 0) return;
-        foreach (var l in listeners) l.OnHealed(healed);
+        foreach (var l in listeners) l.OnHealed(healed, duration, hide);
         NotifyChanged();
     }
 
-    public void TakeDamage(int value)
+    public void TakeDamage(int value, bool hide = false)
     {
         if(isDead || value <= 0) return;
         int before = Current;
@@ -39,8 +52,8 @@ public class Damageable : MonoBehaviour
         int taken = before - Current;
         if(taken <= 0) return;
 
-        foreach(var l in listeners) l.OnDamaged(taken);
-        NotifyChanged();
+        foreach(var l in listeners) l.OnDamaged(taken, 1f, hide);
+        NotifyChanged(hide);
 
         if(Current == 0 && !isDead)
         {
@@ -49,8 +62,8 @@ public class Damageable : MonoBehaviour
         }
     }
 
-    void NotifyChanged()
+    void NotifyChanged(bool hide = false)
     {
-        foreach (var l in listeners) l.OnHealthChanged(Current, maxHealth);
+        foreach (var l in listeners) l.OnHealthChanged(Current, maxHealth, hide);
     }
 }

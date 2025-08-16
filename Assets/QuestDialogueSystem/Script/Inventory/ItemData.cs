@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace QuestDialogueSystem
 {
-    [CreateAssetMenu(menuName = "GameJam/Item")]
+    [CreateAssetMenu(menuName = "GameJam/Item/Item")]
     public class ItemData : ScriptableObject
     {
         public string itemID;
@@ -12,6 +12,14 @@ namespace QuestDialogueSystem
         public string description;
         public int maxStack;
         public string itemType;
+        public ItemAction itemAction;
+        public bool HasAction() => itemAction != null;
+
+        public bool TryUse(UseContext useContext, InventorySlot slot)
+        {
+            if(itemAction == false) return false;
+            return itemAction.TryUse(useContext, slot);
+        }
 
         public override bool Equals(object obj)
         {            
@@ -26,6 +34,11 @@ namespace QuestDialogueSystem
         {
             if (itemID == null) return 0;
             return itemID.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return itemName;
         }
     }
 }

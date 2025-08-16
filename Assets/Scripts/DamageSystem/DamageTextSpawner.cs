@@ -3,20 +3,24 @@ using UnityEngine;
 //This should be placed on damagedTextPos gameobject
 public class DamageTextSpawner : MonoBehaviour, IHealthListener
 {
-    public void OnHealthChanged(int current, int max){}
-    public void OnDamaged(int amount)
+
+    [SerializeField] Color healColor = Color.green;
+    [SerializeField] Color damageColor = Color.red;
+
+    public void OnHealthChanged(int current, int max, bool hide = false){}
+    public void OnDamaged(int amount, float duration = 0f, bool hide = false)
     {
-        SpawnText(-amount);
+        if(!hide) SpawnText(amount, damageColor);
     }
-    public void OnHealed(int amount)
+    public void OnHealed(int amount, float duration = 0f, bool hide = false)
     {
-        SpawnText(amount);
+        if(!hide) SpawnText(amount, healColor);
     }
 
     public void OnDeath(){}
 
-    void SpawnText(int value)
+    void SpawnText(int value, Color color)
     {
-        DamageTextManager.Instance.SpawnText(value, transform.position);
+        DamageTextManager.Instance.SpawnText(value, color, transform.position);
     }
 }

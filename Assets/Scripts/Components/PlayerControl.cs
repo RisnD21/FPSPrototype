@@ -17,7 +17,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float sprintSpeed = 16.0f;
     [SerializeField] float acceleration = 10.0f;
     [SerializeField] float tolerance = 0.1f;
-    [SerializeField] float turnSpeed = 1.0f;
     [SerializeField] AmmoMonitor ammoMonitor;
     [SerializeField] List<GameObject> weapons;
     

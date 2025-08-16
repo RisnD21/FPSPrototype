@@ -15,8 +15,6 @@ namespace QuestDialogueSystem
         public event Action<ItemStack> OnItemAdd;
         public event Action<ItemStack> OnItemRemove;
 
-        public bool subscribed;
-
         public InventoryModel(int size)
         {
             for(int i = 0; i < size; i++)
@@ -63,6 +61,7 @@ namespace QuestDialogueSystem
 
         public int SpaceLeftFor(ItemData item)
             => Slots.Where(s => s.CanStackWith(item)).Sum(s => s.SpaceLeft(item));
+
 
         public bool TryAdd(ItemStack set, out int remainder)
         {
@@ -113,7 +112,7 @@ namespace QuestDialogueSystem
                 Locator.NotificationUI.PrintTitleMsg(msg);
             }
 
-            if(subscribed) OnItemAdd?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
+            OnItemAdd?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
             return remainder < set.Count;
         }
 
@@ -158,8 +157,6 @@ namespace QuestDialogueSystem
         public bool TryForceRemove(ItemStack set, out int remainder)
         {
             //remove set even if insufficient
-            
-
             remainder = set.Count;
             int remainderBef = remainder;
             if(set.Count <= 0) return true;
@@ -171,10 +168,6 @@ namespace QuestDialogueSystem
             foreach (var slot in matchSlots)
                 TryRemoveFromSlot(new ItemStack(set.Item, remainder), slot, ref remainder);
 
-            if(subscribed) 
-            {
-                OnItemRemove?.Invoke(new ItemStack(set.Item, remainderBef - remainder));
-            }
             return true;
         }
 
@@ -196,11 +189,14 @@ namespace QuestDialogueSystem
             return true;
         }
 
-        bool TryRemoveFromSlot(ItemStack stack, InventorySlot slot ,ref int remainder)
+        public bool TryRemoveFromSlot(ItemStack stack, InventorySlot slot ,ref int remainder)
         {
-            if (slot == null) return false;
+            
+            if (slot == null || slot.stack.IsEmpty) return false;
     
             if(!slot.TryAtomicRemove(stack, out int newRemainder)) return false;
+
+            OnItemRemove?.Invoke(new ItemStack(stack.Item, remainder - newRemainder));
             
             if (newRemainder >= 0)
             {

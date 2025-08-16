@@ -13,6 +13,7 @@ namespace QuestDialogueSystem
         public static QuestManager QuestManager{get; private set;}
         public static INotification NotificationUI{get; private set;}
         public static IInventory Inventory{get; private set;}
+        bool isDebugMode = false;
 
         void Awake()
         {
@@ -27,7 +28,7 @@ namespace QuestDialogueSystem
             if (dialogueRunnerReference is IDialogueRunner runner)
             {
                 DialogueRunner = runner;
-                if(DialogueRunner != null)Debug.Log("DialogueRunner initialized successfully");
+                if(DialogueRunner != null && isDebugMode) Debug.Log("DialogueRunner initialized successfully");
             } else 
             {
                 Debug.LogError("[Locator] Assigned reference does not implement IDialogueRunner.");
@@ -39,7 +40,7 @@ namespace QuestDialogueSystem
             if (questManager is QuestManager qm)
             {
                 QuestManager = qm;
-                if(QuestManager != null) Debug.Log("QuestManager initialized successfully");
+                if(QuestManager != null && isDebugMode) Debug.Log("QuestManager initialized successfully");
             } else 
             {
                 Debug.LogError("[Locator] Assigned reference is not a QuestManager.");
@@ -51,7 +52,7 @@ namespace QuestDialogueSystem
             if (notificationUI is INotification n)
             {
                 NotificationUI = n;
-                if(NotificationUI != null) Debug.Log("NotificationUI initialized successfully");
+                if(NotificationUI != null && isDebugMode) Debug.Log("NotificationUI initialized successfully");
             } else 
             {
                 Debug.LogError("[Locator] Assigned reference is not a INotification.");
@@ -66,7 +67,7 @@ namespace QuestDialogueSystem
                 if(Inventory != null) 
                 {
                     Inventory.Initialize();
-                    Debug.Log("Player Inventory initialized successfully");
+                    if(isDebugMode)Debug.Log("Player Inventory initialized successfully");
                 }                
 
             } else 

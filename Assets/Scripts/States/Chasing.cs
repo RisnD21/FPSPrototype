@@ -13,13 +13,15 @@ public class Chasing : IState
 
     public void OnEnter()
     {
-        if(agent.isDebugMode) Debug.Log("Start Chasing");
+        if(agent.isDebugMode) Debug.Log("[Chasing] Start Chasing");
 
         Initialize();
         if(!agent.TryMoveTo(agent.lastSeenPlayerPos, agent.chaseSpeed)) 
         {
             nextState = agent.patrolling;
-        }      
+        }
+
+        agent.CallReinforcement();
     }
     
     void Initialize()
@@ -30,7 +32,7 @@ public class Chasing : IState
     public void OnUpdate()
     {
         if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        if(agent.HasReachDestination()) nextState = agent.searching;
+        else if(agent.HasReachDestination()) nextState = agent.searching;
         
         if(nextState == null) return;
         agent.TransitionTo(nextState);

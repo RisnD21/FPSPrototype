@@ -20,6 +20,8 @@ namespace QuestDialogueSystem
         bool TryRemove(ItemData item, int count, out int Remainder);
         bool TryRemove(ItemStack set, out int Remainder);
 
+        bool TryRemoveFromSlot(ItemStack stack, InventorySlot slot ,ref int remainder);
+
         event Action<ItemStack> OnItemAdd;
         event Action<ItemStack> OnItemRemove;
     }

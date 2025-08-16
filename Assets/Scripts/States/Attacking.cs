@@ -20,7 +20,7 @@ public class Attacking : IState
 
     public void OnEnter()
     {
-        if(agent.isDebugMode) Debug.Log("Start attacking");
+        if(agent.isDebugMode) Debug.Log("[Attacking] Start attacking");
         Initialize();
         agent.Halt();
         coroutine = agent.StartCoroutine(Aim());
@@ -36,6 +36,7 @@ public class Attacking : IState
                 Debug.LogError("[Attacking] ActionStates missing");
             }
 
+            triggerFrequency = actionController.currentWeapon.fireCooldown;
             hasInitialize = true;
         }
 
@@ -87,8 +88,15 @@ public class Attacking : IState
 
     public void OnExit()
     {
-        if(agent.player != null)
+        if(agent.player == null)
+        {
+            if(agent.isDebugMode) Debug.Log("[Attacking] Target Down");
+        }else
+        {
+            if(agent.isDebugMode) Debug.Log("[Attacking] Updating lastSeenPlayerPos");
             agent.lastSeenPlayerPos = agent.player.position;
+        }
+            
         agent.StopCoroutine(coroutine);
     }
 }

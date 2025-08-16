@@ -1,19 +1,36 @@
-using System.Runtime.InteropServices.WindowsRuntime;
 using QuestDialogueSystem;
 using UnityEngine;
+using System.Collections;
 
 public class Weapon : MonoBehaviour
 {
-    Transform muzzle;
-    Transform flash;
+    [SerializeField] Transform muzzle;
+    [SerializeField] Transform flash;
 
     public bool autoReload;
     [SerializeField] public string gunType;
     [SerializeField] ItemData ammoType;
     [SerializeField] int damage;
     [SerializeField] float maxShotDistance;
-    [SerializeField] int magzineSize;
+    [SerializeField] int magazineSize;
     [SerializeField] GameObject inventoryObj;
+
+
+    [SerializeField] float maxAccuracy = 1f;
+    float accuracy;
+    [SerializeField] float accuracyRecoverPerSec = 0f;
+    [SerializeField] float accuracyDecreasePerTrigger = 0f;
+    Coroutine recoverAccuracy;
+
+    public enum FireMode
+    {
+        single,
+        burst,
+        auto
+    }
+    [SerializeField] FireMode firemode;
+    int accumulateFire;
+
     IInventory inventory;
 
     int ReserveAmmo
@@ -34,7 +51,7 @@ public class Weapon : MonoBehaviour
         }
     }
     int magazineAmmo;
-    [SerializeField] float fireCooldown;
+    [SerializeField] public float fireCooldown;
     float fireCountdown;
 
     [SerializeField] bool canShakeCam;
@@ -50,17 +67,18 @@ public class Weapon : MonoBehaviour
 
     bool inDebugMode = false;
 
+    void OnDisable() => hasRegister = false;
+    int mask;
+
     void Awake()
     {
-        muzzle = transform.GetChild(0);
-        flash = transform.GetChild(1);
+        mask = LayerMask.GetMask("NPC", "Obstacle", "Player", "Shield");
     }
-
-    void OnDisable() => hasRegister = false;
 
     void Start()
     {
         RaycastShotController.Instance.SetGunType(gunType);
+        accuracy = maxAccuracy;
     }
 
     public void LoadAmmo(IInventory inventory)
@@ -99,26 +117,61 @@ public class Weapon : MonoBehaviour
         }
 
         if(!CanFire) return;
+
         magazineAmmo -= 1;
         flash.GetComponent<ParticleSystem>().Play();
         RaycastShot();
 
         if(canShakeCam) CameraShaker.Instance.Shake(fireShakeDuration, fireShakeMagnitude);
 
-        fireCountdown = fireCooldown;
+        SetFireCooldown();        
+        ModifyAccuracy();
+
         if(inDebugMode) Debug.Log($"Current Ammo ({magazineAmmo}/{ReserveAmmo})");
         UpdateAmmoMonitor(magazineAmmo, ReserveAmmo);
     }
+
+    /// <summary>
+    /// For NPC fire control – forces cooldown based on accuracy recovery time.
+    /// Player-controlled weapons will always be in mode automatic
+    /// </summary>
+    void SetFireCooldown()
+    {
+        fireCountdown = fireCooldown;
+
+        if(firemode == FireMode.burst) accumulateFire++;
+        if (firemode == FireMode.single || accumulateFire >= 3)
+        {
+            if(accuracyRecoverPerSec != 0)
+                fireCountdown = (maxAccuracy - accuracy)/accuracyRecoverPerSec;
+            accumulateFire = 0;
+        }
+    }
+
+    void ModifyAccuracy()
+    {
+        accuracy -= accuracyDecreasePerTrigger;
+        if(recoverAccuracy != null) StopCoroutine(recoverAccuracy);
+        recoverAccuracy = StartCoroutine(RecoverAccuracy());
+    }
+
+    IEnumerator RecoverAccuracy()
+    {
+        while(accuracy < maxAccuracy)
+        {
+            yield return new WaitForSeconds(0.1f);
+            accuracy = Mathf.Min(accuracy + accuracyRecoverPerSec/10, maxAccuracy);
+        }
+    }   
 
     void RaycastShot()
     {
         Vector3 origin = muzzle.position;
         origin.z = 0;
 
-        Vector3 direction = muzzle.right; 
+        Vector3 direction = muzzle.right + (Vector3)Random.insideUnitCircle * (1-accuracy); 
         direction.z = 0;
 
-        int mask = LayerMask.GetMask("NPC", "Obstacle", "Player", "Shield");
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxShotDistance, mask);
 
         Vector2 endPoint;
@@ -128,10 +181,9 @@ public class Weapon : MonoBehaviour
             VFXManager.Instance.SpawnImpactEffect(hit.point, hit.normal, hit.collider.tag);
             endPoint = hit.point;
 
-            if(hit.collider.TryGetComponent<DamagePipeline>(out var target))
+            if(hit.collider.TryGetComponent<DamageForwarder>(out var target))
             {
-                Debug.Log($"[Weapon] Dealing damage to {target.gameObject.name}");
-                target.TakeDamage(damage);
+                target.ApplyHit(damage);
             }
         } else
         {
@@ -149,7 +201,7 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        int ammoNeed = magzineSize - magazineAmmo;
+        int ammoNeed = magazineSize - magazineAmmo;
         int ammoToFill = Mathf.Min(ReserveAmmo, ammoNeed);
 
         ReserveAmmo -= ammoToFill;

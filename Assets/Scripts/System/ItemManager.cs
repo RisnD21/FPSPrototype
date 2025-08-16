@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections.Generic;
 using QuestDialogueSystem;
+using System.Collections;
 
 public class ItemManager : MonoBehaviour
 {
@@ -25,8 +26,11 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private Transform uiSpriteParent;    // Image Prefab 之 parent
     [SerializeField] private Canvas uiCanvas;                 // 接受圖示的 Canvas
     [SerializeField] private RectTransform targetIcon;        // 飛往的目標 Icon
-    [SerializeField] private float flyDuration = 0.6f;        // 飛行時間
+    [SerializeField] private float flyDuration = 0.3f;        // 飛行時間
     [SerializeField] private Ease flyEase = Ease.InOutQuad;   // 飛行曲線
+    [SerializeField] MonoBehaviour backpackScript;
+    BackpackBounce backpackBounce;
+    
 
     // id → 物品設定
     private Dictionary<string, ItemEntry> entryMap;
@@ -35,6 +39,8 @@ public class ItemManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
+
+        backpackBounce = backpackScript.GetComponent<BackpackBounce>();
     }
 
     public void Initialize()
@@ -99,9 +105,10 @@ public class ItemManager : MonoBehaviour
         if(Locator.Inventory.TryAdd(stack, out _))
         {
             SpawnUIIcon(id, worldPosition);
+            StartCoroutine(CollectItem());
             return true;
         }else return false;
-        // TODO: 增加背包、音效、數量…等邏輯        
+        // TODO: 增加背包、音效、數量…等邏輯    
     }
 
     //--------------- 私有 Method ---------------//
@@ -132,6 +139,12 @@ public class ItemManager : MonoBehaviour
             {
                 uiInst.gameObject.SetActive(false);
             });
+    }
+
+    IEnumerator CollectItem()
+    {
+        yield return new WaitForSeconds(flyDuration);
+        backpackBounce.PlayBounce();
     }
 
 }

@@ -16,11 +16,13 @@ public class AmmoMonitor : MonoBehaviour
     void OnEnable()
     {
         Locator.Inventory.OnItemAdd += UpdateAmmoCount;
+        Locator.Inventory.OnItemRemove += UpdateAmmoCount;
     }
 
     void OnDisable()
     {
         Locator.Inventory.OnItemAdd -= UpdateAmmoCount;
+        Locator.Inventory.OnItemRemove -= UpdateAmmoCount;
     }
 
     void UpdateAmmoCount(ItemStack stack)

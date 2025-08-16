@@ -7,7 +7,6 @@ namespace QuestDialogueSystem
     public class Inventory : MonoBehaviour, IInventory
     {
         [SerializeField] int inventorySize = 8;
-        [SerializeField] bool subscribeThisInventory;
         InventoryModel model;
 
         bool hasInitialized;
@@ -21,9 +20,7 @@ namespace QuestDialogueSystem
         {
             if(hasInitialized) return;
             model = new InventoryModel(inventorySize);
-
-            model.subscribed = subscribeThisInventory;
-
+            
             model.OnItemAdd += stack => OnItemAdd?.Invoke(stack);
             model.OnItemRemove += stack => OnItemRemove?.Invoke(stack);
 
@@ -55,6 +52,8 @@ namespace QuestDialogueSystem
         public bool TryRemove(ItemStack set, out int remainder)
             => model.TryRemove(set, out remainder);
 
+        public bool TryRemoveFromSlot(ItemStack stack, InventorySlot slot ,ref int remainder)
+            => model.TryRemoveFromSlot(stack, slot ,ref remainder);
         public event Action<ItemStack> OnItemAdd;
         public event Action<ItemStack> OnItemRemove;
 

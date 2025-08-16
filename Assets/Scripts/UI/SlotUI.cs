@@ -3,24 +3,28 @@ using UnityEngine.UI;
 using TMPro;
 using QuestDialogueSystem;
 using UnityEngine.EventSystems;
+using System;
 
 
 public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    InventorySlot slot;
-    [SerializeField] Image icon;
-    [SerializeField] GameObject descriptionPanel;
-    [SerializeField] TextMeshProUGUI description;
-    [SerializeField] TextMeshProUGUI count;
 
+    public InventorySlot Slot{get; private set;}
+    [SerializeField] Image icon;
+    [SerializeField] TextMeshProUGUI count;
     Color defaultColor;
-    void Awake()
+    InventoryUI inventoryUI;
+
+    public void InitializeSlot(InventoryUI inventoryUI)
     {
+        this.inventoryUI = inventoryUI;
+
         defaultColor = icon.color;
-        slot = new();
+        Slot = new();
 
         ClearSlot();
     }
+
     public void SetSlot(InventorySlot slot)
     {
         if (slot == null || slot.IsEmpty) 
@@ -29,58 +33,49 @@ public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             return;
         }
 
-        this.slot = slot;
+        Slot = slot;
 
-        icon.sprite = this.slot.stack.Item.itemIcon;
+        icon.sprite = Slot.stack.Item.itemIcon;
         icon.color = defaultColor;
         icon.enabled = true;
 
-        description.text = this.slot.stack.Item.description;
-        count.text = this.slot.stack.Count.ToString();
+        count.text = Slot.stack.Count.ToString();
 
         gameObject.SetActive(true);
     }
 
-    void ClearSlot()
+    public void ClearSlot()
     {
         icon.sprite = null;
         icon.color = new Color(1,1,1,0); //transparent
         icon.enabled = false;
 
-        descriptionPanel.SetActive(false);
-        count.text = "";
-
-        if(slot == null) return;
-        slot.stack = ItemStack.Empty;
+        if(Slot == null) return;
+        Slot.stack = ItemStack.Empty;
 
         gameObject.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (slot != null && !slot.IsEmpty)
-        {
-            descriptionPanel.SetActive(true);
-        }
+        if (Slot == null || Slot.IsEmpty) return;
+        inventoryUI.ShowDescriptionPanel(Slot, eventData.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        descriptionPanel.SetActive(false);
+        inventoryUI.HideDescriptionPanel();
     }
-
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (slot != null && !slot.IsEmpty)
-        {
-            
-        }
+        if (Slot == null || Slot.IsEmpty) return;
+        inventoryUI.OpenItemMenu(Slot, eventData.position);
     }
 
     public override string ToString()
     {
-        if(slot == null || slot.IsEmpty) return "Empty Slot";
-        return $"{slot.stack.Item.itemName} {slot.stack.Count}/{Mathf.Min(slot.stack.Max, slot.slotMaxStack)}";
+        if(Slot == null || Slot.IsEmpty) return "Empty Slot";
+        return $"{Slot.stack.Item.itemName} {Slot.stack.Count}/{Mathf.Min(Slot.stack.Max, Slot.slotMaxStack)}";
     }
 }

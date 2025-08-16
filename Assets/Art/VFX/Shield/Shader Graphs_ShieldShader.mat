@@ -45,8 +45,8 @@ Material:
     - _Alpha: 1
     - _DepthOffset: 0.59
     - _Distortion_Strength: 1
-    - _Fresnel_Effect: 0.97
-    - _Opacity: 0.96
+    - _Fresnel_Effect: 0.79
+    - _Opacity: 0.89
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
