@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class VFXManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class VFXManager : MonoBehaviour
 
     [SerializeField] ParticleSystem impactEffect;
     [SerializeField] ParticleSystem splashEffect;
+
+    public event Action<Vector3> ProduceImpact;
 
     void Awake()
     {
@@ -37,7 +40,7 @@ public class VFXManager : MonoBehaviour
         effect.gameObject.SetActive(true);
 
         effect.Play();
-
+        ProduceImpact?.Invoke(pos);
         
         // var source = WorldAudioPool.GetWorldSFXSource();
 

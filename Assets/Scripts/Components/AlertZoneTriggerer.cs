@@ -4,7 +4,7 @@ using UnityEngine;
 public class AlertZoneTriggerer : MonoBehaviour
 {
     [SerializeField] GameObject aiAgentObject;
-    public LayerMask layerMask;
+    public LayerMask NPCLayer;
     AIAgent aiAgent;
 
     CircleCollider2D col;
@@ -16,7 +16,7 @@ public class AlertZoneTriggerer : MonoBehaviour
 
     void Start()
     {
-        var hits = Physics2D.OverlapCircleAll(transform.position, col.radius, layerMask);
+        var hits = Physics2D.OverlapCircleAll(transform.position, col.radius, NPCLayer);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent(out AIAgent agent) && agent != aiAgent)
@@ -26,7 +26,7 @@ public class AlertZoneTriggerer : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player")) aiAgent.SenseSomething();
+        if(collision.gameObject.CompareTag("Player")) aiAgent.SenseSomething(collision.transform.position + (Vector3)Random.insideUnitCircle * 3);
         else if (collision.TryGetComponent<AIAgent>(out var agent))
         {
             agent.AddNearbyAllies(agent);

@@ -44,7 +44,8 @@ public class Chatting : IState
     {
         Debug.Log($"[Chatting] {agent.gameObject.name} is chatting with {ally.gameObject.name}");
         
-        yield return agent.StartCoroutine(agent.LookAt(ally.transform.position));
+        yield return agent.StartCoroutine(agent.Observe(ally.transform.position, agent.chatDuration));
+        
         yield return new WaitForSeconds(agent.chatDuration);
 
         Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {agent.chatDuration} sec");
@@ -56,6 +57,7 @@ public class Chatting : IState
         if(agent.IsPlayerInSight()) nextState = agent.attacking;
         else if(agent.beingHit && agent.player != null)
         {
+            Debug.Log($"{agent.gameObject.name} is being hit!");
             agent.lastSeenPlayerPos = agent.player.position;
             nextState = agent.chasing;
         }else if(agent.isAlert) nextState = agent.searching;
@@ -66,7 +68,7 @@ public class Chatting : IState
 
     public void OnExit() 
     {
-        agent.StopChatting();
         agent.StopCoroutine(routine);
+        agent.StopChatting();
     }
 }

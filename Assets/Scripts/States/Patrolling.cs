@@ -51,7 +51,7 @@ public class Patrolling : IState
 
         for (int i = currentWaypointIndex; i < patrolWaypoints.Count; i++)
         {
-            var nextPosition = patrolWaypoints[i].position;
+            var nextPosition = patrolWaypoints[i].position + (Vector3) Random.insideUnitCircle * 3;
             if(agent.TryMoveTo(nextPosition))
             {
                 yield return new WaitUntil(() => agent.HasReachDestination());
@@ -64,7 +64,8 @@ public class Patrolling : IState
                 foreach (var viewPoint in viewPoints)
                 {
                     if (agent.isDebugMode) Debug.Log("[Patrolling] Checking " + viewPoint.gameObject.name);
-                    yield return agent.StartCoroutine(agent.Observe(viewPoint.position));
+                    Vector3 view = viewPoint.position + (Vector3) Random.insideUnitCircle;
+                    yield return agent.StartCoroutine(agent.Observe(view));
                 }
             }
 

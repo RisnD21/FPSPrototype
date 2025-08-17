@@ -5,6 +5,7 @@ using System.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using System.Linq;
 
+[DefaultExecutionOrder(0)]
 public class AIAgent : MonoBehaviour
 {
     AIPath path;
@@ -19,8 +20,9 @@ public class AIAgent : MonoBehaviour
 
     public Vector3 lastSeenPlayerPos;
     Vector3 destination;
+    public bool isMoving;
     
-    public bool isDebugMode = false;
+    public bool isDebugMode = true;
     
     public void OnHit() => beingHit = true;    
     [HideInInspector] public bool beingHit;
@@ -30,6 +32,7 @@ public class AIAgent : MonoBehaviour
         if (Vector2.Distance(destination, transform.position) < 2f) 
         {
             if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} has reach destination");
+            isMoving = false;
             return true;
         }
         return false;
@@ -45,15 +48,18 @@ public class AIAgent : MonoBehaviour
     //if on last seen player position, player out of sight, start observing 
     public IState chatting;
     //on patrolling, npc get bored
+
+    public IState observing;
+    //sometimes, npc need to break states to spend some time staring at something
     public IState currentState;
 
 
 
     //Alert Behavior
-    public bool isAlert;
+    [HideInInspector] public bool isAlert;
 
     //Observe Behavior
-    float jitterMagnitude = 1.5f;
+    float jitterMagnitude = 1f;
 
     //Chat Behavior
     HashSet<AIAgent> nearbyAllies;
@@ -75,10 +81,12 @@ public class AIAgent : MonoBehaviour
     void OnEnable()
     {
         AICommander.Instance.RequestReport += ReportBack;
+        
     }
     void OnDisable()
     {
         AICommander.Instance.RequestReport -= ReportBack;
+        
     }
 
     void Start()
@@ -90,7 +98,13 @@ public class AIAgent : MonoBehaviour
     void Initialize()
     {
         InitializeStates();
+        VFXManager.Instance.ProduceImpact += ReactToImpact;
         path.maxSpeed = walkSpeed;
+    }
+
+    void OnDestroy()
+    {
+        VFXManager.Instance.ProduceImpact -= ReactToImpact;
     }
 
     void InitializeStates()
@@ -100,6 +114,7 @@ public class AIAgent : MonoBehaviour
         chasing = new Chasing(this);
         searching = new Searching(this);
         chatting = new Chatting(this);
+        observing = new Observing(this);
     }
 
     public IEnumerator Observe(Vector3 point, float duration = 5f)
@@ -123,8 +138,6 @@ public class AIAgent : MonoBehaviour
     //Face at point
     public IEnumerator LookAt(Vector3 point, float duration = 0.3f)
     {
-        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} is looking at {point}");
-
         Vector3 direction = point - transform.position;
 
         float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
@@ -193,6 +206,7 @@ public class AIAgent : MonoBehaviour
 
         if (fromNode != null && toNode != null && PathUtilities.IsPathPossible(fromNode, toNode))
         {
+            isMoving = true;
             destination = toInfo.position;
             path.destination = destination;
 
@@ -206,11 +220,11 @@ public class AIAgent : MonoBehaviour
         }
     }
 
-    public void SenseSomething()
+    public void SenseSomething(Vector3 position)
     {
         if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} senses something suspicious");
         if (isDebugMode) Debug.Log("[AIAgent] Updating lastSeenPlayerPos");
-        lastSeenPlayerPos = player.position;
+        lastSeenPlayerPos = position;
         isAlert = true;
     }
 
@@ -276,6 +290,7 @@ public class AIAgent : MonoBehaviour
 
     bool TryStartChat(AIAgent agent)
     {
+        if(isMoving) return false;
         Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
         chatDuration = Random.Range(minChatDuration, maxChatDuration);
         
@@ -288,7 +303,7 @@ public class AIAgent : MonoBehaviour
 
     public bool AcceptToChat(AIAgent ally)
     {
-        if(isChatting || Random.Range(0f,1f) > chatTendency)
+        if(isChatting || currentState != patrolling ||Random.Range(0f,1f) > chatTendency)
         {
             Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}");
             return false;
@@ -310,6 +325,15 @@ public class AIAgent : MonoBehaviour
         needChat = false;
         chatDuration = 0f;
     }
+
+    void ReactToImpact(Vector3 pos)
+    {
+        if(Vector3.Distance(transform.position, pos) > 10f) return;
+        SenseSomething(player.position + (Vector3) Random.insideUnitCircle * 6);
+        isAlert = true;
+    }
+
+
 
     public void Halt() => path.destination = transform.position;
 

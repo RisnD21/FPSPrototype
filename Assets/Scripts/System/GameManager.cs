@@ -2,6 +2,8 @@ using QuestDialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+[DefaultExecutionOrder(-1001)]
 public class GameManager : MonoBehaviour
 {
     ItemCounter counter;
