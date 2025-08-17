@@ -4,109 +4,72 @@ using System.Linq;
 using UnityEngine;
 
 
-public class Patrolling : IState
+public class Patrolling : StateBase
 {
-    AIAgent agent;
-    Coroutine routine;
-    
     int nextWaypointIndex;
     List<Transform> patrolWaypoints;
-
-    IState nextState;
-    bool hasInitialize;
-
-    float chatCooldown = 5f;
-    float chatCountdown;
-
-    public Patrolling(AIAgent agent)
+    
+    //child class must define its own constructor if not using default(parameterless) one
+    public Patrolling(AIAgent agent) : base(agent) { } 
+    public override void OnEnter()
     {
-        this.agent = agent;
-    }
+        base.OnEnter();
 
-    public void OnEnter()
-    {
-        if(agent.isDebugMode) Debug.Log("[Patrolling] Start patrolling");
-
-        Initialize();
-
-        routine = agent.StartCoroutine(Patrol());
-        agent.BackToNormalState();
-    }
-
-    void Initialize()
-    {
-        if (!hasInitialize)
-        {
-            patrolWaypoints = agent.patrolWaypoints;
-
-            hasInitialize = true;
-        }
-        
-        nextState = null;
+        patrolWaypoints = agent.patrolWaypoints;
+        routines.Add(agent.StartCoroutine(Patrol()));
     }
 
     IEnumerator Patrol()
     {
-        int currentWaypointIndex = nextWaypointIndex;
-
-        for (int i = currentWaypointIndex; i < patrolWaypoints.Count; i++)
+        while (true)
         {
-            var nextPosition = patrolWaypoints[i].position + (Vector3) Random.insideUnitCircle * 3;
-            if(agent.TryMoveTo(nextPosition))
+            int currentWaypointIndex = nextWaypointIndex;
+
+            for (int i = currentWaypointIndex; i < patrolWaypoints.Count; i++)
             {
-                yield return new WaitUntil(() => agent.HasReachDestination());
-
-                if (agent.isDebugMode) Debug.Log($"[Patrolling] Reach {patrolWaypoints[i].gameObject.name}");
-                Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
-                    .Where(t => t!=patrolWaypoints[i]).ToArray();
-
-                
-                foreach (var viewPoint in viewPoints)
+                var nextPosition = patrolWaypoints[i].position + (Vector3)Random.insideUnitCircle * 3;
+                if (agent.TryMoveTo(nextPosition))
                 {
-                    if (agent.isDebugMode) Debug.Log("[Patrolling] Checking " + viewPoint.gameObject.name);
-                    Vector3 view = viewPoint.position + (Vector3) Random.insideUnitCircle;
-                    yield return agent.StartCoroutine(agent.Observe(view));
+                    yield return new WaitUntil(() => agent.HasReachDestination());
+
+                    if (agent.isDebugMode) Debug.Log($"[Patrolling] Reach {patrolWaypoints[i].gameObject.name}");
+                    Transform[] viewPoints = patrolWaypoints[i].GetComponentsInChildren<Transform>()
+                        .Where(t => t != patrolWaypoints[i]).ToArray();
+
+                    foreach (var viewPoint in viewPoints)
+                    {
+                        if (agent.isDebugMode) Debug.Log("[Patrolling] Checking " + viewPoint.gameObject.name);
+                        Vector3 view = viewPoint.position + (Vector3)Random.insideUnitCircle;
+                        yield return agent.StartCoroutine(agent.Observe(view));
+                    }
                 }
+
+                nextWaypointIndex++;
             }
 
-            nextWaypointIndex++;
+            nextWaypointIndex = 0;
         }
-
-        nextWaypointIndex = 0;
-        routine = agent.StartCoroutine(Patrol());
     }
 
-    public void OnUpdate()
-    {
-        if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        else if(agent.beingHit && agent.player != null)
-        {
-            agent.lastSeenPlayerPos = agent.player.position;
-            nextState = agent.chasing;
-        }else if(agent.isAlert) nextState = agent.searching;
+    public override void OnUpdate() { }
 
-        if (agent.needChat) nextState = agent.chatting;
-        else if (WantToChat() && agent.TryFindAllyToChat()) nextState = agent.chatting;
+    // public override void OnUpdate()
+    // {
+    //     if (WantToChat() && agent.TryFindAllyToChat()) RequestTransition(agent.chatting);
+    // }
 
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
-    }
+    // bool WantToChat()
+    // {
+    //     if(chatCountdown > 0)
+    //     {
+    //         chatCountdown -= Time.deltaTime;
+    //         return false;
+    //     }else
+    //     {
+    //         chatCountdown = chatCooldown;
+    //         return true;
+    //     }        
+    // }
 
-    bool WantToChat()
-    {
-        if(chatCountdown > 0)
-        {
-            chatCountdown -= Time.deltaTime;
-            return false;
-        }else
-        {
-            chatCountdown = chatCooldown;
-            return true;
-        }        
-    }
 
-    public void OnExit() 
-    {
-        agent.StopCoroutine(routine);
-    }
 }

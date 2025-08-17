@@ -67,7 +67,6 @@ public class AIAgent : MonoBehaviour
     public float walkSpeed;
     public float chaseSpeed;
     public List<Transform> patrolWaypoints;
-
     public float viewAngle = 120.0f;
 
     public Vector3 lastSeenPlayerPos;
@@ -78,10 +77,12 @@ public class AIAgent : MonoBehaviour
     
     public void OnHit() => beingHit = true;    
     [HideInInspector] public bool beingHit;
+    
+
 
     public bool HasReachDestination()
     {
-        if (Vector2.Distance(destination, transform.position) < 2f) 
+        if (Vector2.Distance(destination, transform.position) < 2f)
         {
             if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} has reach destination");
             isMoving = false;
@@ -105,7 +106,7 @@ public class AIAgent : MonoBehaviour
     //sometimes, npc need to break states to spend some time staring at something
     public IState currentState;
 
-
+    PerceptionInbox stimulusQueue;
 
     //Alert Behavior
     [HideInInspector] public bool isAlert;
@@ -130,6 +131,7 @@ public class AIAgent : MonoBehaviour
         nearbyAllies = new();
     }
 
+
     void OnEnable()
     {
         AICommander.Instance.RequestReport += ReportBack;
@@ -144,12 +146,14 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         Initialize();
-        TransitionTo(patrolling);
+        EnqueueTransition(patrolling);
     }
 
     void Initialize()
     {
-        InitializeStates();
+        InitStates();
+        InitStatePriorityIndex();
+        stimulusQueue = new();
         VFXManager.Instance.ProduceImpact += ReactToImpact;
         path.maxSpeed = walkSpeed;
     }
@@ -159,7 +163,7 @@ public class AIAgent : MonoBehaviour
         VFXManager.Instance.ProduceImpact -= ReactToImpact;
     }
 
-    void InitializeStates()
+    void InitStates()
     {
         patrolling = new Patrolling(this);
         attacking = new Attacking(this);
@@ -168,19 +172,32 @@ public class AIAgent : MonoBehaviour
         chatting = new Chatting(this);
         observing = new Observing(this);
     }
+    
+    void InitStatePriorityIndex()
+    {
+        statePriorityIndex = new()
+        {
+            { patrolling, 30},
+            { attacking, 70},
+            { chasing, 60},
+            { searching, 50},
+            { observing, 40},
+            { chatting, 20 }
+        };
+    }
 
     public IEnumerator Observe(Vector3 point, float duration = 5f)
     {
         if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} is observing {point}");
         yield return StartCoroutine(LookAt(point)); //StartCoroutine 完成後才會繼續往下
-    
+
         float elapsed = 0;
-        while(elapsed < duration)
+        while (elapsed < duration)
         {
-            Vector3 nextView = point + (Vector3) Random.insideUnitCircle * jitterMagnitude;
+            Vector3 nextView = point + (Vector3)UnityEngine.Random.insideUnitCircle * jitterMagnitude;
             yield return StartCoroutine(LookAt(nextView, 0.4f));
 
-            float waitTime = Random.Range(0.5f,3.5f);
+            float waitTime = UnityEngine.Random.Range(0.5f, 3.5f);
             yield return new WaitForSeconds(waitTime);
 
             elapsed += 0.2f + waitTime;
@@ -229,15 +246,6 @@ public class AIAgent : MonoBehaviour
         if(distanceToPlayer > 20f) return false;
 
         return true;
-    }
-
-    public void TransitionTo(IState state)
-    {
-        // if(currentState != null && currentState == state) return;
-        
-        currentState?.OnExit();
-        currentState = state;
-        state.OnEnter();
     }
 
     public bool TryMoveTo(Vector3 targetPos, float speed = 0)
@@ -325,7 +333,7 @@ public class AIAgent : MonoBehaviour
             .ToList();
 
         if(allyList.Count == 0) return false;
-        int indexToPick = Random.Range(0,allyList.Count);
+        int indexToPick = UnityEngine.Random.Range(0,allyList.Count);
         return TryStartChat(allyList[indexToPick]);
     }
 
@@ -344,7 +352,7 @@ public class AIAgent : MonoBehaviour
     {
         if(isMoving) return false;
         Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
-        chatDuration = Random.Range(minChatDuration, maxChatDuration);
+        chatDuration = UnityEngine.Random.Range(minChatDuration, maxChatDuration);
         
         if (!agent.AcceptToChat(this)) return false;
         allyToChat = agent;
@@ -355,7 +363,7 @@ public class AIAgent : MonoBehaviour
 
     public bool AcceptToChat(AIAgent ally)
     {
-        if(isChatting || currentState != patrolling ||Random.Range(0f,1f) > chatTendency)
+        if(isChatting || currentState != patrolling ||UnityEngine.Random.Range(0f,1f) > chatTendency)
         {
             Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}");
             return false;
@@ -381,7 +389,7 @@ public class AIAgent : MonoBehaviour
     void ReactToImpact(Vector3 pos)
     {
         if(Vector3.Distance(transform.position, pos) > 10f) return;
-        SenseSomething(player.position + (Vector3) Random.insideUnitCircle * 6);
+        SenseSomething(player.position + (Vector3) UnityEngine.Random.insideUnitCircle * 6);
         isAlert = true;
     }
 
@@ -389,8 +397,59 @@ public class AIAgent : MonoBehaviour
 
     public void Halt() => path.destination = transform.position;
 
+    Dictionary<IState, int> statePriorityIndex;
+    IState pendingNext; int pendingPriority;
+    public void EnqueueTransition(IState state, int priority = -1)
+    {
+        if (priority == -1)
+        {
+            statePriorityIndex.TryGetValue(state, out var defaultPriority);
+            priority = defaultPriority;
+        }
+
+        if (pendingNext == null || pendingPriority < priority)
+            pendingNext = state; pendingPriority = priority;
+    }
+
     void Update()
     {
+        while (stimulusQueue.TryConsume(out var toConsume)) HandleStimulus(toConsume);
+        if (pendingNext != null) TransitionTo(pendingNext); pendingNext = null;
         currentState?.OnUpdate();
     }
+
+    public void TransitionTo(IState state)
+    {
+        currentState?.OnExit();
+        currentState = state;
+        state.OnEnter();
+    }
+
+    Blackboard blackboard = new();
+
+    void HandleStimulus(Stimulus stimulus)
+    {
+        switch (stimulus.type)
+        {
+            case StimulusType.SeeEnemy:
+                blackboard.lastSeenEnemy = stimulus.position;
+                EnqueueTransition(attacking); break;
+            case StimulusType.SuspiciousNoise:
+                blackboard.lastHeardPos = stimulus.position;
+                EnqueueTransition(searching); break;
+            case StimulusType.Impact:
+                blackboard.lastImpactPos = stimulus.position;
+                EnqueueTransition(observing); break;
+            case StimulusType.LostSight:
+                blackboard.lastSeenEnemy = stimulus.position;
+                EnqueueTransition(searching); break;
+            case StimulusType.Gunshot:
+                blackboard.lastHeardPos = stimulus.position;
+                EnqueueTransition(searching); break;
+        }
+
+    }
+
+
+
 }
