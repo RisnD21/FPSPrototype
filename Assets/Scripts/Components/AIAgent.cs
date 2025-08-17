@@ -4,6 +4,58 @@ using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using System.Linq;
+using System;
+
+
+public class Blackboard
+{
+    public Vector3? lastSeenEnemy;
+    public Vector3? lastImpactPos;
+    public Vector3? lastHeardPos;
+    public float suspicious; //(may not need) decay over time
+    public float lastCallReinforce;
+}
+
+public enum StimulusType
+{
+    Impact, Gunshot, SuspiciousNoise, SeeEnemy, LostSight, AllyNearby
+}
+
+public readonly struct Stimulus
+{
+    public readonly StimulusType type;
+    public readonly Vector3 position;
+    public readonly float intensity;
+    public readonly float timeStamp;
+    public readonly float ttl; //time to live
+
+    public readonly bool IsValid => timeStamp > 0;
+    public Stimulus(StimulusType type, Vector3 position, float intensity, float timeStamp, float ttl)
+    {
+        this.type = type;
+        this.position = position;
+        this.intensity = intensity;
+        this.timeStamp = timeStamp;
+        this.ttl = ttl;
+    }
+}
+
+public class PerceptionInbox
+{
+    readonly Queue<Stimulus> queue = new();
+    public void Push(Stimulus s) => queue.Enqueue(s);
+    public bool TryConsume(out Stimulus toConsume)
+    {
+        while(queue.Count > 0)
+        {
+            var s = queue.Dequeue();
+            if(Time.time - s.timeStamp < s.ttl) {toConsume = s; return true;}
+        }
+        toConsume = default;
+        return false;
+    }
+}
+
 
 [DefaultExecutionOrder(0)]
 public class AIAgent : MonoBehaviour
