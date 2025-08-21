@@ -51,7 +51,7 @@ public class AICommander : MonoBehaviour
 
     IEnumerator IssuingOrder()
     {
-        yield return new WaitForSeconds(2); //wait for soldiers to report back
+        yield return new WaitForSeconds(0.5f); //wait for soldiers to report back
 
         AIAgent[] troop = SelectSoldiers();
         SendingTroop(troop);
@@ -74,7 +74,7 @@ public class AICommander : MonoBehaviour
     void SendingTroop(AIAgent[] troop)
     {
         foreach(var soldier in troop) 
-            soldier.Reinforce(enemyLocation  + (Vector3) UnityEngine.Random.insideUnitCircle);
+            soldier.Reinforce(enemyLocation  + (Vector3) UnityEngine.Random.insideUnitCircle * 2);
     }
 
     void Update()

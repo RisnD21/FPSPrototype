@@ -1,45 +1,32 @@
-
 using UnityEngine;
 
-public class Chasing : IState
-{
-    AIAgent agent;
-    IState nextState;
-    
-    public Chasing(AIAgent agent)
-    {
-        this.agent = agent;
-    }
+public class Chasing : StateBase
+{   
+    public override string Name => "Chasing";
+    public Chasing(AIAgent agent) : base(agent) {}
 
-    public void OnEnter()
+    public override void OnEnter()
     {
-        if(agent.isDebugMode) Debug.Log("[Chasing] Start Chasing");
+        base.OnEnter();
+        Vector3 target = agent.blackboard.lastSeenEnemy.Value + (Vector3) Random.insideUnitCircle * 1.5f;
 
-        Initialize();
-        if(!agent.TryMoveTo(agent.lastSeenPlayerPos, agent.chaseSpeed)) 
+        if(!agent.TryMoveTo(target, agent.chaseSpeed)) 
         {
-            nextState = agent.patrolling;
+            RequestTransition(agent.patrolling);
         }
 
-        agent.CallReinforcement();
-    }
-    
-    void Initialize()
-    {
-        nextState = null;
+        agent.blackboard.lastHeardPos = null;
+        agent.blackboard.lastHeardPosTimestamp = 0;
+        agent.CallReinforcement(agent.blackboard.lastSeenEnemy.Value);
     }
 
-    public void OnUpdate()
+    public override void OnUpdate()
     {
-        if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        else if(agent.HasReachDestination()) nextState = agent.searching;
-        
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
+        if(agent.HasReachDestination()) RequestTransition(agent.searching);
     }
-    public void OnExit()
+    public override void OnExit()
     {
-        agent.beingHit = false;
+        base.OnExit();
         agent.Halt();
     }
 }

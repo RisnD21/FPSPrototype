@@ -26,16 +26,19 @@ public class AlertZoneTriggerer : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player")) aiAgent.SenseSomething(collision.transform.position + (Vector3)Random.insideUnitCircle * 3);
-        else if (collision.TryGetComponent<AIAgent>(out var agent))
+        if(collision.gameObject.CompareTag("Player")) aiAgent.SubscribeToPlayerNoiseSpeaker();
+        else if (collision.TryGetComponent<AIAgent>(out var agent) && agent != aiAgent)
         {
-            agent.AddNearbyAllies(agent);
+            aiAgent.AddNearbyAllies(agent);
         }
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
+        if(collision.gameObject.CompareTag("Player")) aiAgent.UnsubscribeToPlayerNoiseSpeaker();
         if(collision.TryGetComponent<AIAgent>(out var agent))
-            agent.RemoveNearbyAllies(agent);
+            aiAgent.RemoveNearbyAllies(agent);
     }
+
+
 }

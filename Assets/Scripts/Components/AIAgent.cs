@@ -2,39 +2,42 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections.Generic;
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using System.Linq;
 using System;
 
 
 public class Blackboard
 {
-    public Vector3? lastSeenEnemy;
+    public Vector3? lastSeenEnemy; //remember reseting to null aft use
+    public float lastSeenEnemyTimestamp;
     public Vector3? lastImpactPos;
+    public float lastImpactPosTimestamp;
+    public Vector3? lastImpactSrcDir;
     public Vector3? lastHeardPos;
-    public float suspicious; //(may not need) decay over time
-    public float lastCallReinforce;
+    public float lastHeardPosTimestamp;
+    public AIAgent allyToChat;
+    public float chatDuration;
+    public float suspicious; 
+    public float chatDesire = 0;
 }
 
 public enum StimulusType
 {
-    Impact, Gunshot, SuspiciousNoise, SeeEnemy, LostSight, AllyNearby
+    Impact, Gunshot, SuspiciousNoise, SeeEnemy, LostSight, BeingHit
 }
 
 public readonly struct Stimulus
 {
     public readonly StimulusType type;
     public readonly Vector3 position;
-    public readonly float intensity;
     public readonly float timeStamp;
     public readonly float ttl; //time to live
 
     public readonly bool IsValid => timeStamp > 0;
-    public Stimulus(StimulusType type, Vector3 position, float intensity, float timeStamp, float ttl)
+    public Stimulus(StimulusType type, Vector3 position, float timeStamp, float ttl)
     {
         this.type = type;
         this.position = position;
-        this.intensity = intensity;
         this.timeStamp = timeStamp;
         this.ttl = ttl;
     }
@@ -69,17 +72,14 @@ public class AIAgent : MonoBehaviour
     public List<Transform> patrolWaypoints;
     public float viewAngle = 120.0f;
 
-    public Vector3 lastSeenPlayerPos;
     Vector3 destination;
-    public bool isMoving;
+    [HideInInspector] public bool isMoving;
     
     public bool isDebugMode = true;
     
     public void OnHit() => beingHit = true;    
     [HideInInspector] public bool beingHit;
     
-
-
     public bool HasReachDestination()
     {
         if (Vector2.Distance(destination, transform.position) < 2f)
@@ -110,20 +110,20 @@ public class AIAgent : MonoBehaviour
 
     //Alert Behavior
     [HideInInspector] public bool isAlert;
+    float suspiciousDecaySpeed = 5f;
+    public static event Action<float> UpdateSuspicous;
+    public static event Action<string> UpdateState;
 
     //Observe Behavior
     float jitterMagnitude = 1f;
 
     //Chat Behavior
     HashSet<AIAgent> nearbyAllies;
-    public AIAgent allyToChat;
-
-    [HideInInspector] public bool isChatting;
-    [HideInInspector] public bool needChat;
-    [HideInInspector] public float chatDuration;
     [SerializeField] float minChatDuration;
     [SerializeField] float maxChatDuration;
-    [SerializeField] float chatTendency = 0.5f;
+    [SerializeField] float chatDesireIncPerSec = 5f; 
+
+    [SerializeField] StateMonitor monitor;
 
     void Awake()
     {
@@ -131,16 +131,15 @@ public class AIAgent : MonoBehaviour
         nearbyAllies = new();
     }
 
-
     void OnEnable()
     {
         AICommander.Instance.RequestReport += ReportBack;
-        
+        Weapon.Gunshot += ReactToGunshot;
     }
     void OnDisable()
     {
         AICommander.Instance.RequestReport -= ReportBack;
-        
+        Weapon.Gunshot -= ReactToGunshot;
     }
 
     void Start()
@@ -204,7 +203,6 @@ public class AIAgent : MonoBehaviour
         }
     }
 
-    //Face at point
     public IEnumerator LookAt(Vector3 point, float duration = 0.3f)
     {
         Vector3 direction = point - transform.position;
@@ -227,29 +225,11 @@ public class AIAgent : MonoBehaviour
         transform.rotation = endRotation;
     }
 
-    public bool IsPlayerInSight()
+    public bool TryMoveTo(Vector3? pos, float speed = 0)
     {
-        if(player == null) return false;
+        if(!pos.HasValue) return false;
+        Vector3 targetPos = pos.Value;
 
-        //is player in viewAngle?
-        Vector2 dirToPlayer = player.position - transform.position;
-        float angle = Vector2.Angle(dirToPlayer, transform.up); //face up
-        if (viewAngle/2f < angle) return false;
-
-        //is there obstalce between sight?
-        float distanceToPlayer = dirToPlayer.magnitude;
-        RaycastHit2D hit 
-        = Physics2D.Raycast(transform.position, dirToPlayer, distanceToPlayer, obstacleMask);
-        if (hit.collider != null) return false;
-
-        //too far, can't see
-        if(distanceToPlayer > 20f) return false;
-
-        return true;
-    }
-
-    public bool TryMoveTo(Vector3 targetPos, float speed = 0)
-    {
         targetPos.z = transform.position.z;
 
         path.maxSpeed = speed == 0 ? walkSpeed : speed;
@@ -280,23 +260,9 @@ public class AIAgent : MonoBehaviour
         }
     }
 
-    public void SenseSomething(Vector3 position)
+    public void CallReinforcement(Vector3 pos)
     {
-        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} senses something suspicious");
-        if (isDebugMode) Debug.Log("[AIAgent] Updating lastSeenPlayerPos");
-        lastSeenPlayerPos = position;
-        isAlert = true;
-    }
-
-    public void BackToNormalState()
-    {
-        beingHit = false;
-        isAlert = false;
-    }
-
-    public void CallReinforcement()
-    {
-        AICommander.Instance.CallReinforcement(this, lastSeenPlayerPos);
+        AICommander.Instance.CallReinforcement(this, pos);
     }
 
     void ReportBack(AIAgent sender)
@@ -307,8 +273,9 @@ public class AIAgent : MonoBehaviour
 
     public void Reinforce(Vector3 pos)
     {
-        lastSeenPlayerPos = pos;
-        isAlert = true;
+        blackboard.lastSeenEnemy = pos;
+        blackboard.lastSeenEnemyTimestamp = Time.time;
+        EnqueueTransition(chasing);
     }
 
     public void AddNearbyAllies(AIAgent agent)
@@ -325,23 +292,46 @@ public class AIAgent : MonoBehaviour
 
     public bool TryFindAllyToChat()
     {
+        blackboard.chatDesire -= 10f;
+
         Debug.Log($"[AIAgent] {gameObject.name} is trying to find someone to chat");
         nearbyAllies.RemoveWhere(a => a == null || Vector3.Distance(transform.position, a.transform.position) > 10f);
 
         var allyList = nearbyAllies
-            .Where(a => CanSee(a.gameObject) && !a.isChatting)
+            .Where(a => NoObstacleBetween(a.gameObject.transform.position))
             .ToList();
 
+        Debug.Log($"[AIAgent] Nearby Ally count: {allyList.Count}, chatDesire = {blackboard.chatDesire}");
         if(allyList.Count == 0) return false;
         int indexToPick = UnityEngine.Random.Range(0,allyList.Count);
         return TryStartChat(allyList[indexToPick]);
     }
 
-    bool CanSee(GameObject target)
+    public bool TargetInSight(Vector3? targetPos)
+    {
+        if(!targetPos.HasValue) Debug.LogError("[AIAgent] TargetInSight accept only non null");
+        return IsTargetInfront(targetPos) && NoObstacleBetween(targetPos);
+    }
+
+    bool IsTargetInfront(Vector3? targetPos)
+    {
+        if(!targetPos.HasValue) return false;
+
+        //is target in viewAngle?
+        Vector2 dirToPlayer = targetPos.Value - transform.position;
+        float angle = Vector2.Angle(dirToPlayer, transform.up); //face up
+        if (viewAngle/2f < angle) return false;
+        return true;
+    }
+
+    bool NoObstacleBetween(Vector3? targetPos)
     {
         //obstacle is those that blocks sight
-        Vector2 dirToPlayer = target.transform.position - transform.position;
+        Vector2 dirToPlayer = targetPos.Value - transform.position;
         float distToTarget = dirToPlayer.magnitude;
+
+        if(distToTarget > 20f) return false; //too far, can't see
+
         RaycastHit2D hit 
         = Physics2D.Raycast(transform.position, dirToPlayer, distToTarget, obstacleMask);
         
@@ -350,50 +340,88 @@ public class AIAgent : MonoBehaviour
 
     bool TryStartChat(AIAgent agent)
     {
-        if(isMoving) return false;
+        if(isMoving || agent.isMoving) return false; //移動中禁止交談
         Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
-        chatDuration = UnityEngine.Random.Range(minChatDuration, maxChatDuration);
+        blackboard.chatDuration = UnityEngine.Random.Range(minChatDuration, maxChatDuration);
         
         if (!agent.AcceptToChat(this)) return false;
-        allyToChat = agent;
-        needChat = true;
-        
+
+        blackboard.allyToChat = agent;
+        EnqueueTransition(chatting);        
         return true;
     }
 
     public bool AcceptToChat(AIAgent ally)
     {
-        if(isChatting || currentState != patrolling ||UnityEngine.Random.Range(0f,1f) > chatTendency)
+        if(currentState != patrolling || blackboard.chatDesire < 50)
         {
-            Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}");
+            Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}, desire = {blackboard.chatDesire}");
             return false;
         }
-        Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {ally.gameObject.name}");        
-        chatDuration = ally.chatDuration;
 
-        Debug.Log($"[AIAgent] {gameObject.name} knows the chat should last for {chatDuration} sec");        
-        allyToChat = ally;
-        needChat = true;
+        Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {ally.gameObject.name}");        
+        blackboard.chatDuration = ally.blackboard.chatDuration;
+
+        Debug.Log($"[AIAgent] {gameObject.name} knows the chat should last for {blackboard.chatDuration} sec");        
+        blackboard.allyToChat = ally;
+        EnqueueTransition(chatting);
         return true;
     }
 
-    public void StopChatting()
-    {
-        Debug.Log($"[AIAgent] {gameObject.name} stop chatting.");
-        allyToChat = null;
-        isChatting = false;
-        needChat = false;
-        chatDuration = 0f;
+    public void SubscribeToPlayerNoiseSpeaker()
+    {   
+        PlayerControl.ProduceNoise += ReactToPlayerNoise;
+        Debug.Log("[AIAgent] subscribe to noise event");
     }
 
-    void ReactToImpact(Vector3 pos)
-    {
-        if(Vector3.Distance(transform.position, pos) > 10f) return;
-        SenseSomething(player.position + (Vector3) UnityEngine.Random.insideUnitCircle * 6);
-        isAlert = true;
+    public void UnsubscribeToPlayerNoiseSpeaker()
+    {   
+        PlayerControl.ProduceNoise -= ReactToPlayerNoise;
+        Debug.Log("[AIAgent] unsubscribe to noise event");
     }
 
+    //Maximum receiving frequency is 0.1s (constrained by speaker produce's rate)
+    void ReactToPlayerNoise(float volume) 
+    {
+        blackboard.suspicious = Mathf.Clamp(blackboard.suspicious + volume, 0, 100);
+        if(blackboard.suspicious > 50)
+        {
+            Debug.Log("[AIAgent] sending stimuluse");
+            Stimulus stimulus = new(StimulusType.SuspiciousNoise, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);
+        }
+    }
 
+    void ReactToImpact(Vector3 pos, Vector3 source)
+    {
+        if(Vector3.Distance(transform.position, pos) > 15f) return;
+
+        Stimulus stimulus;
+
+        if(Vector3.Distance(transform.position, pos) < 2f) //being hit
+        {
+
+            stimulus = new(StimulusType.BeingHit, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);            
+            return;
+        }
+
+        blackboard.lastImpactSrcDir = source; 
+        stimulus = new(StimulusType.Impact, pos, Time.time, 5f);
+        stimulusQueue.Push(stimulus);
+    }
+
+    void ReactToGunshot(Vector3 pos, float volume)
+    {
+        if(Vector3.Distance(transform.position, pos) > volume) return;
+
+        if(blackboard.lastHeardPos.HasValue
+        && Vector3.Distance(pos, blackboard.lastHeardPos.Value) < 2
+        && blackboard.lastHeardPosTimestamp - Time.time < 5) return;
+
+        Stimulus stimulus = new(StimulusType.Gunshot, pos, Time.time, 5f);
+        stimulusQueue.Push(stimulus);
+    }
 
     public void Halt() => path.destination = transform.position;
 
@@ -406,26 +434,59 @@ public class AIAgent : MonoBehaviour
             statePriorityIndex.TryGetValue(state, out var defaultPriority);
             priority = defaultPriority;
         }
-
+        
         if (pendingNext == null || pendingPriority < priority)
-            pendingNext = state; pendingPriority = priority;
+            {
+                pendingNext = state; 
+                pendingPriority = priority;
+            }
     }
+
+    bool enemyInSight;
 
     void Update()
     {
+        if(TargetInSight(player.transform.position)) 
+        {
+            Stimulus stimulus = new(StimulusType.SeeEnemy, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);
+            enemyInSight = true;
+        } else if(enemyInSight)
+        {
+            Stimulus stimulus = new(StimulusType.LostSight, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);
+            enemyInSight = false;
+        }
+
+        //Process all the stimulus gathered in each frame, then enqueue corresponding reaction
         while (stimulusQueue.TryConsume(out var toConsume)) HandleStimulus(toConsume);
-        if (pendingNext != null) TransitionTo(pendingNext); pendingNext = null;
+        //The highest priority reaction survives among all the others
+        if (pendingNext != null)
+        {
+            TransitionTo(pendingNext); 
+            pendingNext = null;
+        }
+        //We then exec the behavior
         currentState?.OnUpdate();
+
+        //then update status
+        if(blackboard.suspicious > 0) 
+        {
+            blackboard.suspicious = Mathf.Clamp(
+                blackboard.suspicious - Time.deltaTime * suspiciousDecaySpeed, 0, 100);
+            monitor.UpdateMeter(blackboard.suspicious);
+        }
+
+        if(currentState != patrolling || isMoving) return;
+        if(blackboard.chatDesire < 100)
+        {
+            blackboard.chatDesire = Mathf.Clamp(
+                blackboard.chatDesire +Time.deltaTime * chatDesireIncPerSec, 0, 100);
+        }
+        else TryFindAllyToChat();
     }
 
-    public void TransitionTo(IState state)
-    {
-        currentState?.OnExit();
-        currentState = state;
-        state.OnEnter();
-    }
-
-    Blackboard blackboard = new();
+    public Blackboard blackboard = new();
 
     void HandleStimulus(Stimulus stimulus)
     {
@@ -433,23 +494,66 @@ public class AIAgent : MonoBehaviour
         {
             case StimulusType.SeeEnemy:
                 blackboard.lastSeenEnemy = stimulus.position;
-                EnqueueTransition(attacking); break;
+                if(currentState != attacking) EnqueueTransition(attacking); 
+                break;
+
             case StimulusType.SuspiciousNoise:
                 blackboard.lastHeardPos = stimulus.position;
-                EnqueueTransition(searching); break;
+                blackboard.lastHeardPosTimestamp = Time.time;
+                if(currentState != searching) EnqueueTransition(searching);
+                break;
+
             case StimulusType.Impact:
                 blackboard.lastImpactPos = stimulus.position;
-                EnqueueTransition(observing); break;
+                blackboard.lastImpactPosTimestamp = Time.time;
+                if(currentState != observing) EnqueueTransition(observing); 
+                else 
+                {
+                    blackboard.lastSeenEnemy = player.position + (Vector3)UnityEngine.Random.insideUnitCircle * 2f;
+                    EnqueueTransition(chasing); 
+                }
+                break;
+                
             case StimulusType.LostSight:
+            case StimulusType.BeingHit:
                 blackboard.lastSeenEnemy = stimulus.position;
-                EnqueueTransition(searching); break;
+                blackboard.lastSeenEnemyTimestamp = Time.time;
+                EnqueueTransition(chasing); 
+                break;
+
             case StimulusType.Gunshot:
                 blackboard.lastHeardPos = stimulus.position;
-                EnqueueTransition(searching); break;
-        }
+                blackboard.lastHeardPosTimestamp = Time.time;
+                if(currentState == patrolling || currentState == chatting)
+                {
+                    EnqueueTransition(observing);
+                    break;
+                } else if(currentState == observing)
+                {
+                    blackboard.lastSeenEnemy = player.position + (Vector3)UnityEngine.Random.insideUnitCircle * 2f;
+                    EnqueueTransition(chasing); 
+                }
+                break;
 
+
+        }
     }
 
+    public void TransitionTo(IState state)
+    {
+        currentState?.OnExit();
+        currentState = state;
+        state.OnEnter();
 
+        monitor.UpdateState(currentState.Name);
+    }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.TryGetComponent<Rigidbody2D>(out var rb))
+        {   
+            rb.AddForce(new Vector2(0.5f, 0.5f)*20, ForceMode2D.Impulse);
+            path.destination += (Vector3) UnityEngine.Random.insideUnitCircle;
+        }
+    }
 }

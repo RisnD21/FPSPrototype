@@ -1,5 +1,5 @@
+using System;
 using QuestDialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 
 //define how different action should behave

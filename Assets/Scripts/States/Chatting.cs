@@ -1,74 +1,40 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
-public class Chatting : IState
+public class Chatting : StateBase
 {
-    AIAgent agent;
-    Coroutine routine;
-    
-    IState nextState;
-    bool hasInitialize;
+    public override string Name => "Chatting";
+    public Chatting(AIAgent agent) :base(agent){}
+    float duration;
 
-    public Chatting(AIAgent agent)
+    public override void OnEnter()
     {
-        this.agent = agent;
-    }
-
-    public void OnEnter()
-    {
-        if(agent.isDebugMode) Debug.Log($"[Chatting] {agent.gameObject.name} start chatting");
-
-        Initialize();
-
-        routine = agent.StartCoroutine(ChattingWith(agent.allyToChat));
-    }
-
-    void Initialize()
-    {
-        if (!hasInitialize)
-        {
-            hasInitialize = true;
-        }
-
-        nextState = null;
-        
-        agent.BackToNormalState();
-        agent.isChatting = true;
-        agent.needChat = false;
+        base.OnEnter();
+        routines.Add(agent.StartCoroutine(ChattingWith(agent.blackboard.allyToChat)));
+        duration = agent.blackboard.chatDuration;
     }
 
     IEnumerator ChattingWith(AIAgent ally)
     {
         Debug.Log($"[Chatting] {agent.gameObject.name} is chatting with {ally.gameObject.name}");
         
-        yield return agent.StartCoroutine(agent.Observe(ally.transform.position, agent.chatDuration));
+        yield return agent.Observe(ally.transform.position, duration);
         
-        yield return new WaitForSeconds(agent.chatDuration);
+        yield return new WaitForSeconds(duration);
 
-        Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {agent.chatDuration} sec");
-        nextState = agent.patrolling;
+        Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {duration} sec");
+
+        RequestTransition(agent.patrolling);
     }
 
-    public void OnUpdate()
-    {
-        if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        else if(agent.beingHit && agent.player != null)
-        {
-            Debug.Log($"{agent.gameObject.name} is being hit!");
-            agent.lastSeenPlayerPos = agent.player.position;
-            nextState = agent.chasing;
-        }else if(agent.isAlert) nextState = agent.searching;
+    public override void OnUpdate(){}
 
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
-    }
-
-    public void OnExit() 
+    public override void OnExit() 
     {
-        agent.StopCoroutine(routine);
-        agent.StopChatting();
+        base.OnExit();
+        agent.blackboard.allyToChat = null;
+        agent.blackboard.chatDuration = 0;
+        agent.blackboard.chatDesire = 0;
     }
 }

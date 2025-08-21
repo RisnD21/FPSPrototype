@@ -1,45 +1,84 @@
 using System.Collections;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-public class Observing : IState
+//when 
+public class Observing : StateBase
 {
-    AIAgent agent;
-    IState nextState;
+    public override string Name => "Observing";
+    float minDiffToUpdateObesrvePoint = 3f;
+    float observePointUpdateInterval = 2f;
+    float observePointUpdateTimer;
+    Vector3 currentObservePoint;
+    public Observing(AIAgent agent) : base(agent){}
 
-
-    Coroutine coroutine;
-    public Observing(AIAgent agent)
+    public override void OnEnter()
     {
-        this.agent = agent;
-    }
-
-    public void OnEnter()
-    {
-        if(agent.isDebugMode) Debug.Log($"[Observing] {agent.gameObject.name} starts attacking");
-        Initialize();
+        base.OnEnter();
         agent.Halt();
-    }
 
-    void Initialize()
-    {   
-        nextState = null;
-    }
-
-    public void OnUpdate()
-    {   
-        if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        else if(agent.beingHit && agent.player != null)
+        if(agent.blackboard.lastHeardPosTimestamp > agent.blackboard.lastImpactPosTimestamp)
         {
-            agent.lastSeenPlayerPos = agent.player.position;
-            nextState = agent.chasing;
-        }else if(agent.isAlert) nextState = agent.searching;
-
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
+            currentObservePoint = agent.blackboard.lastHeardPos.Value;
+            routines.Add(agent.StartCoroutine(ObserveAtPos()));
+        }else
+        {
+            currentObservePoint = agent.blackboard.lastImpactPos.Value;
+            routines.Add(agent.StartCoroutine(ObserveAtSrc()));
+        }
     }
 
-    public void OnExit()
+    IEnumerator ObserveAtPos()
     {
-        agent.StopCoroutine(coroutine);
+        yield return agent.LookAt(currentObservePoint);
+        agent.CallReinforcement(currentObservePoint);
+
+        if(agent.player != null) RequestTransition(agent.searching);
+    }
+
+    IEnumerator ObserveAtSrc()
+    {
+        yield return agent.LookAt(currentObservePoint);
+        agent.CallReinforcement(agent.player.position);
+        
+        if(!agent.TargetInSight(currentObservePoint))
+        {
+            agent.blackboard.lastHeardPos = currentObservePoint;
+            agent.blackboard.lastHeardPosTimestamp = Time.time;
+            RequestTransition(agent.searching);
+            yield return null;
+        }
+
+        agent.blackboard.lastHeardPos = agent.player.position;
+        agent.blackboard.lastHeardPosTimestamp = Time.time;
+        yield return agent.Observe(agent.player.position, 5);
+        
+        agent.blackboard.lastImpactPos = null;
+        RequestTransition(agent.searching);
+    }
+
+
+
+    public override void OnUpdate()
+    {
+        if(observePointUpdateTimer > 0) observePointUpdateTimer -= Time.deltaTime;
+        else
+        {
+            if(agent.blackboard.lastHeardPosTimestamp > agent.blackboard.lastImpactPosTimestamp)
+            { //focus on heard pos
+                if(Vector3.Distance(agent.blackboard.lastHeardPos.Value, currentObservePoint) > minDiffToUpdateObesrvePoint)
+                {
+                    RequestTransition(agent.searching);
+                }
+            }else
+            { //focus on impact pos 
+                if(Vector3.Distance(agent.blackboard.lastImpactPos.Value, currentObservePoint) > minDiffToUpdateObesrvePoint)
+                {
+                    agent.blackboard.lastHeardPos = agent.player.position;
+                    RequestTransition(agent.searching);
+                }
+            }
+            observePointUpdateTimer = observePointUpdateInterval;
+        }
     }
 }

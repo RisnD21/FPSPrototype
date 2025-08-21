@@ -25,8 +25,11 @@ public class PlayerControl : MonoBehaviour
     float interactDistance = 5f;
     Vector2 boxSize = new Vector2(5f, 4f); // BoxCast 區域大小
     [SerializeField] LayerMask interactableLayer;
-
     Vector2 targetSpeed;
+
+    public static event Action<float> ProduceNoise;
+    float noiseInterval = 0.1f;
+    float noiseTimer;
     
     void Awake()
     {
@@ -79,9 +82,11 @@ public class PlayerControl : MonoBehaviour
         Fire();
         Interact();
         SelectWeapon();
+
+        if(noiseTimer > 0) noiseTimer -= Time.deltaTime;
     }
 
-    private void Move()
+    void Move()
     {
         Vector2 inputVector = playerInput.InputVector;
 
@@ -99,8 +104,15 @@ public class PlayerControl : MonoBehaviour
             rb.linearVelocityX = Mathf.Lerp(currentSpeed.x, targetSpeed.x, Time.fixedDeltaTime * acceleration);
             rb.linearVelocityY = Mathf.Lerp(currentSpeed.y, targetSpeed.y, Time.fixedDeltaTime * acceleration);
         }
+
+        if(currentSpeed != Vector2.zero && noiseTimer <= 0)
+        {
+            ProduceNoise?.Invoke(rb.linearVelocity.magnitude);
+            noiseTimer = noiseInterval;
+        }
+            
         
-        actionStates.OnMove(currentSpeed != Vector2.zero);
+        actionStates.OnMove(currentSpeed != Vector2.zero);        
     }
 
     void Aim()

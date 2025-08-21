@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 public abstract class StateBase : IState
 {
+    public abstract string Name {get;}
     protected AIAgent agent;
     protected List<Coroutine> routines = new();
-    protected IState requested;
-    protected int requestedPriority;
 
     public StateBase(AIAgent agent) => this.agent = agent;
     public virtual void OnEnter()
     {
-        requested = null;
         if (agent.isDebugMode) Debug.Log($"{agent.gameObject.name} start {GetType().Name}");
     }
     public abstract void OnUpdate();

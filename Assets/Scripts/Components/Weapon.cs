@@ -1,6 +1,8 @@
 using QuestDialogueSystem;
 using UnityEngine;
 using System.Collections;
+using System;
+using Unity.Mathematics;
 
 public class Weapon : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] public string gunType;
     [SerializeField] ItemData ammoType;
     [SerializeField] int damage;
+    [SerializeField] float fireNoise;
     [SerializeField] float maxShotDistance;
     [SerializeField] int magazineSize;
     [SerializeField] GameObject inventoryObj;
@@ -21,6 +24,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] float accuracyRecoverPerSec = 0f;
     [SerializeField] float accuracyDecreasePerTrigger = 0f;
     Coroutine recoverAccuracy;
+
+    public static event Action<Vector3, float> Gunshot;
 
     public enum FireMode
     {
@@ -122,6 +127,8 @@ public class Weapon : MonoBehaviour
         flash.GetComponent<ParticleSystem>().Play();
         RaycastShot();
 
+        Gunshot?.Invoke(transform.position, fireNoise);
+
         if(canShakeCam) CameraShaker.Instance.Shake(fireShakeDuration, fireShakeMagnitude);
 
         SetFireCooldown();        
@@ -169,7 +176,7 @@ public class Weapon : MonoBehaviour
         Vector3 origin = muzzle.position;
         origin.z = 0;
 
-        Vector3 direction = muzzle.right + (Vector3)Random.insideUnitCircle * (1-accuracy); 
+        Vector3 direction = muzzle.right + (Vector3)UnityEngine.Random.insideUnitCircle * (1-accuracy); 
         direction.z = 0;
 
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxShotDistance, mask);

@@ -3,73 +3,82 @@ using System.Collections;
 using UnityEngine;
 
 //往玩家位置看去，若玩家在視線中，進入chase；否則紀錄該方向並微幅隨機張望，10秒後回到待命地點
-public class Searching : IState
+public class Searching : StateBase
 {
-    AIAgent agent;
-    IState nextState;
-    Coroutine coroutine;
+    public override string Name => "Searching";
+    public Searching(AIAgent agent) : base(agent) {}
+    Vector3 currentClue;
+    float minDifferenceToUpdateClue = 3f;
+    float clueUpdateCooldown = 2f;
+    float clueUpdateCountdown;
 
-    public Searching(AIAgent agent)
+    public override void OnEnter()
     {
-        this.agent = agent;
-    }
+        base.OnEnter();
 
-    public void OnEnter()
-    {
-        Initialize();
-        
-        if(agent.isDebugMode) Debug.Log("[Searching] Start Searching");
-        coroutine = agent.StartCoroutine(Search()); 
-    }
+        if(agent.blackboard.lastHeardPosTimestamp > agent.blackboard.lastSeenEnemyTimestamp)
+        {
+            currentClue = agent.blackboard.lastHeardPos.Value + (Vector3) Random.insideUnitCircle * 1.5f;
+            
+            if(agent.isDebugMode) Debug.Log("[Searching] Checking suspiscious sound");
+        }else
+        {
+            currentClue = agent.blackboard.lastSeenEnemy.Value + (Vector3) Random.insideUnitCircle * 1.5f;
+            if(agent.isDebugMode) Debug.Log("[Searching] Enemy lost sight, start searching");
+        }
 
-    void Initialize()
-    {
-        
-        nextState = null;
+        routines.Add(agent.StartCoroutine(Search())); 
     }
 
     IEnumerator Search()
     {
-        if(agent.isAlert)
-        {
-            agent.isAlert = false;
-
-            if(agent.TryMoveTo(agent.lastSeenPlayerPos))
-                yield return new WaitUntil(() => agent.HasReachDestination());
-        }
+        if(agent.TryMoveTo(currentClue))
+            yield return new WaitUntil(() => agent.HasReachDestination());
 
         if(agent.player != null)
         {
-            yield return agent.StartCoroutine(agent.Observe(agent.player.position, 3f));
-            yield return agent.StartCoroutine(agent.Observe(-agent.transform.up, 3f));
-        }else yield return null;
-
-        if(agent.isDebugMode) Debug.Log("[Searching] Target lost, return to duty");
-
-        nextState = agent.patrolling;
-    }
-
-
-    public void OnUpdate()
-    {
-        if(agent.IsPlayerInSight()) nextState = agent.attacking;
-        else if(agent.beingHit && agent.player != null)
-        {
-            agent.lastSeenPlayerPos = agent.player.position;
-            nextState = agent.chasing;
-
-            if (agent.isDebugMode) Debug.Log("[Searching] Updating lastSeenPlayerPos");
-        }else if(agent.isAlert)
-        {
-            if (agent.isDebugMode) Debug.Log("[Searching] Checking suspiscious sound");
-            nextState = agent.searching;
+            yield return agent.Observe(agent.player.position, 3f);
+            yield return agent.Observe(-agent.transform.up, 3f);
         }
-            
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
+
+        if(agent.isDebugMode) Debug.Log("[Searching] Target lost for sure, return to duty");
+        RequestTransition(agent.patrolling);
     }
-    public void OnExit()
+
+    bool TryUpdateClue(Vector3? newClue)
     {
-        agent.StopCoroutine(coroutine);
+        if(!newClue.HasValue) return false;
+        Vector3 newPosition = newClue.Value;
+        if(Vector3.Distance(newPosition, currentClue) > minDifferenceToUpdateClue)
+        {
+            currentClue = newPosition;
+            
+            return true;
+        }
+        return false;
+    }
+
+    public override void OnUpdate()
+    {
+        if(clueUpdateCountdown > 0) clueUpdateCountdown -= Time.deltaTime;
+        else
+        {
+            if(TryUpdateClue(agent.blackboard.lastHeardPos)) 
+            {
+                agent.Halt();
+                Debug.Log("[Searching] Clue updated, searching new clue");
+                foreach (var routine in routines) agent.StopCoroutine(routine);
+                routines.Add(agent.StartCoroutine(Search())); 
+            }
+
+            clueUpdateCountdown = clueUpdateCooldown;
+        }
+    }
+    public override void OnExit()
+    {
+        base.OnExit();
+
+        agent.blackboard.lastHeardPos = null;
+        agent.blackboard.lastHeardPosTimestamp = 0;
     }
 }

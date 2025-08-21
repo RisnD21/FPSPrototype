@@ -1,29 +1,23 @@
 using System.Collections;
 using UnityEngine;
 // attack：若玩家在射程內，則開火；否則進入追擊模式
-public class Attacking : IState
+public class Attacking : StateBase
 {
-    AIAgent agent;
-    IState nextState;
-    float triggerFrequency = 1f;
-    
-    float timer = 0f;
+    public override string Name => "Attacking";
+    float fireCooldown = 0f;
     bool hasInitialize;
-    bool readyToFire;
-    bool isAiming;
     ActionStates actionController;
-    Coroutine coroutine;
-    public Attacking(AIAgent agent)
-    {
-        this.agent = agent;
-    }
+    public Attacking(AIAgent agent) : base(agent) { }
+    bool readyToFire;
 
-    public void OnEnter()
+    public override void OnEnter()
     {
-        if(agent.isDebugMode) Debug.Log("[Attacking] Start attacking");
+        base.OnEnter();
+
         Initialize();
         agent.Halt();
-        coroutine = agent.StartCoroutine(Aim());
+        agent.CallReinforcement(agent.player.position);
+        routines.Add(agent.StartCoroutine(Aim()));
     }
 
     void Initialize()
@@ -35,68 +29,55 @@ public class Attacking : IState
             {
                 Debug.LogError("[Attacking] ActionStates missing");
             }
-
-            triggerFrequency = actionController.currentWeapon.fireCooldown;
             hasInitialize = true;
         }
-
-        timer = 0;
-        readyToFire = false;
-        isAiming = false;
-        nextState = null;
     }
 
     IEnumerator Aim()
     {
-        isAiming = true;
-
-        while (isAiming && agent.player!=null)
+        while (agent.player != null)
         {
             Vector2 aimingDir = agent.player.position - agent.transform.position;
-            if (Vector2.Angle(agent.transform.up, aimingDir) > 1)
+
+            if (Vector2.Angle(agent.transform.up, aimingDir) > 1f)
             {
-                yield return agent.StartCoroutine(agent.LookAt(agent.player.position, 0.3f));
+                // 等待轉向完成
+                yield return agent.LookAt(agent.player.position, 0.2f);
             }
 
+            // 一旦轉向完成，就代表可以射擊
             readyToFire = true;
             yield return null;
         }
     }
 
-    public void OnUpdate()
-    {   
-        UpdateCooldown();
-
-        if(!agent.IsPlayerInSight()) nextState = agent.chasing;
-        if(agent.player == null) nextState = agent.patrolling;
-
-        if(nextState == null) return;
-        agent.TransitionTo(nextState);
-    }
-
-    void UpdateCooldown()
+    public override void OnUpdate()
     {
-        if (timer <= 0 && readyToFire)
+        // 沒目標就切狀態
+        if (agent.player == null)
         {
-            actionController.Fire();
-            timer = triggerFrequency;
-            readyToFire = false;
+            RequestTransition(agent.patrolling);
+            return;
         }
-        actionController.StopFire();
-        timer -= Time.deltaTime;
-    }
 
-    public void OnExit()
-    {
-        if(agent.player == null)
+        // 冷卻倒數
+        if (fireCooldown > 0f)
         {
-            if(agent.isDebugMode) Debug.Log("[Attacking] Target Down");
-        }else
-        {
-            if(agent.isDebugMode) Debug.Log("[Attacking] Updating lastSeenPlayerPos");
-            agent.lastSeenPlayerPos = agent.player.position;
+            fireCooldown -= Time.deltaTime;
+            return;
         }
-            
-        agent.StopCoroutine(coroutine);
+
+        if (readyToFire)
+        {
+            actionController.Fire();            // 開火當幀
+            actionController.StopFire();        // 立刻停火（避免持續射擊）
+            fireCooldown = actionController.currentWeapon.fireCooldown;
+            readyToFire = false;                // 重置，等下一次 Aim 完成
+        }
+    }
+    public override void OnExit()
+    {
+        base.OnExit();
+        if(agent.player == null) if(agent.isDebugMode) Debug.Log("[Attacking] Target Down");
     }
 }

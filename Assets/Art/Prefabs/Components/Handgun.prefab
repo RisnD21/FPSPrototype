@@ -85,6 +85,7 @@ MonoBehaviour:
   gunType: handgun
   ammoType: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
   damage: 5
+  fireNoise: 30
   maxShotDistance: 50
   magazineSize: 15
   inventoryObj: {fileID: 0}

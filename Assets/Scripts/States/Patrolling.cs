@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Patrolling : StateBase
 {
+    public override string Name => "Patrolling";
     int nextWaypointIndex;
     List<Transform> patrolWaypoints;
     
@@ -40,7 +41,7 @@ public class Patrolling : StateBase
                     {
                         if (agent.isDebugMode) Debug.Log("[Patrolling] Checking " + viewPoint.gameObject.name);
                         Vector3 view = viewPoint.position + (Vector3)Random.insideUnitCircle;
-                        yield return agent.StartCoroutine(agent.Observe(view));
+                        yield return agent.Observe(view);
                     }
                 }
 
@@ -52,24 +53,4 @@ public class Patrolling : StateBase
     }
 
     public override void OnUpdate() { }
-
-    // public override void OnUpdate()
-    // {
-    //     if (WantToChat() && agent.TryFindAllyToChat()) RequestTransition(agent.chatting);
-    // }
-
-    // bool WantToChat()
-    // {
-    //     if(chatCountdown > 0)
-    //     {
-    //         chatCountdown -= Time.deltaTime;
-    //         return false;
-    //     }else
-    //     {
-    //         chatCountdown = chatCooldown;
-    //         return true;
-    //     }        
-    // }
-
-
 }
