@@ -7,6 +7,8 @@ public class Attacking : StateBase
     float fireCooldown = 0f;
     bool hasInitialize;
     ActionStates actionController;
+    FireLaneSensor2D sensor;
+    StrafePlanner2D strafePlanner;
     public Attacking(AIAgent agent) : base(agent) { }
     bool readyToFire;
 
@@ -25,6 +27,9 @@ public class Attacking : StateBase
         if (!hasInitialize)
         {
             actionController = agent.GetComponentInChildren<ActionStates>();
+            sensor = agent.GetComponentInChildren<FireLaneSensor2D>();
+            strafePlanner = agent.GetComponentInChildren<StrafePlanner2D>();
+
             if (actionController == null)
             {
                 Debug.LogError("[Attacking] ActionStates missing");
@@ -41,12 +46,38 @@ public class Attacking : StateBase
 
             if (Vector2.Angle(agent.transform.up, aimingDir) > 1f)
             {
-                // 等待轉向完成
                 yield return agent.LookAt(agent.player.position, 0.2f);
             }
 
-            // 一旦轉向完成，就代表可以射擊
-            readyToFire = true;
+            if(sensor.HasFriendlyInFireLane(agent.muzzle.position, agent.muzzle.right))
+            {
+                Vector2? newPos = strafePlanner.GetStrafePos(agent.transform.position, agent.muzzle.position, agent.muzzle.right);
+
+                if (newPos.HasValue) 
+                {
+                    agent.blackboard.isRePositioning = true;
+
+                    Debug.Log($"{agent.gameObject.name} is repositioning");
+
+                    Vector2 offset = agent.muzzle.position - agent.transform.position;
+                    agent.TryMoveTo(newPos.Value + offset);
+
+                    yield return new WaitUntil(agent.HasReachDestination);
+                    
+                    Debug.Log($"{agent.gameObject.name} is now at {agent.muzzle.position}");
+
+                    agent.blackboard.isRePositioning = false;
+                }
+                else yield return new WaitForSeconds(0.5f);
+
+                continue;
+
+            } else
+            {
+                agent.Halt();
+                readyToFire = true;
+            }
+        
             yield return null;
         }
     }
@@ -78,6 +109,7 @@ public class Attacking : StateBase
     public override void OnExit()
     {
         base.OnExit();
+        agent.blackboard.isRePositioning = false;
         if(agent.player == null) if(agent.isDebugMode) Debug.Log("[Attacking] Target Down");
     }
 }

@@ -128,7 +128,6 @@ public class InventoryUI : MonoBehaviour
 
     public void ShowDescriptionPanel(InventorySlot slot, Vector3 position)
     {
-        Debug.Log("ShowingDescriptionPanel");
         description.text = slot.stack.Item.description;
         descriptionPanel.transform.position = position + descriptionPanelOffset;
         descriptionPanel.SetActive(true);

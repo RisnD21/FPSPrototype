@@ -8,7 +8,7 @@ using System;
 
 public class Blackboard
 {
-    public Vector3? lastSeenEnemy; //remember reseting to null aft use
+    public Vector3? lastSeenEnemy;
     public float lastSeenEnemyTimestamp;
     public Vector3? lastImpactPos;
     public float lastImpactPosTimestamp;
@@ -19,6 +19,7 @@ public class Blackboard
     public float chatDuration;
     public float suspicious; 
     public float chatDesire = 0;
+    public bool isRePositioning;
 }
 
 public enum StimulusType
@@ -71,6 +72,7 @@ public class AIAgent : MonoBehaviour
     public float chaseSpeed;
     public List<Transform> patrolWaypoints;
     public float viewAngle = 120.0f;
+    public Transform muzzle;
 
     Vector3 destination;
     [HideInInspector] public bool isMoving;
@@ -280,13 +282,13 @@ public class AIAgent : MonoBehaviour
 
     public void AddNearbyAllies(AIAgent agent)
     {
-        Debug.Log($"[AIAgent] {gameObject.name} add {agent.gameObject.name} to nearbyAllies");
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} add {agent.gameObject.name} to nearbyAllies");
         nearbyAllies.Add(agent);
     }
 
     public void RemoveNearbyAllies(AIAgent agent)
     {
-        Debug.Log($"[AIAgent] {gameObject.name} remove {agent.gameObject.name} from nearbyAllies");
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} remove {agent.gameObject.name} from nearbyAllies");
         nearbyAllies.Remove(agent);
     }
 
@@ -294,14 +296,14 @@ public class AIAgent : MonoBehaviour
     {
         blackboard.chatDesire -= 10f;
 
-        Debug.Log($"[AIAgent] {gameObject.name} is trying to find someone to chat");
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} is trying to find someone to chat");
         nearbyAllies.RemoveWhere(a => a == null || Vector3.Distance(transform.position, a.transform.position) > 10f);
 
         var allyList = nearbyAllies
             .Where(a => NoObstacleBetween(a.gameObject.transform.position))
             .ToList();
 
-        Debug.Log($"[AIAgent] Nearby Ally count: {allyList.Count}, chatDesire = {blackboard.chatDesire}");
+        if (isDebugMode) Debug.Log($"[AIAgent] Nearby Ally count: {allyList.Count}, chatDesire = {blackboard.chatDesire}");
         if(allyList.Count == 0) return false;
         int indexToPick = UnityEngine.Random.Range(0,allyList.Count);
         return TryStartChat(allyList[indexToPick]);
@@ -341,7 +343,7 @@ public class AIAgent : MonoBehaviour
     bool TryStartChat(AIAgent agent)
     {
         if(isMoving || agent.isMoving) return false; //移動中禁止交談
-        Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} is asking if {agent.gameObject.name} want to chat");
         blackboard.chatDuration = UnityEngine.Random.Range(minChatDuration, maxChatDuration);
         
         if (!agent.AcceptToChat(this)) return false;
@@ -355,14 +357,14 @@ public class AIAgent : MonoBehaviour
     {
         if(currentState != patrolling || blackboard.chatDesire < 50)
         {
-            Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}, desire = {blackboard.chatDesire}");
+            if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} refuses to chat with {ally.gameObject.name}, desire = {blackboard.chatDesire}");
             return false;
         }
 
-        Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {ally.gameObject.name}");        
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} accepts to chat with {ally.gameObject.name}");        
         blackboard.chatDuration = ally.blackboard.chatDuration;
 
-        Debug.Log($"[AIAgent] {gameObject.name} knows the chat should last for {blackboard.chatDuration} sec");        
+        if (isDebugMode) Debug.Log($"[AIAgent] {gameObject.name} knows the chat should last for {blackboard.chatDuration} sec");        
         blackboard.allyToChat = ally;
         EnqueueTransition(chatting);
         return true;
@@ -371,13 +373,13 @@ public class AIAgent : MonoBehaviour
     public void SubscribeToPlayerNoiseSpeaker()
     {   
         PlayerControl.ProduceNoise += ReactToPlayerNoise;
-        Debug.Log("[AIAgent] subscribe to noise event");
+        if (isDebugMode) Debug.Log("[AIAgent] subscribe to noise event");
     }
 
     public void UnsubscribeToPlayerNoiseSpeaker()
     {   
         PlayerControl.ProduceNoise -= ReactToPlayerNoise;
-        Debug.Log("[AIAgent] unsubscribe to noise event");
+        if (isDebugMode) Debug.Log("[AIAgent] unsubscribe to noise event");
     }
 
     //Maximum receiving frequency is 0.1s (constrained by speaker produce's rate)
@@ -386,9 +388,24 @@ public class AIAgent : MonoBehaviour
         blackboard.suspicious = Mathf.Clamp(blackboard.suspicious + volume, 0, 100);
         if(blackboard.suspicious > 50)
         {
-            Debug.Log("[AIAgent] sending stimuluse");
             Stimulus stimulus = new(StimulusType.SuspiciousNoise, player.position, Time.time, 5f);
             stimulusQueue.Push(stimulus);
+        }
+    }
+
+    void ReactToEnemyInSight()
+    {
+        if(player == null || blackboard.isRePositioning) return;
+        if(TargetInSight(player.transform.position)) 
+        {
+            Stimulus stimulus = new(StimulusType.SeeEnemy, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);
+            enemyInSight = true;
+        } else if(enemyInSight)
+        {
+            Stimulus stimulus = new(StimulusType.LostSight, player.position, Time.time, 5f);
+            stimulusQueue.Push(stimulus);
+            enemyInSight = false;
         }
     }
 
@@ -446,17 +463,7 @@ public class AIAgent : MonoBehaviour
 
     void Update()
     {
-        if(TargetInSight(player.transform.position)) 
-        {
-            Stimulus stimulus = new(StimulusType.SeeEnemy, player.position, Time.time, 5f);
-            stimulusQueue.Push(stimulus);
-            enemyInSight = true;
-        } else if(enemyInSight)
-        {
-            Stimulus stimulus = new(StimulusType.LostSight, player.position, Time.time, 5f);
-            stimulusQueue.Push(stimulus);
-            enemyInSight = false;
-        }
+        ReactToEnemyInSight();
 
         //Process all the stimulus gathered in each frame, then enqueue corresponding reaction
         while (stimulusQueue.TryConsume(out var toConsume)) HandleStimulus(toConsume);
@@ -518,7 +525,7 @@ public class AIAgent : MonoBehaviour
             case StimulusType.BeingHit:
                 blackboard.lastSeenEnemy = stimulus.position;
                 blackboard.lastSeenEnemyTimestamp = Time.time;
-                EnqueueTransition(chasing); 
+                if(!blackboard.isRePositioning) EnqueueTransition(chasing); 
                 break;
 
             case StimulusType.Gunshot:
@@ -534,8 +541,6 @@ public class AIAgent : MonoBehaviour
                     EnqueueTransition(chasing); 
                 }
                 break;
-
-
         }
     }
 
@@ -546,14 +551,5 @@ public class AIAgent : MonoBehaviour
         state.OnEnter();
 
         monitor.UpdateState(currentState.Name);
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.TryGetComponent<Rigidbody2D>(out var rb))
-        {   
-            rb.AddForce(new Vector2(0.5f, 0.5f)*20, ForceMode2D.Impulse);
-            path.destination += (Vector3) UnityEngine.Random.insideUnitCircle;
-        }
     }
 }

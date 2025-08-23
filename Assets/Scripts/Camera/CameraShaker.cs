@@ -17,17 +17,17 @@ public class CameraShaker : MonoBehaviour
         else Instance = this;
     }
 
-    void Update()
-    {
-        if (shakeRemainTime > 0)
-        {
+    // void Update()
+    // {
+    //     if (shakeRemainTime > 0)
+    //     {
 
-            shakeRemainTime -= Time.deltaTime;
-            StartShake();
+    //         shakeRemainTime -= Time.deltaTime;
+    //         StartShake();
             
-            if(shakeRemainTime <= 0) hasControl = false;
-        }
-    }
+    //         if(shakeRemainTime <= 0) hasControl = false;
+    //     }
+    // }
 
     void StartShake()
     {
@@ -35,11 +35,13 @@ public class CameraShaker : MonoBehaviour
         transform.localPosition = originalPos + randomDir * shakeStrength;
     }
 
-    public void Shake(float duration, float magnitude)
+    public void Shake(Vector2 direction, float duration, float magnitude)
     {
-        hasControl = true;
-        originalPos = transform.position;
-        shakeStrength = magnitude;
-        shakeRemainTime = duration;
+        // hasControl = true;
+        // originalPos = transform.position;
+        // shakeStrength = magnitude;
+        // shakeRemainTime = duration;
+
+        transform.localPosition = transform.localPosition + (Vector3) direction * magnitude;
     }
 }

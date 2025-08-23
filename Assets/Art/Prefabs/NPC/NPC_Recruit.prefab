@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8770850280037262153}
   - component: {fileID: 1227028665241833859}
+  - component: {fileID: 3636854098554073843}
+  - component: {fileID: 3777195103397782764}
   - component: {fileID: 6015555591428813117}
   - component: {fileID: 7085921276672626715}
   - component: {fileID: 3881936503192945777}
@@ -67,6 +69,46 @@ MonoBehaviour:
   - {fileID: 2416646993919370013}
   - {fileID: 560896168404796669}
   tolerance: 0.01
+--- !u!114 &3636854098554073843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4704257243381713777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075c2952d144a4584b1b39f2fc05eca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 8018176139033710705}
+  strafeStep: 2
+  strafeMaxSteps: 2
+  recheckCooldown: 0.25
+  fireLaneSensor: {fileID: 3777195103397782764}
+  blockerMask:
+    serializedVersion: 2
+    m_Bits: 384
+  occupyRadius: 1
+--- !u!114 &3777195103397782764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4704257243381713777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38b7a97abb0b4811ad21067fd70d16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  muzzle: {fileID: 9148562427274654964}
+  range: 20
+  spreadDeg: 20
+  sampleRays: 7
+  allyMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &6015555591428813117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,15 +129,16 @@ MonoBehaviour:
   chaseSpeed: 8
   patrolWaypoints:
   - {fileID: 0}
-  - {fileID: 0}
   viewAngle: 120
+  muzzle: {fileID: 9148562427274654964}
   isMoving: 0
-  isDebugMode: 1
+  isDebugMode: 0
   beingHit: 0
   isAlert: 0
   minChatDuration: 5
   maxChatDuration: 10
   chatDesireIncPerSec: 10
+  monitor: {fileID: 8909563085202273632}
 --- !u!114 &7085921276672626715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +244,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0.06286001, y: 0}
-  m_Radius: 1.1
+  m_Radius: 0.5
 --- !u!114 &5328302581317850007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,6 +1180,10 @@ PrefabInstance:
       value: 1.27
       objectReference: {fileID: 0}
     - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
+      propertyPath: fireNoise
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8920149926434675008, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
       propertyPath: autoReload
       value: 1
       objectReference: {fileID: 0}
@@ -1156,6 +1203,11 @@ PrefabInstance:
 --- !u!4 &3926608871013953640 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1341055698891999814, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
+  m_PrefabInstance: {fileID: 2657826348161546798}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9148562427274654964 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6490892081343975130, guid: 7fe855e724300455ab65dae3d359be1b, type: 3}
   m_PrefabInstance: {fileID: 2657826348161546798}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8752646275915085472

@@ -129,7 +129,10 @@ public class Weapon : MonoBehaviour
 
         Gunshot?.Invoke(transform.position, fireNoise);
 
-        if(canShakeCam) CameraShaker.Instance.Shake(fireShakeDuration, fireShakeMagnitude);
+        if(canShakeCam)
+        {
+            CameraShaker.Instance.Shake(-transform.right, fireShakeDuration, fireShakeMagnitude);
+        }
 
         SetFireCooldown();        
         ModifyAccuracy();

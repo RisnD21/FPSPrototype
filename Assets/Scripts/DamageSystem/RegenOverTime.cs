@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 public class HealingEffect
 {
@@ -59,12 +60,12 @@ public class RegenOverTime : MonoBehaviour
         effects = new();
         index = new();
         target = GetComponent<Damageable>();
+
+        StartCoroutine(ApplyAccumulatedHealing());
     }
 
     public void AddEffect(HealingEffect effect)
     {
-        Debug.Log("Shield Recharging");
-
         HealingEffect prevEffect = effects.Find(e => e.Equals(effect));
 
         if(prevEffect == null)
@@ -122,10 +123,21 @@ public class RegenOverTime : MonoBehaviour
 
             if(effect.remainingAmount <= 0) effects.RemoveAt(i);
         }
+    }
 
-        int healSurge = Mathf.FloorToInt(accumulateHealingAmount);
-        
-        target.Heal(healSurge, dt, false);
-        accumulateHealingAmount -= healSurge;
+    IEnumerator ApplyAccumulatedHealing()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if(accumulateHealingAmount > 1)
+            {
+                int healSurge = Mathf.FloorToInt(accumulateHealingAmount);
+                
+                target.Heal(healSurge, 1, false);
+                accumulateHealingAmount -= healSurge;
+            }
+        }
     }
 }
