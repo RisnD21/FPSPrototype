@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-//when 
+//Sense impact or heard things
 public class Observing : StateBase
 {
     public override string Name => "Observing";
@@ -56,8 +56,6 @@ public class Observing : StateBase
         agent.blackboard.lastImpactPos = null;
         RequestTransition(agent.searching);
     }
-
-
 
     public override void OnUpdate()
     {

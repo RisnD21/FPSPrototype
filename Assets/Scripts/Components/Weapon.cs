@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Collections;
 using System;
 using Unity.Mathematics;
+using UnityEngine.InputSystem.XR.Haptics;
+using Unity.Cinemachine;
 
 public class Weapon : MonoBehaviour
 {
@@ -23,6 +25,12 @@ public class Weapon : MonoBehaviour
     float accuracy;
     [SerializeField] float accuracyRecoverPerSec = 0f;
     [SerializeField] float accuracyDecreasePerTrigger = 0f;
+    
+    [SerializeField] CinemachineImpulseSource impulser;
+
+    [SerializeField] bool canShakeCam;
+    [SerializeField] float shakMagnitude;
+    
     Coroutine recoverAccuracy;
 
     public static event Action<Vector3, float> Gunshot;
@@ -58,10 +66,6 @@ public class Weapon : MonoBehaviour
     int magazineAmmo;
     [SerializeField] public float fireCooldown;
     float fireCountdown;
-
-    [SerializeField] bool canShakeCam;
-    [SerializeField] float fireShakeDuration;
-    [SerializeField] float fireShakeMagnitude;
 
     AmmoMonitor ammoMonitor;
 
@@ -129,9 +133,9 @@ public class Weapon : MonoBehaviour
 
         Gunshot?.Invoke(transform.position, fireNoise);
 
-        if(canShakeCam)
+        if(canShakeCam && impulser != null)
         {
-            CameraShaker.Instance.Shake(-transform.right, fireShakeDuration, fireShakeMagnitude);
+            impulser.GenerateImpulseWithVelocity(transform.right.normalized * shakMagnitude);
         }
 
         SetFireCooldown();        

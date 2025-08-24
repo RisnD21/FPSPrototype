@@ -550,6 +550,6 @@ public class AIAgent : MonoBehaviour
         currentState = state;
         state.OnEnter();
 
-        monitor.UpdateState(currentState.Name);
+        monitor.SetStateIcon(currentState.Name);
     }
 }

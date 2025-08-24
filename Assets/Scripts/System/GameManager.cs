@@ -12,13 +12,16 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         counter = GetComponent<ItemCounter>();
+        
     }
-    void Start()
+
+    async void Start()
     {
         VFXManager.Instance.Initialize();
         DamageTextManager.Instance.Initialize();
         ItemManager.Instance.Initialize();
         counter.Initialize();
         inventoryUI.Initialize();
+        await StateIconLoader.LoadAsync();
     }  
 }
