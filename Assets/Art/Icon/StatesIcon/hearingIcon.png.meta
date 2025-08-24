@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hearingIcon_0: 8644993106315996913
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
