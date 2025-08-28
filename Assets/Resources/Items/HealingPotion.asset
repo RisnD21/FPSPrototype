@@ -19,3 +19,5 @@ MonoBehaviour:
   maxStack: 5
   itemType: Potion
   itemAction: {fileID: 11400000, guid: b3b59799f897c4b298ecb745da9eae05, type: 2}
+  CanDrop: 1
+  msgOnDrop: 

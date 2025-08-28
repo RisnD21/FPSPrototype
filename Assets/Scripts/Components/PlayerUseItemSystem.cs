@@ -37,4 +37,14 @@ public class PlayerUseItemSystem : MonoBehaviour
         }
         slot.stack.Item.TryUse(ctx, slot);
     }
+
+    public void UseItem(ItemData item)
+    {
+        if(item == null)
+        {
+            Debug.LogWarning("[PlayerUseItemSystem] Missing item ");
+            return;
+        } 
+        item.TryUse(ctx, item);
+    }
 }

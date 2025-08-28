@@ -20,3 +20,6 @@ MonoBehaviour:
     Eager to be delivered.'
   maxStack: 90
   itemType: Ammo
+  itemAction: {fileID: 0}
+  CanDrop: 1
+  msgOnDrop: 

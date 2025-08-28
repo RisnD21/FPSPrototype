@@ -10,7 +10,20 @@ public class ApplyShield : ItemAction
     public float regenSpeed;
     public float rechargeCooldown;
 
-    public override bool TryUse(UseContext useContext, InventorySlot slot = null)
+    public override bool TryUse(UseContext useContext, InventorySlot slot)
+    {
+        GameObject shield = useContext.user;
+        Damageable shieldBody = shield.GetComponent<Damageable>();
+        ShieldDamageHandler shieldProperty = shield.GetComponent<ShieldDamageHandler>();
+
+        if(shieldBody.maxHealth > maxHealth) return false;
+        
+        shieldBody.SetMaxHealth(maxHealth);
+        shieldProperty.SetProperty(regenSpeed, rechargeCooldown);
+        return true;
+    }
+
+    public override bool TryUse(UseContext useContext, ItemData item)
     {
         GameObject shield = useContext.user;
         Damageable shieldBody = shield.GetComponent<Damageable>();

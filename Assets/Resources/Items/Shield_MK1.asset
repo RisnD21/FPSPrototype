@@ -19,3 +19,5 @@ MonoBehaviour:
   maxStack: 1
   itemType: Shield
   itemAction: {fileID: 11400000, guid: 5984270fa5d25444ea9f994a68f0dbeb, type: 2}
+  CanDrop: 1
+  msgOnDrop: 

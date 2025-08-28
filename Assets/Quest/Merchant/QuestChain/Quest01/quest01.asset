@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dda2cc785b247debd1e48ffdddbfcb, type: 3}
+  m_Name: quest01
+  m_EditorClassIdentifier: 
+  id: 01
+  questName: The Rifle
+  icon: {fileID: 0}
+  description: pay the dealer 10 souls for the rifle
+  requireItem: 1
+  requiredItems:
+  - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
+    count: 1
+  onQuestStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: d97b1bf32e1fd394e902a34b2c9fef80, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestFail:
+    m_PersistentCalls:
+      m_Calls: []

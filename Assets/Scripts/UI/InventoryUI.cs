@@ -7,28 +7,26 @@ using System;
 
 public class InventoryUI : MonoBehaviour
 {
-    //掌管所有 slot prefabs
-    //訂閱 inventory 能在物件更新時更新對應欄位
-    //隨 inventory ui 開關而作業 => 主動索取當前 slots
-
     [SerializeField] Transform slotParent;
     [SerializeField] Transform slotPrefab;
     [SerializeField] int slotsCount = 24;
     List<SlotUI> slots;
 
-    [SerializeField] GameObject descriptionPanel;
-    [SerializeField] TextMeshProUGUI description;
-
     [SerializeField] GameObject itemMenu;
     [SerializeField] GameObject blocker;
     [SerializeField] Button useItemButton;
-    [SerializeField] Button destroyItemButton;
+    [SerializeField] Button dropItemButton;
     
     [SerializeField] Vector3 itemMenuOffset;
-    [SerializeField] Vector3 descriptionPanelOffset;
+
+    [SerializeField] Damageable player;
+    [SerializeField] TextMeshProUGUI healthPanel;
 
     public static event Action<InventorySlot> OnItemUse;
     InventorySlot currentSlot;
+    public ItemData itemSelected;
+    public void ItemSelected(ItemData item) => itemSelected = item;
+
     void Awake()
     {
         transform.localPosition = Vector3.zero;
@@ -43,7 +41,6 @@ public class InventoryUI : MonoBehaviour
             slots.Add(slot);
         }
 
-        descriptionPanel.SetActive(false);
         itemMenu.SetActive(false);
         blocker.SetActive(false);
     }
@@ -66,7 +63,6 @@ public class InventoryUI : MonoBehaviour
         Locator.Inventory.OnItemAdd -= UpdateSlot;
         Locator.Inventory.OnItemRemove -= UpdateSlot;
         CloseItemMenu();
-        HideDescriptionPanel();
     }
 
     void UpdateSlot(ItemStack _)
@@ -92,16 +88,21 @@ public class InventoryUI : MonoBehaviour
     {
         currentSlot = slot;
         
-        if (currentSlot.stack.Item.HasAction()) 
+        if (currentSlot.stack.Item.HasAction() && currentSlot.stack.Item.itemType != "Shield") 
         {
             useItemButton.onClick.RemoveAllListeners();
             useItemButton.onClick.AddListener(UseItem);
             useItemButton.gameObject.SetActive(true);
-        } else useItemButton.gameObject.SetActive(false);
+        } 
+        else useItemButton.gameObject.SetActive(false);
 
-        destroyItemButton.onClick.RemoveAllListeners();
-        destroyItemButton.onClick.AddListener(DestroyItem);
+        dropItemButton.onClick.RemoveAllListeners();
 
+        if (currentSlot.stack.Item.CanDrop) 
+            dropItemButton.onClick.AddListener(DestroyItem);
+        else 
+            dropItemButton.onClick.AddListener(ShowProhibitMsg);
+        
         itemMenu.transform.position = position + itemMenuOffset;
         itemMenu.SetActive(true);
         blocker.SetActive(true);
@@ -113,10 +114,24 @@ public class InventoryUI : MonoBehaviour
         CloseItemMenu();
     }
 
+    public void UseItem(InventorySlot slot)
+    {
+        if(slot == null) return;
+        OnItemUse?.Invoke(slot);
+        CloseItemMenu();
+    }
+
     void DestroyItem()
     {
         int toRemove = currentSlot.stack.Count;
         Locator.Inventory.TryRemoveFromSlot(currentSlot.stack, currentSlot, ref toRemove);
+        CloseItemMenu();
+    }
+
+    void ShowProhibitMsg()
+    {
+        string msg = currentSlot.stack.Item.msgOnDrop ?? "Can't drop item";
+        Locator.NotificationUI.PrintInventoryMsg(msg);
         CloseItemMenu();
     }
 
@@ -126,15 +141,8 @@ public class InventoryUI : MonoBehaviour
         blocker.SetActive(false);
     }
 
-    public void ShowDescriptionPanel(InventorySlot slot, Vector3 position)
+    void Update()
     {
-        description.text = slot.stack.Item.description;
-        descriptionPanel.transform.position = position + descriptionPanelOffset;
-        descriptionPanel.SetActive(true);
-    }
-
-    public void HideDescriptionPanel()
-    {   
-        descriptionPanel.SetActive(false);
+        healthPanel.text = player.Current + " / " + player.maxHealth.ToString();
     }
 }

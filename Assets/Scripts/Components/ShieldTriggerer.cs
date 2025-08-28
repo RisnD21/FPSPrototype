@@ -39,7 +39,7 @@ public class ShieldTriggerer : MonoBehaviour
         if(stack.Item.itemType != "Shield") return;
 
         shield.SetActive(true);
-        stack.Item.itemAction.TryUse(ctx);
+        stack.Item.itemAction.TryUse(ctx, stack.Item);
     }
 
     //嘗試使用物品欄中的每一個 Shield
@@ -53,7 +53,7 @@ public class ShieldTriggerer : MonoBehaviour
         {
             if(inventory.Count(item) > 0)
             {
-                item.itemAction.TryUse(ctx);
+                item.itemAction.TryUse(ctx, item);
                 hasShield = true;
             }
         }

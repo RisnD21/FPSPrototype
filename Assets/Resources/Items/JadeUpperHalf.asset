@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74608d84c18dc43c0a9ab652f4a90c85, type: 3}
+  m_Name: JadeUpperHalf
+  m_EditorClassIdentifier: 
+  itemID: Jade01
+  itemName: Fractured Jade (Upper)
+  itemIcon: {fileID: 6059710261541566431, guid: cb256574bd6154621b46e95e9413d6ed, type: 3}
+  description: the jade is unusual
+  maxStack: 1
+  itemType: Jade
+  itemAction: {fileID: 0}
+  CanDrop: 0
+  msgOnDrop: You drop the jade, yet soon after it leaves your hand, it reappear in
+    your inventory.

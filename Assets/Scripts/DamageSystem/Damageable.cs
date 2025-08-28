@@ -21,7 +21,6 @@ public class Damageable : MonoBehaviour
     {
         this.maxHealth = maxHealth;
         Current = Mathf.Min(Current, maxHealth);
-        Debug.Log($"Setting health {Current}/{this.maxHealth}");
         NotifyChanged(true);
     }
 

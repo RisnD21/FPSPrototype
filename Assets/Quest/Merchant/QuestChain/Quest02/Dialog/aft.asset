@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea69c725b9690406283ac981b361a9df, type: 3}
+  m_Name: aft
+  m_EditorClassIdentifier: 
+  pieces:
+  - id: 01
+    portrait: {fileID: -6762547388975960061, guid: 54b964cc9acc84ea39a2b688694a7810, type: 3}
+    portraitDescription: The dealer
+    text: The man remain silent.
+    audio: {fileID: 0}
+    options:
+    - text: (End Conversation)
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []

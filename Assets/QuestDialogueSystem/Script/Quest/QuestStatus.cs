@@ -1,6 +1,4 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace QuestDialogueSystem
 {
@@ -20,12 +18,12 @@ namespace QuestDialogueSystem
         {
             IsStarted = true;
             quest.onQuestStart?.Invoke();
-            Locator.NotificationUI.PrintTitleMsg($"Quest \"{quest.questName}\" accepted");
+            Locator.NotificationUI.PrintTitleMsg($"Start Quest \"{quest.questName}\"");
         }
         public void Complete()
         {
             IsCompleted = true;
-            Locator.NotificationUI.PrintTitleMsg($"Quest \"{quest.questName}\" completed");
+            Locator.NotificationUI.PrintTitleMsg($"\"{quest.questName}\" completed");
             quest.onQuestComplete?.Invoke();
         }
 

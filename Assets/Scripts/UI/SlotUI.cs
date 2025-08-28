@@ -3,10 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using QuestDialogueSystem;
 using UnityEngine.EventSystems;
-using System;
 
-
-public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+[RequireComponent(typeof(TooltipHoverHandler))]
+public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     public InventorySlot Slot{get; private set;}
@@ -24,7 +23,6 @@ public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         ClearSlot();
     }
-
     public void SetSlot(InventorySlot slot)
     {
         if (slot == null || slot.IsEmpty) 
@@ -40,6 +38,7 @@ public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         icon.enabled = true;
 
         count.text = Slot.stack.Count.ToString();
+        GetComponent<TooltipHoverHandler>().SetTooltip(slot.stack.Item.description);
 
         gameObject.SetActive(true);
     }
@@ -56,21 +55,20 @@ public class SlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         gameObject.SetActive(false);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (Slot == null || Slot.IsEmpty) return;
-        inventoryUI.ShowDescriptionPanel(Slot, eventData.position);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        inventoryUI.HideDescriptionPanel();
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (Slot == null || Slot.IsEmpty) return;
         inventoryUI.OpenItemMenu(Slot, eventData.position);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        inventoryUI.ItemSelected(Slot.stack.Item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        inventoryUI.ItemSelected(null);
     }
 
     public override string ToString()

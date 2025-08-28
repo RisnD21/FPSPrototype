@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class VFXManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class VFXManager : MonoBehaviour
 
     [SerializeField] ParticleSystem impactEffect;
     [SerializeField] ParticleSystem splashEffect;
+    [SerializeField] ParticleSystem healEffect;
 
     public event Action<Vector3, Vector3> ProduceImpact;
 
@@ -47,5 +49,10 @@ public class VFXManager : MonoBehaviour
         // source.transform.position = position;
         // source.pitch = Random.Range(0.8f, 1.1f);
         // source.PlayOneShot(setting.ImpactSound);
+    }
+
+    public void SpawnHealEffect(Transform parent)
+    {
+        Instantiate(healEffect, parent, false);
     }
 }

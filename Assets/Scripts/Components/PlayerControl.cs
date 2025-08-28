@@ -45,8 +45,6 @@ public class PlayerControl : MonoBehaviour
     {
         int index = playerInput.weaponIndex;
         if (index < 0) return;
-        
-        playerInput.weaponIndex = -1; // 重設 weaponIndex，避免重複切換
 
         if (!IsWeaponSelectable(index)) return;
 

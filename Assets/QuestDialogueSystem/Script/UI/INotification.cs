@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace QuestDialogueSystem
 {
     public interface INotification

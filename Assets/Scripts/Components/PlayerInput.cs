@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using QuestDialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -17,8 +16,10 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode inventory = KeyCode.Tab;
+    [SerializeField] private KeyCode swapWeapon = KeyCode.Q;
 
     [HideInInspector] public bool IsDialogueMode { get; private set; }
+    [HideInInspector] public bool IsInventoryMode { get; private set; }
     
 
     [HideInInspector] public List<Button> options;
@@ -36,6 +37,11 @@ public class PlayerInput : MonoBehaviour
 
     public static event Action<MenuType> ToggleMenu;
     [HideInInspector] bool isMenuMode;
+
+
+
+    public static event Action<int> SetQuickSlot;
+    public static event Action<int> UseQuickSlot;
 
     void Awake()
     {
@@ -108,15 +114,18 @@ public class PlayerInput : MonoBehaviour
             IsInteract = true;
         }
 
-
-        for (int i = 0; i < 4; i++) //let's assume we can have atmost 4 weapons
+        if(Input.GetKeyDown(swapWeapon))
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                weaponIndex = i;
-                return;
-            }
+            weaponIndex = (weaponIndex + 1) % 2;
         } 
+
+        for (int i = 0; i < 8; i++)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                UseQuickSlot?.Invoke(i);
+            }
+        }
     }
 
     void PauseCharacterControl()
@@ -146,6 +155,17 @@ public class PlayerInput : MonoBehaviour
             Locator.DialogueRunner.ResetDialog();
     }
 
+    public void HandleInventoryInput()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                SetQuickSlot?.Invoke(i);
+            }
+        }
+    }
+
     public void SetDialogMode(bool status)
     {
         IsDialogueMode = status;
@@ -166,7 +186,10 @@ public class PlayerInput : MonoBehaviour
         {
             ToggleMenu?.Invoke(MenuType.Inventory);
             if(isMenuMode) PauseCharacterControl();
+            IsInventoryMode = !IsInventoryMode;
         }
+
+        if(IsInventoryMode) HandleInventoryInput();
 
         if(isMenuMode) return;
         else if(IsDialogueMode) HandleDialogueInput();

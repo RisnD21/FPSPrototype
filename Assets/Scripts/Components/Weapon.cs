@@ -230,4 +230,14 @@ public class Weapon : MonoBehaviour
     {
         if(fireCountdown > 0) fireCountdown -= Time.deltaTime; 
     }
+
+    public void SetAccuracy(float value)
+    {
+        maxAccuracy = Mathf.Clamp01(value);
+    }
+
+    public void SetAccuracyDecreaseSpeed(float value)
+    {
+        accuracyDecreasePerTrigger = Mathf.Clamp01(value);
+    }
 }

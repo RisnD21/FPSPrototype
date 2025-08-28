@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace QuestDialogueSystem
@@ -14,11 +15,22 @@ namespace QuestDialogueSystem
         public string itemType;
         public ItemAction itemAction;
         public bool HasAction() => itemAction != null;
+        public bool CanDrop;
+
+        [TextArea(3,5)]
+        public string msgOnDrop;
+        
 
         public bool TryUse(UseContext useContext, InventorySlot slot)
         {
             if(itemAction == false) return false;
             return itemAction.TryUse(useContext, slot);
+        }
+
+        public bool TryUse(UseContext useContext, ItemData item)
+        {
+            if(itemAction == false) return false;
+            return itemAction.TryUse(useContext, item);
         }
 
         public override bool Equals(object obj)
