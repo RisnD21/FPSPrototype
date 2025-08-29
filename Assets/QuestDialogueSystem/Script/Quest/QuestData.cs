@@ -13,6 +13,8 @@ namespace QuestDialogueSystem
         public Sprite icon;
         [TextArea(3,5)]
         public string description;
+        public List<string> progressionTemplates;
+        public string fulfillDescription;
 
         public bool requireItem;
 

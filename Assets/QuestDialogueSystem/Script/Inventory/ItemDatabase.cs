@@ -7,6 +7,7 @@ namespace QuestDialogueSystem
     {
         static Dictionary<string, ItemData> itemMap = new();
         static Dictionary<string, List<ItemData>> typeMap = new();
+        public static List<string> itemList = new();
 
         static bool isDebugMode = false;
 
@@ -30,6 +31,8 @@ namespace QuestDialogueSystem
             {
                 if(!itemMap.ContainsKey(item.itemID))
                 {
+                    itemList.Add(item.itemID);
+
                     itemMap[item.itemID] = item;
                     if (isDebugMode) Debug.Log($"[ItemDatabase] register item: {item.itemID} {item.itemName}");
 

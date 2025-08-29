@@ -6,6 +6,7 @@ namespace QuestDialogueSystem
 {
     public class QuestManager : MonoBehaviour
     {
+        [SerializeField] QuestUI questUI;
         public List<QuestData> quests = new();
 
         Dictionary<QuestData, QuestStatus> statuses = new();
@@ -59,7 +60,7 @@ namespace QuestDialogueSystem
             }
 
             quests.Add(quest);
-            statuses[quest] = new QuestStatus(quest);
+            statuses[quest] = new QuestStatus(quest, questUI);
         }
 
         public void CancelQuest(QuestData quest)

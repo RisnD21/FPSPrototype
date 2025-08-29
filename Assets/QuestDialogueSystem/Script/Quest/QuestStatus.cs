@@ -6,25 +6,29 @@ namespace QuestDialogueSystem
     {
 
         QuestData quest;
+        QuestUI questUI;
         public bool IsStarted {get; private set;}
         public bool IsCompleted {get; private set;}
         public bool IsFailed {get; private set;}
 
-        public QuestStatus(QuestData quest)
+        public QuestStatus(QuestData quest, QuestUI ui)
         {
             this.quest = quest;
+            questUI = ui;
         }
         public void Start()
         {
             IsStarted = true;
             quest.onQuestStart?.Invoke();
             Locator.NotificationUI.PrintTitleMsg($"Start Quest \"{quest.questName}\"");
+            questUI.AddQuest(quest);
         }
         public void Complete()
         {
             IsCompleted = true;
             Locator.NotificationUI.PrintTitleMsg($"\"{quest.questName}\" completed");
             quest.onQuestComplete?.Invoke();
+            questUI.CompleteQuest(quest);
         }
 
         public void Fail()

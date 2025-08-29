@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: quest01
   m_EditorClassIdentifier: 
   id: 01
-  questName: The Rifle
+  questName: "A \uFF27ift"
   icon: {fileID: 0}
-  description: pay the dealer 10 souls for the rifle
+  description: The Demon needs souls
+  progressionTemplates:
+  - Collect <b>{soul}</b> <color=#{progressHex}>{current}</color>/{required}
+  fulfillDescription: Return to the Demon
   requireItem: 1
   requiredItems:
   - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
