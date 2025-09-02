@@ -1,10 +1,19 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
 guid: 1e8d3c30da30945f4a4d579da7356bd1
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: 7242233572103824272
     second: 7.65mm_0
+========
+guid: d336b8c2824a4b442a100affe42d4fda
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5669715413884589900
+    second: CrystalR_0
+>>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +81,11 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
+<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
     maxTextureSize: 256
+========
+    maxTextureSize: 64
+>>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,6 +126,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
+<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
       name: 7.65mm_0
       rect:
         serializedVersion: 2
@@ -120,6 +134,15 @@ TextureImporter:
         y: 17
         width: 629
         height: 915
+========
+      name: CrystalR_0
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 124
+        width: 655
+        height: 800
+>>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +151,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
       spriteID: 09328a51015918460800000000000000
       internalID: 7242233572103824272
+========
+      spriteID: c47d5262120eeae40800000000000000
+      internalID: 5669715413884589900
+>>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
       vertices: []
       indices: 
       edges: []
@@ -148,7 +176,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
       7.65mm_0: 7242233572103824272
+========
+      CrystalR_0: 5669715413884589900
+>>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
