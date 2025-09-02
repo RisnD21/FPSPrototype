@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dda2cc785b247debd1e48ffdddbfcb, type: 3}
+  m_Name: quest01
+  m_EditorClassIdentifier: 
+  id: 01
+  questName: "\u4EFB\u6027\u8ACB\u6C42"
+  icon: {fileID: 0}
+  description: "\u4F60\u5728\u6D1E\u7A9F\u4E2D\u9192\u4F86\uFF0C\u9047\u898B\u4E00\u4F4D\u5305\u88F9\u5728\u6597\u7BF7\u4E2D\u7684\u5C11\u5973\uFF0C\u5979\u81EA\u7A31\u53D7\u4E86\u50B7\u4E26\u8ACB\u4F60\u5E6B\u5FD9"
+  progressionTemplates:
+  - "\u6536\u96C6\u9748\u9B42 <b>{soul}</b> <color=#{progressHex}>{current}</color>/{required}"
+  fulfillDescription: "\u56DE\u53BB\u627E\u963F\u7D2B"
+  requireItem: 1
+  requiredItems:
+  - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
+    count: 5
+  onQuestStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: d97b1bf32e1fd394e902a34b2c9fef80, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: 3ec94e684aa7f48ae987b5edc5c9cbee, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.ReceiveItemOnTrigger, Assembly-CSharp
+        m_MethodName: OnTrigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestFail:
+    m_PersistentCalls:
+      m_Calls: []
