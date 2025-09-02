@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: handgunAmmo
   itemName: 9mm ammo
-  itemIcon: {fileID: 21300000, guid: aeed86078f6b241169432f0bea07beb0, type: 3}
+  itemIcon: {fileID: 21300000, guid: b4ac3f8736f2c47728387054da3e0e17, type: 3}
   description: 'The shell shines under your sight.
 
     Eager to be delivered.'

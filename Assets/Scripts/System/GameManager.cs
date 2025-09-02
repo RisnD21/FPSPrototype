@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
         VFXManager.Instance.Initialize();
         DamageTextManager.Instance.Initialize();
         ItemManager.Instance.Initialize();
-        counter.Initialize();
         inventoryUI.Initialize();
         await StateIconLoader.LoadAsync();
     }  

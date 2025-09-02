@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces:
   - id: 01
-    portrait: {fileID: -6762547388975960061, guid: 54b964cc9acc84ea39a2b688694a7810, type: 3}
-    portraitDescription: The dealer
-    text: The man remain silent.
+    portrait: {fileID: 21300000, guid: 99f365be328254f67af9ad28e561b44b, type: 3}
+    portraitDescription: "\u963F\u7D2B"
+    text: "\u6211\u5C31\u77E5\u9053\u4F60\u8FA6\u5F97\u5230\uFF5E \u672C\u516C\u4E3B\u2026\u2026\u55EF\u54FC\uFF0C\u5C0F\u5973\u5B50\u53EF\u662F\u4E00\u8A00\u4E5D\u9F0E\u7684\u5462\u3002\u4F86\u4F86\u4F86\uFF0C\u9019\u4E9B\u5C0F\u73A9\u610F\u5152\u5C31\u9001\u7D66\u4F60\u5566\uFF01\uFF08\u5979\u795E\u79D8\u516E\u516E\u5730\u5F9E\u515C\u88E1\u8B8A\u51FA\u4E00\u628A\u6B65\u69CD\u548C\u4E00\u76D2\u5B50\u5F48\uFF0C\u7728\u773C\u628A\u5B83\u5011\u585E\u5230\u4F60\u61F7\u88E1\uFF09"
     audio: {fileID: 0}
     options:
     - text: (End Conversation)

@@ -126,6 +126,12 @@ public class AIAgent : MonoBehaviour
 
     [SerializeField] StateMonitor monitor;
 
+    //Reinforce Behavior
+    [SerializeField] ReinforceIcon reinforceIcon;
+    [SerializeField] bool canCallReinforcement;
+    [SerializeField] bool canReinforce;
+    
+
     void Awake()
     {
         path = GetComponent<AIPath>();
@@ -263,12 +269,15 @@ public class AIAgent : MonoBehaviour
 
     public void CallReinforcement(Vector3 pos)
     {
+        if(!canCallReinforcement) return;
+
+        reinforceIcon.CallReinforcement();
         AICommander.Instance.CallReinforcement(this, pos);
     }
 
     void ReportBack(AIAgent sender)
     {
-        if (sender == this) return;
+        if (sender == this || !canReinforce) return;
         AICommander.Instance.ReceiveReport(this, transform.position);
     }
 
@@ -530,12 +539,16 @@ public class AIAgent : MonoBehaviour
             case StimulusType.AlertnessNoise:
                 blackboard.lastHeardPos = stimulus.position;
                 blackboard.lastHeardPosTimestamp = Time.time;
+                if(currentState == attacking || currentState == chasing) break;
+
                 if(currentState != searching) EnqueueTransition(searching);
                 break;
 
             case StimulusType.Impact:
                 blackboard.lastImpactPos = stimulus.position;
                 blackboard.lastImpactPosTimestamp = Time.time;
+                if(currentState == attacking) break;
+
                 if(currentState != observing) EnqueueTransition(observing); 
                 else 
                 {
@@ -545,15 +558,25 @@ public class AIAgent : MonoBehaviour
                 break;
                 
             case StimulusType.LostSight:
+                blackboard.lastSeenEnemy = stimulus.position;
+                blackboard.lastSeenEnemyTimestamp = Time.time;
+
+                if(!blackboard.isRePositioning) EnqueueTransition(chasing); 
+                break;
+
             case StimulusType.BeingHit:
                 blackboard.lastSeenEnemy = stimulus.position;
                 blackboard.lastSeenEnemyTimestamp = Time.time;
+                if(currentState == attacking) break;
+
                 if(!blackboard.isRePositioning) EnqueueTransition(chasing); 
                 break;
 
             case StimulusType.Gunshot:
                 blackboard.lastHeardPos = stimulus.position;
                 blackboard.lastHeardPosTimestamp = Time.time;
+                if(currentState == attacking) break;
+
                 if(currentState == patrolling || currentState == chatting)
                 {
                     EnqueueTransition(observing);

@@ -17,13 +17,13 @@ public class Chatting : StateBase
 
     IEnumerator ChattingWith(AIAgent ally)
     {
-        Debug.Log($"[Chatting] {agent.gameObject.name} is chatting with {ally.gameObject.name}");
+        if(agent.isDebugMode) Debug.Log($"[Chatting] {agent.gameObject.name} is chatting with {ally.gameObject.name}");
         
         yield return agent.Observe(ally.transform.position, duration);
         
         yield return new WaitForSeconds(duration);
 
-        Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {duration} sec");
+        if(agent.isDebugMode) Debug.Log($"[Chatting] {agent.gameObject.name} has chatted for {duration} sec");
 
         RequestTransition(agent.patrolling);
     }

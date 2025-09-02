@@ -117,15 +117,9 @@ public class StateMonitor : MonoBehaviour
 
     public void SetStateIcon(string value)
     {
-        if (swapCooldownTimer > 0) return;
-
-        if (!StateIconLoader.IsReady)
-        {
-            Debug.Log("StateIconLoader is not ready yet");
-            return;
-        }
-
+        if (!StateIconLoader.IsReady) return;
         var sprite = StateIconLoader.Set.GetSprite(value);
+        
         if (sprite == null)
         {
             Debug.Log("sprite is null");
@@ -134,6 +128,8 @@ public class StateMonitor : MonoBehaviour
         }
 
         state.sprite = sprite;
+
+        if (swapCooldownTimer > 0) return;
         PlayStateAnim();
 
         stateDisplayTimer = stateDisplayInterval;

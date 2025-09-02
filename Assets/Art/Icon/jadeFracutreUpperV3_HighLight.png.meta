@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      jadeFracutreUpperV3_HighLight_0: 3749004631274497125
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
