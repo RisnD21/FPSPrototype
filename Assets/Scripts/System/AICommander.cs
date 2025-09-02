@@ -25,7 +25,7 @@ public class AICommander : MonoBehaviour
 
     [SerializeField] int maxReinforcement = 3;
     Vector3 enemyLocation;
-    float commandCoolDown = 5f;
+    float commandCoolDown = 15f;
     float commandCountDown;
 
     void Awake()

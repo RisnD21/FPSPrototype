@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: def2746e40bb645e9a7550aa2abbca6e
+guid: 2d9d3709a1eee814c8c7690414e8cc61
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3749004631274497125
-    second: jadeFracutreUpperV3_HighLight_0
+      213: -5017592583188297746
+    second: lampHalf_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 64
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: jadeFracutreUpperV3_HighLight_0
+      name: lampHalf_0
       rect:
         serializedVersion: 2
-        x: 21
-        y: 35
-        width: 973
-        height: 754
+        x: 268
+        y: 149
+        width: 635
+        height: 737
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 564296c59d3270430800000000000000
-      internalID: 3749004631274497125
+      spriteID: ee74d63412eed5ab0800000000000000
+      internalID: -5017592583188297746
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      jadeFracutreUpperV3_HighLight_0: 3749004631274497125
+      lampHalf_0: -5017592583188297746
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

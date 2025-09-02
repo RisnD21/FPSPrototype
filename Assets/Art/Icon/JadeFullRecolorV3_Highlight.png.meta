@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      JadeFullRecolorV3_Highlight_0: -1614547751306445879
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

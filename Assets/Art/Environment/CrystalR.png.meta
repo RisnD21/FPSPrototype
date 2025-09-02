@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4fc50f7516b1740a195c5cd75de23277
+guid: d336b8c2824a4b442a100affe42d4fda
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 478521620576905941
-    second: PurpleMushroom_0
+      213: 5669715413884589900
+    second: CrystalR_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 64
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PurpleMushroom_0
+      name: CrystalR_0
       rect:
         serializedVersion: 2
-        x: 130
-        y: 177
-        width: 760
-        height: 695
+        x: 194
+        y: 124
+        width: 655
+        height: 800
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5daa4dbe0ec04a600800000000000000
-      internalID: 478521620576905941
+      spriteID: c47d5262120eeae40800000000000000
+      internalID: 5669715413884589900
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CrystalR_0: 5669715413884589900
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
