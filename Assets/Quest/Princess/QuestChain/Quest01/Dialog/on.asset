@@ -15,11 +15,11 @@ MonoBehaviour:
   pieces:
   - id: 01
     portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
-    portraitDescription: "\u963F\u7D2B"
-    text: "\u5C11\u5973\u7528\u90A3\u96D9\u9748\u52D5\u7684\u5927\u773C\u775B\u76EF\u8457\u4F60\u770B\uFF0C\u773C\u88E1\u6EFF\u662F\u671F\u5F85\u3002"
+    portraitDescription: "<b>\u963F\u7D2B</b>"
+    text: "<b><i>\u5C11\u5973\u7528\u90A3\u96D9\u9748\u52D5\u7684\u5927\u773C\u775B\u76EF\u8457\u4F60\u770B\uFF0C\u773C\u88E1\u6EFF\u662F\u671F\u5F85\u3002</i></b>"
     audio: {fileID: 0}
     options:
-    - text: "\u63D0\u4EA4\u9748\u9B42"
+    - text: "<b>\u63D0\u4EA4\u9748\u9B42</b>"
       targetID: 
       onSelected:
         m_PersistentCalls:
@@ -37,7 +37,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-    - text: (End Conversation)
+    - text: "<b>\u7D50\u675F\u5C0D\u8A71</b>"
       targetID: 
       onSelected:
         m_PersistentCalls:

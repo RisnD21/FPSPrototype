@@ -14,6 +14,11 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField] GameObject itemMenu;
     [SerializeField] GameObject blocker;
+
+    [SerializeField] Button singleButton;
+    [SerializeField] Button upperButton;
+    [SerializeField] Button lowerButton;
+
     [SerializeField] Button useItemButton;
     [SerializeField] Button dropItemButton;
     
@@ -82,6 +87,12 @@ public class InventoryUI : MonoBehaviour
         {
             slots[i].SetSlot(Locator.Inventory.Slots[i]);
         }
+    }
+
+    public void OpenItemMenu2(InventorySlot slot, Vector3 position)
+    {
+        //if only have single action, register it to the single button then enable it
+        //otherwise register actions to upper/lower button, respectively, then enable them
     }
 
     public void OpenItemMenu(InventorySlot slot, Vector3 position)

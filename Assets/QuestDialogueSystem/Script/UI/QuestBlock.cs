@@ -217,6 +217,7 @@ namespace QuestDialogueSystem
             };
 
             vars[itemID] = itemName;
+            vars[itemID] = "";
 
             return SimpleTemplate.Format(target, vars);
         }
