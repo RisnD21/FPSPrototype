@@ -20,13 +20,13 @@ namespace QuestDialogueSystem
         {
             IsStarted = true;
             quest.onQuestStart?.Invoke();
-            Locator.NotificationUI.PrintTitleMsg($"Start Quest \"{quest.questName}\"");
+            Locator.NotificationUI.PrintTitleMsg($"{quest.questName}");
             questUI.AddQuest(quest);
         }
         public void Complete()
         {
             IsCompleted = true;
-            Locator.NotificationUI.PrintTitleMsg($"\"{quest.questName}\" completed");
+            Locator.NotificationUI.PrintTitleMsg($"{quest.questName} <b>完成</b>");
             quest.onQuestComplete?.Invoke();
             questUI.CompleteQuest(quest);
         }

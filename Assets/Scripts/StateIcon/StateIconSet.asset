@@ -16,7 +16,7 @@ MonoBehaviour:
   - id: Attacking
     sprite: {fileID: 556151293, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
   - id: Chasing
-    sprite: {fileID: -453574485, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: 850182695, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
   - id: Chatting
     sprite: {fileID: 681959245, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
   - id: Observing

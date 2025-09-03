@@ -55,7 +55,7 @@ namespace QuestDialogueSystem
         {
             var block = Instantiate(questBlockPrefab, questInfoPanel);
             block.SetQuest(quest);
-            StartCoroutine(UpdateUI(1));
+            StartCoroutine(UpdateUI(0.1f));
 
             questEntries[quest] = block;
         }

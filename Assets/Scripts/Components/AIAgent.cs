@@ -406,6 +406,7 @@ public class AIAgent : MonoBehaviour
     Tween raiseAlarmTween;
     void RaiseAlarm()
     {
+        if (blackboard.alertness >= 95) return;
         if (raiseAlarmTween != null && raiseAlarmTween.IsPlaying()) return;
 
         raiseAlarmTween = DOTween.To(

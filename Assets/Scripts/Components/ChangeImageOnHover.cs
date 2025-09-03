@@ -2,12 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using TMPro;
 
 public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Images")]
     [SerializeField] Image image;        // 底圖（可選）
     [SerializeField] Image imageToSwap;  // 會被淡入/淡出的上層圖（排序較高）
+
+    [Header("Text")]
+    [SerializeField] TextMeshProUGUI textToFade;
 
     [Header("Timings")]
     [SerializeField] float showDelay = 0.3f;
@@ -51,7 +55,7 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
             delayRoutine = null;
         }
 
-        FadeOut();
+        DeSelectAnim();
     }
 
     void OnDisable()
@@ -86,28 +90,30 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
         delayRoutine = null;
 
         if (!isHovering) yield break;
-        FadeIn();
+        OnSelectAnim();
     }
 
-    void FadeIn()
+    void OnSelectAnim()
     {
         if (imageToSwap == null) return;
 
         currentTween?.Kill();
-        currentTween = imageToSwap
-            .DOFade(1f, fadeInDuration)
-            .SetEase(Ease.OutQuad)     // OutBack 有回彈；想要更穩定就用 OutQuad
-            .SetLink(gameObject);      // 綁定生命週期，避免殘留
+
+        Sequence seq = DOTween.Sequence();
+        seq.Join(imageToSwap.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuad));
+        seq.Join(textToFade.DOFade(0.5f, fadeInDuration).SetEase(Ease.OutQuad)); 
+
+        currentTween = seq.SetLink(gameObject);
     }
 
-    void FadeOut()
+    void DeSelectAnim()
     {
         if (imageToSwap == null) return;
 
-        currentTween?.Kill();
-        currentTween = imageToSwap
-            .DOFade(0f, fadeOutDuration)
-            .SetEase(Ease.OutQuad)
-            .SetLink(gameObject);
+        Sequence seq = DOTween.Sequence();
+        seq.Join(imageToSwap.DOFade(0f, fadeInDuration).SetEase(Ease.OutQuad));
+        seq.Join(textToFade.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuad)); 
+
+        currentTween = seq.SetLink(gameObject);
     }
 }

@@ -16,6 +16,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] GameObject blocker;
 
     [SerializeField] Button singleButton;
+    [SerializeField] TextMeshProUGUI singleButtonText;
+    [SerializeField] GameObject dualButtonParent;
     [SerializeField] Button upperButton;
     [SerializeField] Button lowerButton;
 
@@ -53,6 +55,12 @@ public class InventoryUI : MonoBehaviour
     public void Initialize()
     {
         SyncInventory();
+    }
+
+    void Start()
+    {
+        upperButton.onClick.AddListener(UseItem);
+        lowerButton.onClick.AddListener(DestroyItem);
     }
 
     void OnEnable()
@@ -93,6 +101,49 @@ public class InventoryUI : MonoBehaviour
     {
         //if only have single action, register it to the single button then enable it
         //otherwise register actions to upper/lower button, respectively, then enable them
+        currentSlot = slot;
+        var item = currentSlot.stack.Item;
+
+        if (item.itemType != "Shield")
+        {
+            singleButton.onClick.RemoveAllListeners();
+
+            singleButton.onClick.AddListener(DestroyItem);
+            singleButtonText.text = "Discard";
+
+            singleButton.gameObject.SetActive(true);
+            dualButtonParent.SetActive(false);
+        }
+
+        if (item.HasAction() && item.CanDrop)
+        {
+            singleButton.gameObject.SetActive(false);
+            dualButtonParent.SetActive(true);
+        }
+        else if (item.HasAction())
+        {
+            singleButton.onClick.RemoveAllListeners();
+            singleButton.onClick.AddListener(UseItem);
+            singleButtonText.text = "Use";
+
+            singleButton.gameObject.SetActive(true);
+            dualButtonParent.SetActive(false);
+        }
+        else if (item.CanDrop)
+        {
+            singleButton.onClick.RemoveAllListeners();
+            dropItemButton.onClick.AddListener(DestroyItem);
+
+            singleButtonText.text = "Discard";
+
+            singleButton.gameObject.SetActive(true);
+            dualButtonParent.SetActive(false);
+        }
+        else return;
+
+        itemMenu.transform.position = position + itemMenuOffset;
+        itemMenu.SetActive(true);
+        blocker.SetActive(true);
     }
 
     public void OpenItemMenu(InventorySlot slot, Vector3 position)

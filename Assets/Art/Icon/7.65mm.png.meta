@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
 guid: 1e8d3c30da30945f4a4d579da7356bd1
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 7242233572103824272
-    second: 7.65mm_0
-========
-guid: d336b8c2824a4b442a100affe42d4fda
-TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 5669715413884589900
-    second: CrystalR_0
->>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +34,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -75,20 +63,16 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 0
+  applyGammaDecoding: 1
   swizzle: 50462976
-  cookieLightType: 0
+  cookieLightType: 2
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
     maxTextureSize: 256
-========
-    maxTextureSize: 64
->>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -101,7 +85,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -114,7 +98,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -124,44 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
-      name: 7.65mm_0
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 17
-        width: 629
-        height: 915
-========
-      name: CrystalR_0
-      rect:
-        serializedVersion: 2
-        x: 194
-        y: 124
-        width: 655
-        height: 800
->>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
-      spriteID: 09328a51015918460800000000000000
-      internalID: 7242233572103824272
-========
-      spriteID: c47d5262120eeae40800000000000000
-      internalID: 5669715413884589900
->>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     customData: 
     physicsShape: []
@@ -175,12 +122,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-<<<<<<<< HEAD:Assets/Art/Icon/7.65mm.png.meta
-      7.65mm_0: 7242233572103824272
-========
-      CrystalR_0: 5669715413884589900
->>>>>>>> 0551f216d1b990f58e6a322ca327f7048dc5f838:Assets/Art/Environment/CrystalR.png.meta
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
