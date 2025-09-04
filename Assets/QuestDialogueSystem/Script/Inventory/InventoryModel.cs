@@ -166,7 +166,11 @@ namespace QuestDialogueSystem
                 = Slots.Where(s => s.HasItem(set.Item)).ToList();
 
             foreach (var slot in matchSlots)
+            {
                 TryRemoveFromSlot(new ItemStack(set.Item, remainder), slot, ref remainder);
+                if (remainder == 0) break;
+            }
+                
 
             return true;
         }
@@ -202,7 +206,7 @@ namespace QuestDialogueSystem
             {
                 remainder = newRemainder;
                 return true;
-            } 
+            }
             else
             {
                 Debug.LogWarning("[Inventory] Remainder is negative");

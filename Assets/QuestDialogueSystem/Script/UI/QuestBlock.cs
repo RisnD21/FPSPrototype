@@ -110,6 +110,7 @@ namespace QuestDialogueSystem
             PlayQuestIntroAnim();
         }
 
+
         void SetTitle()
         {
             title.text = quest.questName;
@@ -128,25 +129,27 @@ namespace QuestDialogueSystem
             {
                 bool misMatch = true;
 
-                for(int i = toSearch.Length - 1; i > -1; i--)
+                for (int i = toSearch.Length - 1; i > -1; i--)
                 {
                     var itemID = toSearch[i];
 
-                    if(!entry.Contains("{" + itemID + "}")) continue;
-                    
+                    if (!entry.Contains("{" + itemID + "}")) continue;
+
                     misMatch = false;
                     progressionTemplateIndex[itemID] = entry;
-                    if(isDebugMode)Debug.Log($"Binding Templates {itemID}/{entry}");
+                    if (isDebugMode) Debug.Log($"Binding Templates {itemID}/{entry}");
 
                     UpdateProgression(itemID);
                 }
 
-                if(misMatch) 
+                if (misMatch)
                 {
                     Debug.LogError($"[QuestBlock] Unrecognize itemID exists in {entry}");
                     return;
                 }
-            }                
+            }
+
+            // questUI.StartCoroutine(questUI.UpdateUI(0.1f));
         }
 
         void SetupRequirementIndex()

@@ -58,7 +58,7 @@ namespace QuestDialogueSystem
 
         void OnItemRemove(ItemStack stack)
         {
-            PrintInventoryMsg($"Removed {stack}");
+            PrintInventoryMsg($"Remove {stack}");
         }
 
         // --- Public API ---

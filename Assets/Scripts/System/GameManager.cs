@@ -6,14 +6,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-1001)]
 public class GameManager : MonoBehaviour
 {
-    ItemCounter counter;
     [SerializeField] InventoryUI inventoryUI;
-
-    void Awake()
-    {
-        counter = GetComponent<ItemCounter>();
-        
-    }
 
     async void Start()
     {

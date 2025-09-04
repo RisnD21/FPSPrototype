@@ -173,13 +173,6 @@ public class InventoryUI : MonoBehaviour
         CloseItemMenu();
     }
 
-    void ShowProhibitMsg()
-    {
-        string msg = currentSlot.stack.Item.msgOnDrop ?? "Can't drop item";
-        Locator.NotificationUI.PrintInventoryMsg(msg);
-        CloseItemMenu();
-    }
-
     public void CloseItemMenu()
     {
         itemMenu.SetActive(false);

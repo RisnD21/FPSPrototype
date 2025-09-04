@@ -36,7 +36,7 @@ MonoBehaviour:
     audio: {fileID: 0}
     options:
     - text: "\u63A5\u53D7\u4EFB\u52D9 "
-      targetID: 
+      targetID: 03
       onSelected:
         m_PersistentCalls:
           m_Calls:
@@ -52,6 +52,29 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+          - m_Target: {fileID: 11400000, guid: 424cc40b2049a4615a0e874550db9b07, type: 2}
+            m_TargetAssemblyTypeName: QuestDialogueSystem.RemoveItemOnTrigger, Assembly-CSharp
+            m_MethodName: OnTrigger
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - text: "\u7D50\u675F\u5C0D\u8A71"
+      targetID: 
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+  - id: 03
+    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portraitDescription: "\u963F\u7D2B"
+    text: "<i>\u963F\u7D2B\u7389\u624B\u4E00\u63EE\uFF0C\u4E00\u9053\u6D41\u5149\u9583\u904E\uFF0C\u7389\u4F69\u5149\u83EF\u6D41\u8F49</i>\\n\\n\u6210\u5566\uFF01\u7B49\u4F60\u7684\u597D\u6D88\u606F\u5537\uFF01"
+    audio: {fileID: 0}
+    options:
     - text: "\u7D50\u675F\u5C0D\u8A71"
       targetID: 
       onSelected:

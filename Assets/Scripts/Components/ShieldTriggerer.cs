@@ -36,10 +36,11 @@ public class ShieldTriggerer : MonoBehaviour
     //useShield automatically
     void IfAddShield(ItemStack stack)
     {
-        if(stack.Item.itemType != "Shield") return;
+        if (stack.Item.itemType != "Shield") return;
 
         shield.SetActive(true);
         stack.Item.itemAction.TryUse(ctx, stack.Item);
+        Debug.Log("using shield: "+ stack.Item.itemName);
     }
 
     //嘗試使用物品欄中的每一個 Shield

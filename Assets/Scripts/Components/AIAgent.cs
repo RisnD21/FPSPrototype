@@ -112,8 +112,6 @@ public class AIAgent : MonoBehaviour
 
     //Alert Behavior
     float alertnessDecaySpeed = 5f;
-    public static event Action<float> UpdateSuspicous;
-    public static event Action<string> UpdateState;
 
     //Observe Behavior
     float jitterMagnitude = 1f;

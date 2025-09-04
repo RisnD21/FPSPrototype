@@ -23,7 +23,7 @@ public class JadeTriggerer : MonoBehaviour
 
     void IfAddJade(ItemStack stack)
     {
-        if(stack.Item.itemType != "Jade") return;
+        if(stack.Item.itemID != "Jade01") return;
         TriggerQuest();
     }
 

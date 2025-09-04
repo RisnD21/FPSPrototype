@@ -30,23 +30,24 @@ namespace QuestDialogueSystem
                 var quest = entry.Key;
                 var block = entry.Value;
 
-                if(quest.requireItem)
+                if (quest.requireItem)
                 {
                     var requiredStacks = quest.requiredItems;
 
-                    foreach (var requireStack in requiredStacks) 
+                    foreach (var requireStack in requiredStacks)
                     {
                         var item = requireStack.item;
                         var required = requireStack.count;
 
-                        if(!stack.Item.Equals(item)) continue;
+                        if (!stack.Item.Equals(item)) continue;
 
                         var fulfillment = Locator.Inventory.Count(item) >= required;
                         block.SetRequirement(item.itemID, fulfillment);
 
                         block.UpdateProgression(item.itemID);
-                        if(block.CanComplete) block.FulfillQuest();
+                        if (block.CanComplete) block.FulfillQuest();
                     }
+                    StartCoroutine(UpdateUI(0.1f));
                 } 
             }
         }
@@ -55,12 +56,13 @@ namespace QuestDialogueSystem
         {
             var block = Instantiate(questBlockPrefab, questInfoPanel);
             block.SetQuest(quest);
+            
             StartCoroutine(UpdateUI(0.1f));
 
             questEntries[quest] = block;
         }
 
-        IEnumerator UpdateUI(float duration = 0)
+        public IEnumerator UpdateUI(float duration = 0)
         {
             if(duration > 0) yield return new WaitForSeconds(duration);
             yield return null;
