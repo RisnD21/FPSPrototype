@@ -167,6 +167,7 @@ public class AIAgent : MonoBehaviour
     void OnDestroy()
     {
         VFXManager.Instance.ProduceImpact -= ReactToImpact;
+        raiseAlarmTween?.Kill();
     }
 
     void InitStates()

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 04
   questName: "\u963F\u7D2B\u8981\u7DF4\u624B"
   icon: {fileID: 0}
-  description: "\u963F\u7D2B\u89BA\u5F97\u8B77\u76FE\u7522\u751F\u5668\u7684\u8A2D\u8A08\u601D\u8DEF\u5F88\u5DE7\u5999\\n\n\u5979\u4E5F\u60F3\u8A66\u8A66"
+  description: "\u963F\u7D2B\u89BA\u5F97\u8B77\u76FE\u7522\u751F\u5668\u7684\u8A2D\u8A08\u601D\u8DEF\\n\u5F88\u5DE7\u5999\uFF0C\u5979\u4E5F\u60F3\u8A66\u8A66"
   progressionTemplates:
   - "\u8B77\u76FE\u7522\u751F\u5668 {shield01}<color=#{progressHex}>{current}</color>
     / {required}</b>"

@@ -208,7 +208,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 40, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 40, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -836,6 +836,10 @@ PrefabInstance:
     - target: {fileID: 7260418231465136087, guid: 2849df53b9f9d4361b2395a619e267e3, type: 3}
       propertyPath: m_text
       value: ' Souls (0/10)'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7260418231465136087, guid: 2849df53b9f9d4361b2395a619e267e3, type: 3}
+      propertyPath: m_margin.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7260418231465136087, guid: 2849df53b9f9d4361b2395a619e267e3, type: 3}
       propertyPath: m_fontStyle
