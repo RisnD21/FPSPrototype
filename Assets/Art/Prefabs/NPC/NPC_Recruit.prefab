@@ -736,8 +736,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 909f34fa31818433a888ef20e4766669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropInventoryItemInstead: 1
-  items: []
+  dropInventoryItemInstead: 0
+  items:
+  - item: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
+    count: 18
+  - item: {fileID: 11400000, guid: a37fb3528b8f34f01a243799962d15e5, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
+    count: 1
 --- !u!114 &6383618969053675433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,11 +784,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stacks:
   - item: {fileID: 11400000, guid: 4974c8fb4d16b4964936fdc0debb8229, type: 2}
-    count: 45
+    count: 60
   - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
     count: 1
-  - item: {fileID: 11400000, guid: a37fb3528b8f34f01a243799962d15e5, type: 2}
-    count: 2
 --- !u!1 &5809345357842468755
 GameObject:
   m_ObjectHideFlags: 0

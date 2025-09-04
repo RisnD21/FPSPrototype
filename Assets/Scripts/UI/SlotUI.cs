@@ -10,9 +10,11 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     public InventorySlot Slot{get; private set;}
     [SerializeField] Image icon;
+    [SerializeField] Image highlight;
     [SerializeField] TextMeshProUGUI count;
     Color defaultColor;
     InventoryUI inventoryUI;
+    bool beingClick;
 
     public void InitializeSlot(InventoryUI inventoryUI)
     {
@@ -23,6 +25,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
         ClearSlot();
     }
+
     public void SetSlot(InventorySlot slot)
     {
         if (slot == null || slot.IsEmpty) 
@@ -55,20 +58,34 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         gameObject.SetActive(false);
     }
 
+    void OnEnable()
+    {
+        SetImageAlpha(highlight, 0);
+        beingClick = false;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (Slot == null || Slot.IsEmpty) return;
         inventoryUI.OpenItemMenu(Slot, eventData.position);
+    
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         inventoryUI.ItemSelected(Slot.stack.Item);
+        SetImageAlpha(highlight, 1);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         inventoryUI.ItemSelected(null);
+        SetImageAlpha(highlight, 0);
+    }
+
+    void SetImageAlpha(Image img, float a)
+    {
+        img.color = new Color(img.color.r, img.color.g, img.color.b, a);
     }
 
     public override string ToString()

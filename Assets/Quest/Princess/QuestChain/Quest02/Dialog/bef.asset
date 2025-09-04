@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces:
   - id: 01
-    portrait: {fileID: -6762547388975960061, guid: 54b964cc9acc84ea39a2b688694a7810, type: 3}
-    portraitDescription: The dealer
-    text: The man remain silent.
+    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portraitDescription: "\u963F\u7D2B"
+    text: You shouldn't see this msg
     audio: {fileID: 0}
     options:
     - text: (End Conversation)

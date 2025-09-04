@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: Jade01
   itemName: Fractured Jade (Upper)
   itemIcon: {fileID: 6059710261541566431, guid: cb256574bd6154621b46e95e9413d6ed, type: 3}
-  description: the jade is unusual
+  description: A jade, or at least, half of a jade.
   maxStack: 1
   itemType: Jade
   itemAction: {fileID: 0}

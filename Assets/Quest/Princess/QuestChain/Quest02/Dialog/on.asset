@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces:
   - id: 01
-    portrait: {fileID: -6762547388975960061, guid: 54b964cc9acc84ea39a2b688694a7810, type: 3}
-    portraitDescription: The Dealer
-    text: The man stares at you silently
+    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portraitDescription: "\u963F\u7D2B"
+    text: "\u4F60\u597D\uFF0C\u53C8\u898B\u9762\u4E86\uFF01\u554F\u6211\u70BA\u4EC0\u9EBC\u6703\u5728\u9019\uFF1F\\n\\n\u6211\u6709\u9810\u611F\uFF0C\u6709\u4EBA\u6703\u9700\u8981\u535A\u5B78\u591A\u805E\u7684\u963F\u7D2B\u5E6B\u5FD9\u5440\\n\u8AAA\u8AAA\u770B\uFF0C\u662F\u4E0D\u662F\u64BF\u5230\u4E86\u4EC0\u9EBC\u5947\u602A\u7684\u6771\u897F\uFF1F\\n\u6BD4\u5982\u2026\u2026\u4E00\u679A\u6478\u4E0D\u900F\u7528\u9014\u7684\u7389\u4F69\uFF1F\\n\\n<i>\u5979\u7709\u773C\u5F4E\u5F4E\uFF0C\u5634\u89D2\u542B\u7B11\uFF0C\u4FC3\u72F9\u5730\u770B\u8457\u4F60</i>"
     audio: {fileID: 0}
     options:
-    - text: Show him the jade
+    - text: "\u51FA\u793A\u7389\u4F69 "
       targetID: 
       onSelected:
         m_PersistentCalls:
@@ -37,36 +37,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-    - text: (End Conversation)
-      targetID: 
-      onSelected:
-        m_PersistentCalls:
-          m_Calls: []
-  - id: 02
-    portrait: {fileID: -6762547388975960061, guid: 54b964cc9acc84ea39a2b688694a7810, type: 3}
-    portraitDescription: The Dealer
-    text: He seems confused, "Step Back!" he says.
-    audio: {fileID: 0}
-    options:
-    - text: Do as he said.
-      targetID: 
-      onSelected:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 11400000, guid: 0f1d531d2913e46c88eb499cada147b6, type: 2}
-            m_TargetAssemblyTypeName: QuestDialogueSystem.TryCompleteQuestOnTrigger,
-              Assembly-CSharp
-            m_MethodName: OnTrigger
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - text: (End Conversation)
+    - text: "\u7D50\u675F\u5C0D\u8A71"
       targetID: 
       onSelected:
         m_PersistentCalls:

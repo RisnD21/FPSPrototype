@@ -6,7 +6,7 @@ public class HealthUpgrader : MonoBehaviour
 
     public void ApplyFirstUpgrade()
     {
-        body.SetMaxHealth(30);
+        body.SetMaxHealth(25);
     }
 
     public void ApplySecondUpgrade()

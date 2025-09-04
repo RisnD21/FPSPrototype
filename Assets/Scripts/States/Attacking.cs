@@ -57,14 +57,14 @@ public class Attacking : StateBase
                 {
                     agent.blackboard.isRePositioning = true;
 
-                    Debug.Log($"{agent.gameObject.name} is repositioning");
+                    if(agent.isDebugMode) Debug.Log($"{agent.gameObject.name} is repositioning");
 
                     Vector2 offset = agent.muzzle.position - agent.transform.position;
                     agent.TryMoveTo(newPos.Value + offset);
 
                     yield return new WaitUntil(agent.HasReachDestination);
                     
-                    Debug.Log($"{agent.gameObject.name} is now at {agent.muzzle.position}");
+                    if(agent.isDebugMode) Debug.Log($"{agent.gameObject.name} is now at {agent.muzzle.position}");
 
                     agent.blackboard.isRePositioning = false;
                 }

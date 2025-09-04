@@ -20,6 +20,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] GameObject dualButtonParent;
     [SerializeField] Button upperButton;
     [SerializeField] Button lowerButton;
+    [SerializeField] TextMeshProUGUI upperButtonText;
+    [SerializeField] TextMeshProUGUI lowerButtonText;
 
     [SerializeField] Button useItemButton;
     [SerializeField] Button dropItemButton;
@@ -97,14 +99,12 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    public void OpenItemMenu2(InventorySlot slot, Vector3 position)
+    public void OpenItemMenu(InventorySlot slot, Vector3 position)
     {
-        //if only have single action, register it to the single button then enable it
-        //otherwise register actions to upper/lower button, respectively, then enable them
         currentSlot = slot;
         var item = currentSlot.stack.Item;
 
-        if (item.itemType != "Shield")
+        if (item.itemType == "Shield")
         {
             singleButton.onClick.RemoveAllListeners();
 
@@ -113,10 +113,12 @@ public class InventoryUI : MonoBehaviour
 
             singleButton.gameObject.SetActive(true);
             dualButtonParent.SetActive(false);
-        }
-
-        if (item.HasAction() && item.CanDrop)
+        } 
+        else if (item.HasAction() && item.CanDrop)
         {
+            ResetTextAlpha(upperButtonText);
+            ResetTextAlpha(lowerButtonText);
+
             singleButton.gameObject.SetActive(false);
             dualButtonParent.SetActive(true);
         }
@@ -146,28 +148,9 @@ public class InventoryUI : MonoBehaviour
         blocker.SetActive(true);
     }
 
-    public void OpenItemMenu(InventorySlot slot, Vector3 position)
+    void ResetTextAlpha(TextMeshProUGUI text)
     {
-        currentSlot = slot;
-        
-        if (currentSlot.stack.Item.HasAction() && currentSlot.stack.Item.itemType != "Shield") 
-        {
-            useItemButton.onClick.RemoveAllListeners();
-            useItemButton.onClick.AddListener(UseItem);
-            useItemButton.gameObject.SetActive(true);
-        } 
-        else useItemButton.gameObject.SetActive(false);
-
-        dropItemButton.onClick.RemoveAllListeners();
-
-        if (currentSlot.stack.Item.CanDrop) 
-            dropItemButton.onClick.AddListener(DestroyItem);
-        else 
-            dropItemButton.onClick.AddListener(ShowProhibitMsg);
-        
-        itemMenu.transform.position = position + itemMenuOffset;
-        itemMenu.SetActive(true);
-        blocker.SetActive(true);
+        text.color = new Color(text.color.r, text.color.g, text.color.b, 1f);
     }
 
     void UseItem()

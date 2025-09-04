@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dda2cc785b247debd1e48ffdddbfcb, type: 3}
+  m_Name: quest03
+  m_EditorClassIdentifier: 
+  id: 03
+  questName: "\u963F\u7D2B\u7684\u7389\u4F69"
+  icon: {fileID: 0}
+  description: "\u7389\u4F69\u662F\u963F\u7D2B\u5F04\u4E1F\u7684\uFF0C\u4F46\u5979\u4E0D\u60F3\u627F\u8A8D\n\u5979\u8981\u6C42\u4F60\u627E\u5230\u53E6\u5916\u534A\u622A"
+  progressionTemplates:
+  - "\u534A\u622A\u7389\u4F69\uFF08\u4E0B\uFF09 {Jade02}<color=#{progressHex}>{current}</color>
+    / {required}</b>"
+  fulfillDescription: "\u56DE\u53BB\u627E\u963F\u7D2B"
+  requireItem: 1
+  requiredItems:
+  - item: {fileID: 11400000, guid: 3a9762fea38db4cd2881492c1fab3284, type: 2}
+    count: 1
+  onQuestStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuestComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: f780a47ef891547478bdcca44a7263c3, type: 2}
+        m_TargetAssemblyTypeName: QuestDialogueSystem.QuestEvent, Assembly-CSharp
+        m_MethodName: Raised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onQuestFail:
+    m_PersistentCalls:
+      m_Calls: []

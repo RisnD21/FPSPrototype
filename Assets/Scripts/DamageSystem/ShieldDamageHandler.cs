@@ -134,4 +134,9 @@ public class ShieldDamageHandler : MonoBehaviour, IHealthListener, IDamageHandle
             duration
         ).SetEase(Ease.OutQuad);
     }
+    
+    void OnDestroy()
+    {
+        fadeTween?.Kill();
+    }
 }

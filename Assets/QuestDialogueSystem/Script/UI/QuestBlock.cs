@@ -101,10 +101,7 @@ namespace QuestDialogueSystem
             SetTitle();
             SetDescription();
 
-            if(!quest.requireItem)
-            {
-                FulfillQuest();
-            } else 
+            if(quest.requireItem)
             {
                 SetupRequirementIndex();   
                 SetupProgressionEntries();
@@ -115,7 +112,7 @@ namespace QuestDialogueSystem
 
         void SetTitle()
         {
-            title.text = quest.name;
+            title.text = quest.questName;
         }
 
         void SetDescription()
