@@ -7,7 +7,6 @@ using TMPro;
 public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Images")]
-    [SerializeField] Image image;        // 底圖（可選）
     [SerializeField] Image imageToSwap;  // 會被淡入/淡出的上層圖（排序較高）
 
     [Header("Text")]

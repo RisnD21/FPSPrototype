@@ -2,13 +2,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
+//支援inspector上字或由他處指定
 public class TooltipHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] float showDelay = 0.3f; // 反跳，避免太躁動
     [SerializeField] bool followMouse = true; // 是否跟著滑鼠
     [SerializeField] Transform worldAnchor;    // 如果是 NPC/3D 物件可指定錨點（選填）
 
-    string staticText;                 // 99% 用這個
+    [TextArea(3,5)]
+    [SerializeField] string staticText;                 // 99% 用這個
     Func<string> textProvider;         // 少數情況：需要動態更新
     bool isHovering;
     float refreshTimer;
@@ -40,7 +42,7 @@ public class TooltipHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         isHovering = false;
         if (delayRoutine != null) StopCoroutine(delayRoutine);
-        if(TooltipManager.Instance != null) TooltipManager.Instance.Hide();
+        TooltipManager.Instance?.Hide();
     }
 
     System.Collections.IEnumerator ShowAfterDelay(PointerEventData eventData)
@@ -49,9 +51,10 @@ public class TooltipHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointer
         if (!isHovering) yield break;
 
         string content = textProvider != null ? textProvider() : staticText;
+
         Vector2 pos = GetScreenPosition(eventData);
 
-        if(TooltipManager.Instance != null) TooltipManager.Instance.Show(content, pos);
+        TooltipManager.Instance?.Show(content, pos);
         refreshTimer = 0f;
     }
 

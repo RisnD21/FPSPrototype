@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: Jade02
   itemName: Fractured Jade (Lower)
-  itemIcon: {fileID: 6007557777907042317, guid: 03530303b018948139dbcba73c04fbd8, type: 3}
+  itemIcon: {fileID: 21300000, guid: 03530303b018948139dbcba73c04fbd8, type: 3}
   description: This seems to be the lower half of the jade
   maxStack: 1
   itemType: Jade
