@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 900755fe5e0f54f46b09d74cfd6218d0, type: 3}
-  m_Name: AddItem
+  m_Name: AddAmmo
   m_EditorClassIdentifier: 
   stack:
     item: {fileID: 11400000, guid: 3e4d5df8f212c4a478c5e348aa3979b9, type: 2}

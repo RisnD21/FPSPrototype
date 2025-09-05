@@ -25,6 +25,7 @@ public class Weapon : MonoBehaviour
     float accuracy;
     [SerializeField] float accuracyRecoverPerSec = 0f;
     [SerializeField] float accuracyDecreasePerTrigger = 0f;
+    [SerializeField] float minAccuracy = 0.7f;
     
     [SerializeField] CinemachineImpulseSource impulser;
 
@@ -164,7 +165,7 @@ public class Weapon : MonoBehaviour
 
     void ModifyAccuracy()
     {
-        accuracy -= accuracyDecreasePerTrigger;
+        accuracy = Mathf.Clamp(accuracy - accuracyDecreasePerTrigger, minAccuracy, maxAccuracy);
         if(recoverAccuracy != null) StopCoroutine(recoverAccuracy);
         recoverAccuracy = StartCoroutine(RecoverAccuracy());
     }

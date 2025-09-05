@@ -60,14 +60,14 @@ public class RegenOverTime : MonoBehaviour
         effects = new();
         index = new();
         target = GetComponent<Damageable>();
-
-        StartCoroutine(ApplyAccumulatedHealing());
     }
+
+    void OnEnable() => StartCoroutine(ApplyAccumulatedHealing());
 
     public void AddEffect(HealingEffect effect)
     {
         HealingEffect prevEffect = effects.Find(e => e.Equals(effect));
-
+        
         if(prevEffect == null)
         {
             effects.Add(effect);
@@ -116,8 +116,9 @@ public class RegenOverTime : MonoBehaviour
             var effect = effects[i];
 
             float regenAmount = effect.regenSpeed * dt;
-
+            
             float actualRegenAmount = Mathf.Min(effect.remainingAmount, regenAmount);
+            
             accumulateHealingAmount += actualRegenAmount;
             effect.remainingAmount -= actualRegenAmount;   
 
@@ -134,7 +135,7 @@ public class RegenOverTime : MonoBehaviour
             if(accumulateHealingAmount > 1)
             {
                 int healSurge = Mathf.FloorToInt(accumulateHealingAmount);
-                
+
                 target.Heal(healSurge, 1, false);
                 accumulateHealingAmount -= healSurge;
             }

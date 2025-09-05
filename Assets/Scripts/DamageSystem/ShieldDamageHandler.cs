@@ -47,7 +47,6 @@ public class ShieldDamageHandler : MonoBehaviour, IHealthListener, IDamageHandle
         StartRegenerate();
     }
     
-
     public int HandleDamage(int amount)
     {
         if(!gameObject.activeSelf) return amount;

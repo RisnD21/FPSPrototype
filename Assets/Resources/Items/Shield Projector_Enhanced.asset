@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: shield02
   itemName: Shield Projector
   itemIcon: {fileID: 21300000, guid: 844f39b6d410940188250e24c53c3f3a, type: 3}
-  description: forcefield generator
+  description: mk2
   maxStack: 1
   itemType: Shield
   itemAction: {fileID: 11400000, guid: f5685cbe2d42848b28eb905e1f772cda, type: 2}

@@ -21,6 +21,7 @@ public class UIHoverHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExi
     Tween glowTween;
 
     void Reset() { baseImage = GetComponent<Image>(); }
+    void OnEnable() => SetHighlight(false);
 
     void Awake()
     {

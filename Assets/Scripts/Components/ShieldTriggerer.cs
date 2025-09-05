@@ -40,7 +40,6 @@ public class ShieldTriggerer : MonoBehaviour
 
         shield.SetActive(true);
         stack.Item.itemAction.TryUse(ctx, stack.Item);
-        Debug.Log("using shield: "+ stack.Item.itemName);
     }
 
     //嘗試使用物品欄中的每一個 Shield
