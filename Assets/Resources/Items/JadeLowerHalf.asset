@@ -15,10 +15,10 @@ MonoBehaviour:
   itemID: Jade02
   itemName: Fractured Jade (Lower)
   itemIcon: {fileID: 21300000, guid: 03530303b018948139dbcba73c04fbd8, type: 3}
-  description: This seems to be the lower half of the jade
+  description: "<b><size=28>[ \u7384\u9748\u7389\u4F69\uFF08\u4E0B\u534A\uFF09]</size>\\n\u534A\u622A\u4E0D\u77E5\u4F86\u6B77\u7684\u7389\u4F69\u2026
+    \u4E0D\u5C0D\uFF0C\u9019\u662F\u963F\u7D2B\u7149\u7684\uFF0C\u4F60\u6709\u4E0A\u534A\u7247\\n\u963F\u7D2B\u5E0C\u671B\u4F60\u5E36\u8457\u9019\u7247\u56DE\u53BB\u627E\u5979</b>"
   maxStack: 1
   itemType: Jade
   itemAction: {fileID: 0}
   CanDrop: 0
-  msgOnDrop: You drop the jade, yet soon after it leaves your hand, it reappear in
-    your inventory.
+  msgOnDrop: "\u4F60\u4E00\u628A\u7389\u4F69\u6254\u51FA\u5B83\u5C31\u4E0D\u898B\u4E86\uFF0C\u539F\u4F86\u4ED6\u9084\u5728\u80CC\u5305\u88E1"

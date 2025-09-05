@@ -17,6 +17,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode inventory = KeyCode.Tab;
     [SerializeField] private KeyCode swapWeapon = KeyCode.Q;
+    [SerializeField] private KeyCode aim = KeyCode.LeftAlt;
 
     [HideInInspector] public bool IsDialogueMode { get; private set; }
     [HideInInspector] public bool IsInventoryMode { get; private set; }
@@ -34,11 +35,10 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool IsSprint;
     [HideInInspector] public bool IsInteract;
     [HideInInspector] public int weaponIndex;
+    [HideInInspector] public bool isAiming;
 
     public static event Action<MenuType> ToggleMenu;
     [HideInInspector] bool isMenuMode;
-
-
 
     public static event Action<int> SetQuickSlot;
     public static event Action<int> UseQuickSlot;
@@ -126,6 +126,17 @@ public class PlayerInput : MonoBehaviour
                 UseQuickSlot?.Invoke(i);
             }
         }
+
+        if(Input.GetKeyDown(aim))
+        {
+            isAiming = true;
+        }
+        
+        if(Input.GetKeyUp(aim))
+        {
+            isAiming = false;
+        }
+
     }
 
     void PauseCharacterControl()

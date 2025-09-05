@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 50
   regenSpeed: 10
-  rechargeCooldown: 5
+  rechargeCooldown: 3
