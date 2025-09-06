@@ -3,6 +3,8 @@ using UnityEngine;
 public class HealthUpgrader : MonoBehaviour
 {
     [SerializeField] Damageable body;
+    [SerializeField] int firstUpgrade = 30;
+    [SerializeField] int secondUpgrade = 50;
 
     public void ApplyFirstUpgrade()
     {

@@ -142,7 +142,7 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: c08c7eb118c6f44b8ac674c659709d64, type: 2}
     count: 1
   - item: {fileID: 11400000, guid: 3e4d5df8f212c4a478c5e348aa3979b9, type: 2}
-    count: 60
+    count: 72
   - item: {fileID: 11400000, guid: a37fb3528b8f34f01a243799962d15e5, type: 2}
     count: 1
 --- !u!114 &490082475740203257
@@ -968,6 +968,8 @@ GameObject:
   - component: {fileID: 3463850195573515619}
   - component: {fileID: 3111448991709066541}
   - component: {fileID: 5704161426168515747}
+  - component: {fileID: 2893513237702453956}
+  - component: {fileID: 4785950800999618717}
   m_Layer: 7
   m_Name: NPC_Veteran
   m_TagString: NPC
@@ -1281,6 +1283,118 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!60 &2893513237702453956
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8384751257336535221}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.62934875, y: -1.1419754}
+      - {x: 0.74224854, y: -0.8665848}
+      - {x: 0.7227783, y: -0.4994583}
+      - {x: 0.6195984, y: -0.19038391}
+      - {x: 0.33520508, y: -0.09526062}
+      - {x: 0.012581766, y: -0.012195796}
+      - {x: -0.40353394, y: -0.15341187}
+      - {x: -0.45570374, y: -0.38848114}
+      - {x: -0.4512648, y: -0.72871006}
+      - {x: -0.24942017, y: -1.014328}
+      - {x: 0.16998446, y: -1.2268102}
+      - {x: 0.43332577, y: -1.2746544}
+  m_UseDelaunayMesh: 0
+--- !u!114 &4785950800999618717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8384751257336535221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 0
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 2893513237702453956}
+  m_ShadowShape2DProvider:
+    rid: 4976145676607946854
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: 0.1432724, y: -0.643425, z: 0}
+      m_Extent: {x: 0.59897614, y: 0.6312332, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 2
+  m_PreviousShadowShape2DSource: {fileID: 2893513237702453956}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4976145676607946854
+      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
 --- !u!1001 &3015075795326985296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1291,7 +1405,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5837121239210728271, guid: 8c4a7b1a88a0f43f68f277e89c74f0b6, type: 3}
       propertyPath: damage
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5837121239210728271, guid: 8c4a7b1a88a0f43f68f277e89c74f0b6, type: 3}
       propertyPath: ammoType

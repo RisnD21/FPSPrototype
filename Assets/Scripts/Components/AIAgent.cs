@@ -339,7 +339,7 @@ public class AIAgent : MonoBehaviour
         Vector2 dirToPlayer = targetPos.Value - transform.position;
         float distToTarget = dirToPlayer.magnitude;
 
-        if (distToTarget > 20f) return false; //too far, can't see
+        if (distToTarget > 15f) return false; //too far, can't see
 
         RaycastHit2D hit
         = Physics2D.Raycast(transform.position, dirToPlayer, distToTarget, obstacleMask);
@@ -437,6 +437,7 @@ public class AIAgent : MonoBehaviour
     void ReactToImpact(Vector3 pos, Vector3 source)
     {
         if(Vector3.Distance(transform.position, pos) > 15f) return;
+        if(player == null) return;
 
         RaiseAlarm();
         Stimulus stimulus;
@@ -456,7 +457,8 @@ public class AIAgent : MonoBehaviour
     void ReactToGunshot(Vector3 pos, float volume)
     {
         if (Vector3.Distance(transform.position, pos) > volume) return;
-
+        if(player == null) return;
+        
         //if the situation is being considered, don't react
         if (blackboard.lastHeardPos.HasValue
         && Vector3.Distance(pos, blackboard.lastHeardPos.Value) < 2

@@ -37,7 +37,7 @@ public class ShieldTriggerer : MonoBehaviour
     void IfAddShield(ItemStack stack)
     {
         if (stack.Item.itemType != "Shield") return;
-
+        Debug.Log($"{gameObject.name} Adding Shield");
         shield.SetActive(true);
         stack.Item.itemAction.TryUse(ctx, stack.Item);
     }

@@ -32,8 +32,9 @@ public class CameraMouseOffset : MonoBehaviour
         if (camOffset != null) camOffset.Offset = Vector3.zero;
     }
 
-    void Update()
+    void LateUpdate()
     {
+        if (playerInput == null) return;
         if (playerInput.isAiming)
         {
             var targetOffset = CalculateCamOffset();

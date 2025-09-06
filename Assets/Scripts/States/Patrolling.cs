@@ -17,6 +17,8 @@ public class Patrolling : StateBase
         base.OnEnter();
 
         patrolWaypoints = agent.patrolWaypoints;
+        if(patrolWaypoints == null) patrolWaypoints.Add(agent.transform);
+
         routines.Add(agent.StartCoroutine(Patrol()));
     }
 
@@ -28,7 +30,7 @@ public class Patrolling : StateBase
 
             for (int i = currentWaypointIndex; i < patrolWaypoints.Count; i++)
             {
-                var nextPosition = patrolWaypoints[i].position + (Vector3)Random.insideUnitCircle * 3;
+                var nextPosition = patrolWaypoints[i].position + (Vector3)Random.insideUnitCircle * 1.5f;
                 if (agent.TryMoveTo(nextPosition))
                 {
                     yield return new WaitUntil(() => agent.HasReachDestination());
@@ -47,8 +49,8 @@ public class Patrolling : StateBase
 
                 nextWaypointIndex++;
             }
-
             nextWaypointIndex = 0;
+            yield return null;
         }
     }
 
