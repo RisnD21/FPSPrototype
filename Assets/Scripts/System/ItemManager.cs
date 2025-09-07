@@ -4,6 +4,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using QuestDialogueSystem;
 using System.Collections;
+using AudioSystem.SFX;
 
 public class ItemManager : MonoBehaviour
 {
@@ -108,7 +109,8 @@ public class ItemManager : MonoBehaviour
             StartCoroutine(CollectItem());
             return true;
         }else return false;
-        // TODO: 增加背包、音效、數量…等邏輯    
+        
+
     }
 
     //--------------- 私有 Method ---------------//
@@ -144,6 +146,8 @@ public class ItemManager : MonoBehaviour
     IEnumerator CollectItem()
     {
         yield return new WaitForSeconds(flyDuration);
+
+        SFXManager.Instance.PlaySound(SoundID.ItemPickup);
         backpackBounce.PlayBounce();
     }
 

@@ -2,6 +2,7 @@ using QuestDialogueSystem;
 using TMPro;
 using UnityEngine;
 
+
 public class AmmoMonitor : MonoBehaviour
 {
     TextMeshProUGUI monitor;

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using AudioSystem.SFX;
 
 namespace QuestDialogueSystem
 {
@@ -48,6 +49,7 @@ namespace QuestDialogueSystem
                 AddQuestWithoutStart(quest);
             }
             
+            SFXManager.Instance.PlaySound(SoundID.AcceptQuest);
             statuses[quest].Start();
         }
 
@@ -81,6 +83,8 @@ namespace QuestDialogueSystem
                 Debug.LogWarning("[QuestManager] Quest not found, abort completing");
                 return;
             }
+
+            SFXManager.Instance.PlaySound(SoundID.CompleteQuest);
             statuses[quest].Complete();            
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AudioSystem.SFX;
 using QuestDialogueSystem;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
@@ -51,6 +52,8 @@ public class PlayerControl : MonoBehaviour
         var weapon = weapons[index].GetComponent<Weapon>();
         if (actionStates.currentWeapon == weapon && weapon.hasRegister) return;
 
+        SFXManager.Instance.PlaySound(SoundID.SwapWeapon);
+        
         actionStates.Select(weapon);
         weapon.RegisterMonitor(ammoMonitor);
     }

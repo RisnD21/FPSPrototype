@@ -182,8 +182,8 @@ namespace QuestDialogueSystem
             {
                 remainder = set.Count;
 
-                string msg = $"[Inventory] Required {set.Count - Count(set.Item)} more {set.Item.itemName}, cancel removal.";
-                Locator.NotificationUI.PrintTitleMsg(msg);
+                string msg = $"尚未達成任務需求";
+                Locator.NotificationUI.PrintInventoryMsg(msg);
 
                 return false;
             }

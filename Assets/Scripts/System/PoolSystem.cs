@@ -28,7 +28,9 @@ public class PoolSystem : MonoBehaviour
     public void InitPool(UnityEngine.Object prefab, int size, Transform parent = null)
     {
         if (m_Pools.ContainsKey(prefab)) return;
+
         Queue<Object> queue = new Queue<Object>();
+
         for (int i = 0; i < size; ++i)
         {
             // Instantiate 時就指定 parent
@@ -36,6 +38,7 @@ public class PoolSystem : MonoBehaviour
             SetActive(o, false);
             queue.Enqueue(o);
         }
+        
         m_Pools[prefab] = queue;
     }
 

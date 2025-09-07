@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using AudioSystem.SFX;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -71,6 +72,8 @@ public class InventoryUI : MonoBehaviour
         Locator.Inventory.OnItemRemove += UpdateSlot;
 
         SyncInventory();
+
+        SFXManager.Instance.PlaySound(SoundID.OpenInventory);
     }
 
     void OnDisable()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using QuestDialogueSystem;
+using AudioSystem.SFX;
 
 public class PlayerUseItemSystem : MonoBehaviour
 {
@@ -46,5 +47,6 @@ public class PlayerUseItemSystem : MonoBehaviour
             return;
         } 
         item.TryUse(ctx, item);
+        SFXManager.Instance.PlaySound(SoundID.UseItem);
     }
 }

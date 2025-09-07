@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d21719a03394987b7f4f90ff99e5e9, type: 3}
+  m_Name: SFXDatabase
+  m_EditorClassIdentifier: Assembly-CSharp:AudioSystem.SFX:SFXDataBase
+  configs:
+  - soundID: 1
+    clip: {fileID: 8300000, guid: 5c6eb52578bff485ea7759c77730684f, type: 3}
+    maxInstances: 8
+    cooldown: 0.01
+    volume: 0.8
+  - soundID: 3
+    clip: {fileID: 8300000, guid: f6adf5fa2adba4b9aac27cfbc04246ae, type: 3}
+    maxInstances: 3
+    cooldown: 0.5
+    volume: 0.7
+  - soundID: 2
+    clip: {fileID: 8300000, guid: 369dfaed551f0405b9bafaa8312f0581, type: 3}
+    maxInstances: 10
+    cooldown: 0.01
+    volume: 0.6
+  - soundID: 4
+    clip: {fileID: 8300000, guid: c21bd9f6bbb834424a12f552a34121ed, type: 3}
+    maxInstances: 3
+    cooldown: 0.5
+    volume: 1
+  - soundID: 5
+    clip: {fileID: 8300000, guid: c21bd9f6bbb834424a12f552a34121ed, type: 3}
+    maxInstances: 3
+    cooldown: 0.5
+    volume: 1
+  - soundID: 7
+    clip: {fileID: 8300000, guid: 2c3e33eda1d044bb4bae61fc526230e3, type: 3}
+    maxInstances: 3
+    cooldown: 0.1
+    volume: 1
+  - soundID: 6
+    clip: {fileID: 8300000, guid: 64410549dcba949d69a421dd05556860, type: 3}
+    maxInstances: 1
+    cooldown: 3
+    volume: 1
+  - soundID: 8
+    clip: {fileID: 8300000, guid: 290d9c299afb04601b3fa784b3718111, type: 3}
+    maxInstances: 5
+    cooldown: 0.1
+    volume: 1
+  - soundID: 9
+    clip: {fileID: 8300000, guid: 884ca33fe5936498396267d087f9b77a, type: 3}
+    maxInstances: 2
+    cooldown: 0.1
+    volume: 1
+  - soundID: 10
+    clip: {fileID: 8300000, guid: 6aa7c2d558ab54fa1b51c650856135c6, type: 3}
+    maxInstances: 2
+    cooldown: 0.1
+    volume: 1
+  - soundID: 11
+    clip: {fileID: 8300000, guid: 463373097b97d4d758b05fb39f7f5a44, type: 3}
+    maxInstances: 2
+    cooldown: 0.1
+    volume: 1
+  - soundID: 12
+    clip: {fileID: 8300000, guid: b54ae8f90c6444e1994f4f0c46a336da, type: 3}
+    maxInstances: 2
+    cooldown: 0.1
+    volume: 1
+  - soundID: 13
+    clip: {fileID: 8300000, guid: 103bd523cd970423fbd45c0339898c54, type: 3}
+    maxInstances: 3
+    cooldown: 0.1
+    volume: 1

@@ -5,6 +5,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine.InputSystem.XR.Haptics;
 using Unity.Cinemachine;
+using AudioSystem.SFX;
 
 public class Weapon : MonoBehaviour
 {
@@ -131,6 +132,12 @@ public class Weapon : MonoBehaviour
         magazineAmmo -= 1;
         flash.GetComponent<ParticleSystem>().Play();
         RaycastShot();
+        
+        if(gunType == "handgun") 
+            SFXManager.Instance.PlaySound(SoundID.HandgunShot, transform.position);
+        else SFXManager.Instance.PlaySound(SoundID.RifleShot, transform.position);
+        
+        
 
         Gunshot?.Invoke(transform.position, fireNoise);
 
@@ -215,6 +222,8 @@ public class Weapon : MonoBehaviour
         {
             return;
         }
+
+        SFXManager.Instance.PlaySound(SoundID.Reloading, transform.position);
 
         int ammoNeed = magazineSize - magazineAmmo;
         int ammoToFill = Mathf.Min(ReserveAmmo, ammoNeed);

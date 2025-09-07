@@ -5,6 +5,7 @@ using System.Collections;
 using System.Linq;
 using System;
 using DG.Tweening;
+using AudioSystem.SFX;
 
 public class Blackboard
 {
@@ -282,6 +283,8 @@ public class AIAgent : MonoBehaviour
 
     public void Reinforce(Vector3 pos)
     {
+        SFXManager.Instance.PlaySound(SoundID.Reinforcement);
+
         blackboard.lastSeenEnemy = pos;
         blackboard.lastSeenEnemyTimestamp = Time.time;
         EnqueueTransition(chasing);
