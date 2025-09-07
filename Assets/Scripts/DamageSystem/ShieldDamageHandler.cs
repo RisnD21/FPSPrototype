@@ -17,6 +17,8 @@ public class ShieldDamageHandler : MonoBehaviour, IHealthListener, IDamageHandle
     [SerializeField] float rechargeCooldown = 2;
     Coroutine ShieldCooldownRoutine;
 
+    bool isDebugMode = false;
+
     int alphaID;
     float idleAlpha = 0.1f;
     float hitAlpha = 1f;
@@ -43,7 +45,7 @@ public class ShieldDamageHandler : MonoBehaviour, IHealthListener, IDamageHandle
     {
         this.regenSpeed = regenSpeed;
         this.rechargeCooldown = rechargeCooldown;
-        Debug.Log($"Setting shield, regenerate speed = {this.regenSpeed}, recharge cd = {this.rechargeCooldown}");
+        if(isDebugMode) Debug.Log($"Setting shield, regenerate speed = {this.regenSpeed}, recharge cd = {this.rechargeCooldown}");
         StartRegenerate();
     }
     
@@ -121,7 +123,7 @@ public class ShieldDamageHandler : MonoBehaviour, IHealthListener, IDamageHandle
 
         float regenAmount = shield.Max - shield.Current;
         float duration = regenAmount / regenSpeed;
-        Debug.Log($"Start Regenerate Shield, regenAmount = {regenAmount}, duration = {duration}");
+        if(isDebugMode) Debug.Log($"Start Regenerate Shield, regenAmount = {regenAmount}, duration = {duration}");
         HealingEffect regenEffect = new("shieldRegen", regenAmount, duration, EffectMode.reset, true);
         regenerator.AddEffect(regenEffect);
 

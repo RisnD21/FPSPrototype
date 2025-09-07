@@ -53,7 +53,7 @@ namespace AudioSystem.SFX
         {
             if (footstepClips == null || footstepClips.Count == 0)
             {
-                Debug.Log("[FootstepSrc] No footstep clips assigned");
+                Debug.LogError("[FootstepSrc] No footstep clips assigned");
                 yield break;
             }
 
@@ -65,7 +65,6 @@ namespace AudioSystem.SFX
 
                         float speed = body.linearVelocity.magnitude;
                         float interval = speed >= runSpeedThreshold ? runInterval : walkInterval;
-                        Debug.Log($"speed={speed} interval={interval}");
                         interval += Random.Range(-0.05f, 0.05f); // 微隨機化間隔，避免機械感
 
                         yield return new WaitForSeconds(interval);

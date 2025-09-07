@@ -552,7 +552,7 @@ public class AIAgent : MonoBehaviour
             case StimulusType.Impact:
                 blackboard.lastImpactPos = stimulus.position;
                 blackboard.lastImpactPosTimestamp = Time.time;
-                if(currentState == attacking) break;
+                if(currentState == attacking || currentState == chasing) break;
 
                 if(currentState != observing) EnqueueTransition(observing); 
                 else 
