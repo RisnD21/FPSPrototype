@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AudioSystem.SFX;
 using QuestDialogueSystem;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class QuestNarrator : MonoBehaviour
             return;
         }
 
+        SFXManager.Instance.PlaySound(SoundID.ClickButton);
+        
         SelectEntry();
         SelectScript();
 

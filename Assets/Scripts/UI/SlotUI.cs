@@ -14,7 +14,6 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     [SerializeField] TextMeshProUGUI count;
     Color defaultColor;
     InventoryUI inventoryUI;
-    bool beingClick;
 
     public void InitializeSlot(InventoryUI inventoryUI)
     {
@@ -61,7 +60,6 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     void OnEnable()
     {
         SetImageAlpha(highlight, 0);
-        beingClick = false;
     }
 
     public void OnPointerClick(PointerEventData eventData)

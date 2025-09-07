@@ -27,7 +27,7 @@ namespace AudioSystem.SFX
                 return true;
             }
 
-            public void OnPlay(SoundConfig cfg) {
+            public void OnPlay() {
                 lastPlayedTime = Time.time;
                 activeInstances++;
             }
@@ -60,7 +60,7 @@ namespace AudioSystem.SFX
 
             gates = new();
             foreach (var config in configs) gates[config.Key] = new GlobalGate();
-        }        
+        }
 
         void Start()
         {
@@ -84,8 +84,11 @@ namespace AudioSystem.SFX
             var gate = gates[sfx];
             if(!gate.CanPlay(cfg)) return;
 
-            gate.OnPlay(cfg);
+            if (!PoolSystem.Instance.Contains(sourcePrefab)) return;
+            
             var soundSrc = PoolSystem.Instance.GetInstance<SoundSrc>(sourcePrefab);
+
+            gate.OnPlay();
             soundSrc.Set(sfx, cfg.clip, pos, cfg.volume);
             soundSrc.Play();
         }

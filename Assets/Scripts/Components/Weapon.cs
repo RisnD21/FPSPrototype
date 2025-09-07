@@ -223,8 +223,8 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        SFXManager.Instance.PlaySound(SoundID.Reloading, transform.position);
-
+        if(SFXManager.Instance != null) SFXManager.Instance.PlaySound(SoundID.Reloading, transform.position);
+        
         int ammoNeed = magazineSize - magazineAmmo;
         int ammoToFill = Mathf.Min(ReserveAmmo, ammoNeed);
 

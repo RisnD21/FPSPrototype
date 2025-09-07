@@ -72,8 +72,8 @@ public class InventoryUI : MonoBehaviour
         Locator.Inventory.OnItemRemove += UpdateSlot;
 
         SyncInventory();
-
-        SFXManager.Instance.PlaySound(SoundID.OpenInventory);
+        
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySound(SoundID.OpenInventory);
     }
 
     void OnDisable()
