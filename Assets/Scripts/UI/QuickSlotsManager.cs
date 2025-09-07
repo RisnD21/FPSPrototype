@@ -1,6 +1,7 @@
 using QuestDialogueSystem;
 using UnityEngine;
 using System.Collections.Generic;
+using AudioSystem.SFX;
 
 public class QuickSlotsManager : MonoBehaviour 
 {
@@ -40,6 +41,8 @@ public class QuickSlotsManager : MonoBehaviour
     void SetQuickSlot(int index)
     {
         if(index > quickSlots.Count - 1) return;
+
+        if(SFXManager.Instance != null) SFXManager.Instance.PlaySound(SoundID.ClickButton);
 
         var targetSlot = quickSlots[index];
         var item = inventoryUI.itemSelected;

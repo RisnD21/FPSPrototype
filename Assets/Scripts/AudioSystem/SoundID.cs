@@ -16,5 +16,7 @@ namespace AudioSystem.SFX
         SwapWeapon,
         ChangeScene,
         UseItem,
+        Bandage,
+        Select,
     }
 }

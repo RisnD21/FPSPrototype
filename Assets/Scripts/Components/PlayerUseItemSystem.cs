@@ -47,6 +47,8 @@ public class PlayerUseItemSystem : MonoBehaviour
             return;
         } 
         item.TryUse(ctx, item);
-        SFXManager.Instance.PlaySound(SoundID.UseItem);
+
+        if (item.itemID == "bandage") SFXManager.Instance.PlaySound(SoundID.Bandage);
+        else SFXManager.Instance.PlaySound(SoundID.UseItem);
     }
 }

@@ -77,7 +77,7 @@ namespace AudioSystem.SFX
         {
             if (footstepClips.Count == 0) return;
 
-            // 避免連播同一段：抽到跟上次同一個就重抽一次（O(1) 小成本）
+            // 避免連播同一段：抽到跟上次同一個就重抽一次
             int index = Random.Range(0, footstepClips.Count);
             if (footstepClips.Count > 1 && index == lastIndex)
                 index = (index + 1) % footstepClips.Count;
