@@ -129,5 +129,15 @@ namespace AudioSystem.BGM
         {
             engagingEnemies.Clear();
         }
+
+        public float GetVolume()
+        {
+            return 0;
+        }
+
+        public void SetVolume(float val)
+        {
+
+        }
     }
 }
