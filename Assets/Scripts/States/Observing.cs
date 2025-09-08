@@ -39,7 +39,7 @@ public class Observing : StateBase
     IEnumerator ObserveAtSrc()
     {
         yield return agent.LookAt(currentObservePoint);
-        agent.CallReinforcement(agent.player.position);
+        if(agent.player != null) agent.CallReinforcement(agent.player.position);
         
         if(!agent.TargetInSight(currentObservePoint))
         {

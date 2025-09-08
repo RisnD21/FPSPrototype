@@ -3,7 +3,7 @@ using Pathfinding;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using System;
+using AudioSystem.BGM;
 using DG.Tweening;
 using AudioSystem.SFX;
 
@@ -82,6 +82,9 @@ public class AIAgent : MonoBehaviour
 
     public void OnHit() => beingHit = true;
     [HideInInspector] public bool beingHit;
+
+    bool inBattleState => currentState == chasing || currentState == attacking;
+    bool isInBattle;
 
     public bool HasReachDestination()
     {
@@ -166,6 +169,8 @@ public class AIAgent : MonoBehaviour
     void OnDestroy()
     {
         VFXManager.Instance.ProduceImpact -= ReactToImpact;
+        if(BGMManager.Instance != null) BGMManager.Instance.OnEnemyDisengage(this);
+
         raiseAlarmTween?.Kill();
     }
 
@@ -597,9 +602,22 @@ public class AIAgent : MonoBehaviour
 
     public void TransitionTo(IState state)
     {
+
         currentState?.OnExit();
         currentState = state;
         state.OnEnter();
+
+
+        if (inBattleState)
+        {
+            if(!isInBattle && BGMManager.Instance != null) BGMManager.Instance.OnEnemyEngage(this);
+            isInBattle = true;
+        }
+        else
+        {
+            if(isInBattle && BGMManager.Instance != null) BGMManager.Instance.OnEnemyDisengage(this);
+            isInBattle = false;
+        }   
 
         monitor.SetStateIcon(currentState.Name);
     }
