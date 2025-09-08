@@ -21,6 +21,8 @@ namespace AudioSystem.BGM
         Coroutine fadeRoutine;
         Coroutine lingerRoutine;
 
+        float masterVolume = 1f;
+
         void Awake()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -132,11 +134,12 @@ namespace AudioSystem.BGM
 
         public float GetVolume()
         {
-            return 0;
+            return masterVolume;
         }
 
         public void SetVolume(float val)
         {
+            masterVolume = Mathf.Clamp01(val);
 
         }
     }
