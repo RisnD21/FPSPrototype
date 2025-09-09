@@ -21,6 +21,9 @@ namespace AudioSystem.BGM
         Coroutine fadeRoutine;
         Coroutine lingerRoutine;
 
+        float battleTrackRawVolume;
+        float defaultTrackRawVolume;
+
         float masterVolume = 1f;
 
         void Awake()
@@ -36,6 +39,9 @@ namespace AudioSystem.BGM
             {
                 defaultTrackSrc.loop = true;
                 defaultTrackSrc.volume = initVolume;
+
+                defaultTrackRawVolume = masterVolume == 0 ? 0 : Mathf.Clamp01(initVolume / masterVolume);
+
                 if (!defaultTrackSrc.isPlaying) defaultTrackSrc.Play();
             }
 
@@ -43,6 +49,8 @@ namespace AudioSystem.BGM
             {
                 battleTrackSrc.loop = true;
                 battleTrackSrc.volume = 0f;
+                battleTrackRawVolume = 0f;
+
                 if (!battleTrackSrc.isPlaying) battleTrackSrc.Play();
             }
         }
@@ -100,31 +108,58 @@ namespace AudioSystem.BGM
 
         IEnumerator CrossfadeCoroutine(bool toBattle, float duration)
         {
-            var from = toBattle ? defaultTrackSrc : battleTrackSrc;
-            var to = toBattle ? battleTrackSrc : defaultTrackSrc;
+            float toEnd = masterVolume == 0 ? 0 : Mathf.Clamp01(initVolume / masterVolume);
 
-            if (from == null || to == null) yield break;
+            if (!defaultTrackSrc.isPlaying) defaultTrackSrc.Play();
+            if (!battleTrackSrc.isPlaying) battleTrackSrc.Play();
 
-            if (!from.isPlaying) from.Play(); // 安全起見
-            if (!to.isPlaying) to.Play();
-
-            float t = 0f;
-            float fromStart = from.volume;
-            float toStart = to.volume;
-            float toEnd = initVolume;
-
-            while (t < duration)
+            if (toBattle)
             {
-                t += Time.deltaTime;
-                float k = t / duration;
-                from.volume = Mathf.Lerp(fromStart, 0f, 2 * k);
-                to.volume = Mathf.Lerp(toStart, toEnd, k);
-                yield return null;
-            }
+                float t = 0f;
+                float fromStart = defaultTrackRawVolume;
+                float toStart = battleTrackRawVolume;
 
-            from.volume = 0f;
-            to.volume = toEnd;
+                while (t < duration)
+                {
+                    t += Time.deltaTime;
+                    float k = t / duration;
+                    AdjustVolumes(defaultTrackSrc, Mathf.Lerp(fromStart, 0f, 2 * k));
+                    AdjustVolumes(battleTrackSrc, Mathf.Lerp(toStart, toEnd, k));
+                    yield return null;
+                }
+
+                AdjustVolumes(defaultTrackSrc, 0f);
+                AdjustVolumes(battleTrackSrc, toEnd);
+            }
+            else
+            {
+                float t = 0f;
+                float fromStart = battleTrackRawVolume;
+                float toStart = defaultTrackRawVolume;
+
+                while (t < duration)
+                {
+                    t += Time.deltaTime;
+                    float k = t / duration;
+                    AdjustVolumes(battleTrackSrc, Mathf.Lerp(fromStart, 0f, 2 * k));
+                    AdjustVolumes(defaultTrackSrc, Mathf.Lerp(toStart, toEnd, k));
+                    yield return null;
+                }
+
+                AdjustVolumes(battleTrackSrc, 0f);
+                AdjustVolumes(defaultTrackSrc, toEnd);
+
+            }
+            
             fadeRoutine = null;
+        }
+
+        void AdjustVolumes(AudioSource src, float rawValue)
+        {
+            if (src == defaultTrackSrc) defaultTrackRawVolume = rawValue;
+            else if (src == battleTrackSrc) battleTrackRawVolume = rawValue;
+
+            src.volume = rawValue * masterVolume;
         }
 
         void OnDestroy()
@@ -139,8 +174,14 @@ namespace AudioSystem.BGM
 
         public void SetVolume(float val)
         {
+            
             masterVolume = Mathf.Clamp01(val);
 
+            if (fadeRoutine == null) // 非淡換中，直接調整目前音量
+            {
+                if (engagingEnemies.Count == 0) AdjustVolumes(defaultTrackSrc, defaultTrackRawVolume);
+                else AdjustVolumes(defaultTrackSrc, battleTrackRawVolume);
+            }
         }
     }
 }

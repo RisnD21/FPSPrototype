@@ -5,10 +5,12 @@ using System;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] InventoryUI inventoryUI;
+    [SerializeField] InGameMenu inGameMenu;
 
     public static event Action<bool> SetMenuMode;
 
     bool IsInventoryOpen;
+    bool IsInGameMenuOpen;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class UIManager : MonoBehaviour
     void InitailzieUI()
     {
         IsInventoryOpen = true;
+        IsInGameMenuOpen = true;
         ToggleInventory();
     }
 
@@ -36,11 +39,11 @@ public class UIManager : MonoBehaviour
         switch (type)
         {
             case MenuType.Inventory:
-            ToggleInventory();
-            break;
+                ToggleInventory();
+                break;
 
             default:
-            break;
+                break;
         }
     }
 
@@ -49,7 +52,9 @@ public class UIManager : MonoBehaviour
         IsInventoryOpen = !IsInventoryOpen;
         inventoryUI.gameObject.SetActive(IsInventoryOpen);
 
-        if(!IsInventoryOpen) SetMenuMode?.Invoke(false);
+        if (!IsInventoryOpen) SetMenuMode?.Invoke(false);
         else SetMenuMode?.Invoke(true);
     }
+    
+    
 }
