@@ -1,16 +1,16 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 //控制所有面板的開關，並更新 PlayerInput 中的狀況
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] InventoryUI inventoryUI;
-    [SerializeField] InGameMenu inGameMenu;
+    [SerializeField] GameObject inventoryUI;
+    [SerializeField] GameObject inGameMenu;
 
     public static event Action<bool> SetMenuMode;
-
-    bool IsInventoryOpen;
-    bool IsInGameMenuOpen;
+    Dictionary<GameObject, bool> menuStatus = new();
 
     void Start()
     {
@@ -19,9 +19,11 @@ public class UIManager : MonoBehaviour
 
     void InitailzieUI()
     {
-        IsInventoryOpen = true;
-        IsInGameMenuOpen = true;
-        ToggleInventory();
+        menuStatus.Add(inventoryUI, true);
+        menuStatus.Add(inGameMenu, true);
+
+        var menus = new List<GameObject>(menuStatus.Keys);
+        foreach (var menu in menus) ToggleMenu(menu);
     }
 
     void OnEnable()
@@ -36,25 +38,38 @@ public class UIManager : MonoBehaviour
 
     void ToggleMenu(MenuType type)
     {
+        GameObject menuToOpen = null;
+
         switch (type)
         {
             case MenuType.Inventory:
-                ToggleInventory();
+                menuToOpen = inventoryUI;
+                break;
+            case MenuType.InGameMenu:
+                menuToOpen = inGameMenu;
                 break;
 
             default:
                 break;
         }
+
+        ToggleMenu(menuToOpen);
     }
 
-    void ToggleInventory()
+    void ToggleMenu(GameObject menu)
     {
-        IsInventoryOpen = !IsInventoryOpen;
-        inventoryUI.gameObject.SetActive(IsInventoryOpen);
+        if (!menuStatus.ContainsKey(menu)) return;
 
-        if (!IsInventoryOpen) SetMenuMode?.Invoke(false);
-        else SetMenuMode?.Invoke(true);
+        menuStatus[menu] = !menuStatus[menu];
+        menu.SetActive(menuStatus[menu]);
+
+        if (menuStatus.Any(kv => kv.Value))
+        {
+            SetMenuMode?.Invoke(true);
+        }
+        else
+        {
+            SetMenuMode?.Invoke(false);
+        }
     }
-    
-    
 }

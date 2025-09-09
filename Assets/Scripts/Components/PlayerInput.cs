@@ -16,6 +16,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode inventory = KeyCode.Tab;
+    [SerializeField] private KeyCode inGameMenu = KeyCode.Escape;
     [SerializeField] private KeyCode swapWeapon = KeyCode.Q;
     [SerializeField] private KeyCode aim = KeyCode.LeftAlt;
 
@@ -200,10 +201,16 @@ public class PlayerInput : MonoBehaviour
             IsInventoryMode = !IsInventoryMode;
         }
 
-        if(IsInventoryMode) HandleInventoryInput();
+        if (IsInventoryMode) HandleInventoryInput();
+        
+        if (Input.GetKeyDown(inGameMenu))
+        {
+            ToggleMenu?.Invoke(MenuType.InGameMenu);
+            if (isMenuMode) PauseCharacterControl();
+        }        
 
-        if(isMenuMode) return;
-        else if(IsDialogueMode) HandleDialogueInput();
+        if (isMenuMode) return;
+        else if (IsDialogueMode) HandleDialogueInput();
         else HandleInput();
     }
 }

@@ -49,10 +49,13 @@ public class Observing : StateBase
             yield return null;
         }
 
-        agent.blackboard.lastHeardPos = agent.player.position;
-        agent.blackboard.lastHeardPosTimestamp = Time.time;
-        yield return agent.Observe(agent.player.position, 5);
-        
+        if (agent.player != null)
+        {
+            agent.blackboard.lastHeardPos = agent.player.position;
+            agent.blackboard.lastHeardPosTimestamp = Time.time;
+            yield return agent.Observe(agent.player.position, 5);
+        }
+
         agent.blackboard.lastImpactPos = null;
         RequestTransition(agent.searching);
     }
@@ -70,7 +73,7 @@ public class Observing : StateBase
                 }
             }else
             { //focus on impact pos 
-                if(Vector3.Distance(agent.blackboard.lastImpactPos.Value, currentObservePoint) > minDiffToUpdateObesrvePoint)
+                if(Vector3.Distance(agent.blackboard.lastImpactPos.Value, currentObservePoint) > minDiffToUpdateObesrvePoint && agent.player != null)
                 {
                     agent.blackboard.lastHeardPos = agent.player.position;
                     RequestTransition(agent.searching);
