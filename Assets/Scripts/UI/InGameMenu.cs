@@ -3,6 +3,7 @@ using DG.Tweening;
 
 public class InGameMenu : MonoBehaviour
 {
+    [SerializeField] GameObject controls;
     public void OnEnable()
     {
         PopUpMenuAnim();
@@ -12,6 +13,7 @@ public class InGameMenu : MonoBehaviour
     public void OnDisable()
     {
         ResumeGame();
+        controls.SetActive(false);
     }
 
     void PopUpMenuAnim()
@@ -29,5 +31,28 @@ public class InGameMenu : MonoBehaviour
     void ResumeGame()
     {
         Time.timeScale = 1;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ShowControls()
+    {
+        controls.SetActive(true);
+    }
+
+    public void ToTitleScene()
+    {
+        Time.timeScale = 1;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+        Debug.Log("Quit Game");
     }
 }

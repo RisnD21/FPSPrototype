@@ -24,6 +24,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] float maxAccuracy = 1f;
     float accuracy;
+    public float Accuracy => accuracy;
     [SerializeField] float accuracyRecoverPerSec = 0f;
     [SerializeField] float accuracyDecreasePerTrigger = 0f;
     [SerializeField] float minAccuracy = 0.7f;
@@ -249,5 +250,10 @@ public class Weapon : MonoBehaviour
     public void SetAccuracyDecreaseSpeed(float value)
     {
         accuracyDecreasePerTrigger = Mathf.Clamp01(value);
+    }
+
+    public void SetAccuracyRecoverSpeed(float value)
+    {
+        accuracyRecoverPerSec = Mathf.Max(0, value);
     }
 }

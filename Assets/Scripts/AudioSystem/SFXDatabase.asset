@@ -71,7 +71,7 @@ MonoBehaviour:
   - soundID: 12
     clip: {fileID: 8300000, guid: b54ae8f90c6444e1994f4f0c46a336da, type: 3}
     maxInstances: 2
-    cooldown: 0.1
+    cooldown: 0
     volume: 1
   - soundID: 13
     clip: {fileID: 8300000, guid: 103bd523cd970423fbd45c0339898c54, type: 3}
@@ -86,5 +86,5 @@ MonoBehaviour:
   - soundID: 15
     clip: {fileID: 8300000, guid: 6e5cf2b2f4e88ea4488ec01f3f504999, type: 3}
     maxInstances: 3
-    cooldown: 0.1
+    cooldown: 0
     volume: 0.5

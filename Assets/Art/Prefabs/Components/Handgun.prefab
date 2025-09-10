@@ -89,9 +89,10 @@ MonoBehaviour:
   maxShotDistance: 50
   magazineSize: 15
   inventoryObj: {fileID: 0}
-  maxAccuracy: 0.9
-  accuracyRecoverPerSec: 0
-  accuracyDecreasePerTrigger: 0
+  maxAccuracy: 0.95
+  accuracyRecoverPerSec: 0.05
+  accuracyDecreasePerTrigger: 0.05
+  minAccuracy: 0.8
   impulser: {fileID: 0}
   canShakeCam: 1
   shakMagnitude: 0

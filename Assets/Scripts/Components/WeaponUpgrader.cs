@@ -7,13 +7,13 @@ public class WeaponUpgrader : MonoBehaviour
 
     public void ApplyFirstUpgrade()
     {
-        handgun.SetAccuracy(1);
-        rifle.SetAccuracy(0.95f);
+        handgun.SetAccuracyDecreaseSpeed(0.25f);
+        rifle.SetAccuracyDecreaseSpeed(0.01f);
     }
 
     public void ApplySecondUpgrade()
     {
-        rifle.SetAccuracy(1);
-        rifle.SetAccuracyDecreaseSpeed(0.01f);
+        handgun.SetAccuracyRecoverSpeed(0.1f);
+        rifle.SetAccuracyRecoverSpeed(0.1f);
     }
 }

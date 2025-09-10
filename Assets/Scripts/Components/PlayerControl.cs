@@ -6,10 +6,10 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInput), typeof(ActionStates))]
+[RequireComponent(typeof(Rigidbody2D), typeof(ActionStates))]
 public class PlayerControl : MonoBehaviour
 {
-    PlayerInput playerInput;
+    [SerializeField]  PlayerInput playerInput;
     Rigidbody2D rb;
     
     ActionStates actionStates;
@@ -34,7 +34,6 @@ public class PlayerControl : MonoBehaviour
     
     void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         actionStates = GetComponent<ActionStates>();
 
@@ -168,5 +167,10 @@ public class PlayerControl : MonoBehaviour
             }
         }
         playerInput.IsInteract = false;
+    }
+
+    void OnDisable() 
+    {
+        playerInput.OnPlayerDead();
     }
 }

@@ -3,5 +3,6 @@ public enum MenuType
     Inventory,
     Quest,
     Settings,
-    InGameMenu
+    InGameMenu,
+    GameOver,
 }

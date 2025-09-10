@@ -44,6 +44,8 @@ public class PlayerInput : MonoBehaviour
     public static event Action<int> SetQuickSlot;
     public static event Action<int> UseQuickSlot;
 
+    bool playerIsDead;
+
     void Awake()
     {
         options = new();
@@ -191,9 +193,17 @@ public class PlayerInput : MonoBehaviour
         isMenuMode = status;
     }
 
+    public void OnPlayerDead()
+    {
+        playerIsDead = true;
+        ToggleMenu?.Invoke(MenuType.GameOver);
+    }
+
 
     private void Update()
     {
+        if(playerIsDead) return;
+
         if (Input.GetKeyDown(inventory))
         {
             ToggleMenu?.Invoke(MenuType.Inventory);
