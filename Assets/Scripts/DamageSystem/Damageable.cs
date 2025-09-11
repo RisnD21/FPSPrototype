@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class Damageable : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Damageable : MonoBehaviour
     public int Current {get; private set;}
     public int Max => maxHealth;
     bool isDead;
+    public event Action<float> RecordLoss;
+    public event Action<float> RecordRecover;
 
     void Awake()
     {
@@ -38,6 +41,9 @@ public class Damageable : MonoBehaviour
         
         int healed = Current - before;
         if(healed <= 0) return;
+
+        RecordRecover?.Invoke(healed);
+
         foreach (var l in listeners) l.OnHealed(healed, duration, hide);
         NotifyChanged();
     }
@@ -50,6 +56,8 @@ public class Damageable : MonoBehaviour
         
         int taken = before - Current;
         if(taken <= 0) return;
+
+        RecordLoss?.Invoke(taken);
 
         foreach(var l in listeners) l.OnDamaged(taken, 1f, hide);
         NotifyChanged(hide);

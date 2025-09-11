@@ -37,6 +37,7 @@ public class Weapon : MonoBehaviour
     Coroutine recoverAccuracy;
 
     public static event Action<Vector3, float> Gunshot;
+    public event Action RecordShot;
 
     public enum FireMode
     {
@@ -130,6 +131,7 @@ public class Weapon : MonoBehaviour
 
         if(!CanFire) return;
 
+        RecordShot?.Invoke();
         magazineAmmo -= 1;
         flash.GetComponent<ParticleSystem>().Play();
         RaycastShot();

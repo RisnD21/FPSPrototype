@@ -6,6 +6,7 @@ using System.Linq;
 using AudioSystem.BGM;
 using DG.Tweening;
 using AudioSystem.SFX;
+using System;
 
 public class Blackboard
 {
@@ -80,7 +81,11 @@ public class AIAgent : MonoBehaviour
 
     public bool isDebugMode = true;
 
-    public void OnHit() => beingHit = true;
+    public void OnHit()
+    {
+        beingHit = true;
+        RecordHit?.Invoke();
+    }
     [HideInInspector] public bool beingHit;
 
     bool inBattleState => currentState == chasing || currentState == attacking;
@@ -133,7 +138,9 @@ public class AIAgent : MonoBehaviour
     [SerializeField] bool canCallReinforcement;
     [SerializeField] bool canReinforce;
     
-
+    public static event Action RecordHit;
+    public static event Action RecordDeath;
+    
     void Awake()
     {
         path = GetComponent<AIPath>();
@@ -168,6 +175,8 @@ public class AIAgent : MonoBehaviour
 
     void OnDestroy()
     {
+        RecordDeath?.Invoke();
+
         VFXManager.Instance.ProduceImpact -= ReactToImpact;
         if(BGMManager.Instance != null) BGMManager.Instance.OnEnemyDisengage(this);
 
@@ -347,7 +356,7 @@ public class AIAgent : MonoBehaviour
         Vector2 dirToPlayer = targetPos.Value - transform.position;
         float distToTarget = dirToPlayer.magnitude;
 
-        if (distToTarget > 15f) return false; //too far, can't see
+        if (distToTarget > 20f) return false; //too far, can't see
 
         RaycastHit2D hit
         = Physics2D.Raycast(transform.position, dirToPlayer, distToTarget, obstacleMask);

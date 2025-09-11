@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Button), typeof(AudioSource))]
-public class StandaloneButtonSFX : MonoBehaviour, IPointerEnterHandler
+public class StandaloneButtonSFX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] AudioClip clickSFX;
     [SerializeField] AudioClip selectSFX;
@@ -24,5 +24,11 @@ public class StandaloneButtonSFX : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         audioSource.PlayOneShot(selectSFX);  
+        transform.localScale = Vector3.one * 1.1f;
+    }
+
+    public void OnPointerExit (PointerEventData eventData)
+    {
+        transform.localScale = Vector3.one * 1f; 
     }
 }

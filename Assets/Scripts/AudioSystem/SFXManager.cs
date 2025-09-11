@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace AudioSystem.SFX
 {
-    public class SFXManager : MonoBehaviour
+    public class SFXManager : MonoBehaviour, IAudioHandler
     {
         class GlobalGate
         {
@@ -64,6 +62,16 @@ namespace AudioSystem.SFX
 
             gates = new();
             foreach (var config in configs) gates[config.Key] = new GlobalGate();
+        }
+
+        void OnEnable() 
+        {
+            masterVolume = PlayerPrefs.GetFloat("SFXVolume", 1);
+        }
+
+        void OnDisable()
+        {
+            PlayerPrefs.SetFloat("SFXVolume", masterVolume);
         }
 
         void Start()

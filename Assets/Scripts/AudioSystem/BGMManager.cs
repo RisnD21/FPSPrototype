@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AudioSystem.BGM
 {
-    public class BGMManager : MonoBehaviour
+    public class BGMManager : MonoBehaviour, IAudioHandler
     {
         [Header("Sources")]
         [SerializeField] AudioSource defaultTrackSrc;   // 探索曲（常駐）
@@ -13,7 +13,7 @@ namespace AudioSystem.BGM
         [Header("Mixing")]
         [SerializeField] float crossfadeDuration = 3.0f; // 淡換秒數
         [SerializeField] float linger = 3f;            // 離戰後延遲回探索，避免抖
-        [SerializeField, Range(0f, 1f)] float initVolume = 0.5f;
+        [SerializeField, Range(0f, 1f)] float initRowVolume = 0.5f;
 
         HashSet<AIAgent> engagingEnemies = new();
         public static BGMManager Instance { get; private set; }
@@ -32,15 +32,20 @@ namespace AudioSystem.BGM
             else { Destroy(gameObject); return; }
         }
 
+        void OnEnable() 
+        {
+            masterVolume = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        }
+
         void Start()
         {
             // 確保兩條都在播，戰鬥曲先靜音
             if (defaultTrackSrc != null)
             {
                 defaultTrackSrc.loop = true;
-                defaultTrackSrc.volume = initVolume;
+                defaultTrackSrc.volume = initRowVolume * masterVolume;
 
-                defaultTrackRawVolume = masterVolume == 0 ? 0 : Mathf.Clamp01(initVolume / masterVolume);
+                defaultTrackRawVolume = masterVolume == 0 ? 0 : Mathf.Clamp01(initRowVolume / masterVolume);
 
                 if (!defaultTrackSrc.isPlaying) defaultTrackSrc.Play();
             }
@@ -108,7 +113,7 @@ namespace AudioSystem.BGM
 
         IEnumerator CrossfadeCoroutine(bool toBattle, float duration)
         {
-            float toEnd = masterVolume == 0 ? 0 : Mathf.Clamp01(initVolume / masterVolume);
+            float toEnd = masterVolume == 0 ? 0 : Mathf.Clamp01(initRowVolume / masterVolume);
 
             if (!defaultTrackSrc.isPlaying) defaultTrackSrc.Play();
             if (!battleTrackSrc.isPlaying) battleTrackSrc.Play();

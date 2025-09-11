@@ -44,10 +44,15 @@ public class InGameMenu : MonoBehaviour
         controls.SetActive(true);
     }
 
+    public void ToGameScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+    }
+
     public void ToTitleScene()
     {
         Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
     }
 
     public void ExitGame()

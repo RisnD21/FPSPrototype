@@ -9,10 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/TitleScene.unity
     guid: 96db1a2f2cb3c4641a8de143ff618423
   - enabled: 1
-    path: Assets/Scenes/EndScene.unity
+    path: Assets/Scenes/ScoreScene.unity
     guid: 6d5ce5480974149baa1fe1045c153e52
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2382f9d1d3a554fd4a9f270d51e7446b, type: 2}
