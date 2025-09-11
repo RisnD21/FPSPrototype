@@ -68,7 +68,7 @@ namespace AudioSystem.SFX
 
         void Start()
         {
-            PoolSystem.Instance.InitPool(sourcePrefab, 20, sourceParent);
+            PoolSystem.Instance.InitPool(sourcePrefab, 30, sourceParent);
         }
 
         public void PlaySound(SoundID sfx, Vector3? pos = null)

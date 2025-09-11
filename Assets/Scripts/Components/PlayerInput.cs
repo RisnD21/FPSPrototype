@@ -19,6 +19,11 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode inGameMenu = KeyCode.Escape;
     [SerializeField] private KeyCode swapWeapon = KeyCode.Q;
     [SerializeField] private KeyCode aim = KeyCode.LeftAlt;
+    [SerializeField] private KeyCode camMode = KeyCode.CapsLock;
+    [SerializeField] KeyCode camZoomIn = KeyCode.F1;
+    [SerializeField] KeyCode camZoomOut = KeyCode.F2;
+    [SerializeField] BasicMovement camMovement;
+    bool CamModeIsOn => camMovement.gameObject.activeSelf;
 
     [HideInInspector] public bool IsDialogueMode { get; private set; }
     [HideInInspector] public bool IsInventoryMode { get; private set; }
@@ -40,6 +45,7 @@ public class PlayerInput : MonoBehaviour
 
     public static event Action<MenuType> ToggleMenu;
     [HideInInspector] bool isMenuMode;
+
 
     public static event Action<int> SetQuickSlot;
     public static event Action<int> UseQuickSlot;
@@ -117,34 +123,78 @@ public class PlayerInput : MonoBehaviour
             IsInteract = true;
         }
 
-        if(Input.GetKeyDown(swapWeapon))
+        if (Input.GetKeyDown(swapWeapon))
         {
             weaponIndex = (weaponIndex + 1) % 2;
-        } 
+        }
 
         for (int i = 0; i < 8; i++)
         {
-            if(Input.GetKeyDown(KeyCode.Alpha1 + i))
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 UseQuickSlot?.Invoke(i);
             }
         }
 
-        if(Input.GetKeyDown(aim))
+        if (Input.GetKeyDown(aim))
         {
             isAiming = true;
         }
-        
-        if(Input.GetKeyUp(aim))
+
+        if (Input.GetKeyUp(aim))
         {
             isAiming = false;
         }
-
     }
 
     void PauseCharacterControl()
     {
         m_inputVector = Vector2.zero; //stop moving
+    }
+    
+    public void HandleCamInput()
+    {
+
+        xInput = 0;
+        yInput = 0;
+
+        if (Input.GetKey(forward))
+        {
+            yInput++;
+        }
+
+        if (Input.GetKey(back))
+        {
+            yInput--;
+        }
+
+        if (Input.GetKey(left))
+        {
+            xInput--;
+        }
+
+        if (Input.GetKey(right))
+        {
+            xInput++;
+        }
+
+        m_inputVector = new Vector2(xInput, yInput);
+
+        if (Input.GetKeyDown(camMode))
+        {
+            camMovement.gameObject.SetActive(!CamModeIsOn);
+        }
+
+        if (!CamModeIsOn) return;
+
+        if (Input.GetKey(camZoomIn))
+        {
+            camMovement.ZoomIn();
+        }
+        if (Input.GetKey(camZoomOut))
+        {
+            camMovement.ZoomOut();
+        }
     }
 
     public void HandleDialogueInput()
@@ -155,17 +205,17 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                if(i < options.Count )
+                if (i < options.Count)
                 {
                     options[i].onClick.Invoke();
                     options.Clear();
                     return;
                 }
             }
-        } 
+        }
 
-        if (Input.GetKeyDown(KeyCode.Escape)||Input.GetKey(forward)
-        ||Input.GetKey(left)||Input.GetKey(right)||Input.GetKey(back))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKey(forward)
+        || Input.GetKey(left) || Input.GetKey(right) || Input.GetKey(back))
             Locator.DialogueRunner.ResetDialog();
     }
 
@@ -202,7 +252,9 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        if(playerIsDead) return;
+        HandleCamInput();
+        if (CamModeIsOn) return;
+        if (playerIsDead) return;
 
         if (Input.GetKeyDown(inventory))
         {

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using AudioSystem.SFX;
 using QuestDialogueSystem;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(ActionStates))]
 public class PlayerControl : MonoBehaviour

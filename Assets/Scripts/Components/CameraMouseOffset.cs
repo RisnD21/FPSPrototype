@@ -37,6 +37,7 @@ public class CameraMouseOffset : MonoBehaviour
         if (playerInput == null) return;
         if (playerInput.isAiming)
         {
+            Debug.Log("Aiming - cam offset");
             var targetOffset = CalculateCamOffset();
 
             offsetTween?.Kill();

@@ -25,7 +25,7 @@ MonoBehaviour:
     volume: 0.7
   - soundID: 2
     clip: {fileID: 8300000, guid: 369dfaed551f0405b9bafaa8312f0581, type: 3}
-    maxInstances: 10
+    maxInstances: 20
     cooldown: 0.01
     volume: 0.6
   - soundID: 4
