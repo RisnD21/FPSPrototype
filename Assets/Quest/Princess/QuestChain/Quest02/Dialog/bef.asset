@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces:
   - id: 01
-    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portrait: {fileID: 21300000, guid: 68c80f7bf688faa44b3c5f845024f818, type: 3}
     portraitDescription: "\u963F\u7D2B"
     text: You shouldn't see this msg
     audio: {fileID: 0}

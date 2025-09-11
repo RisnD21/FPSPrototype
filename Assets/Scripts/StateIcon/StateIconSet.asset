@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icons:
   - id: Attacking
-    sprite: {fileID: 556151293, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: -1174901096, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}
   - id: Chasing
-    sprite: {fileID: 850182695, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: -1817841700, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}
   - id: Chatting
-    sprite: {fileID: 681959245, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: 1558906695, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}
   - id: Observing
-    sprite: {fileID: -1530144751, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: -812395923, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}
   - id: Searching
-    sprite: {fileID: 78563263, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: 2098329212, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}
   - id: Patrolling
-    sprite: {fileID: -380326840, guid: acbe36536adb94ab29178dec0d83185d, type: 3}
+    sprite: {fileID: -219815301, guid: 5045f5e3742d4db41a042e9cc14d325b, type: 3}

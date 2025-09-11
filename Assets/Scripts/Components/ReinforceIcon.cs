@@ -73,6 +73,6 @@ public class ReinforceIcon : MonoBehaviour
             routine = null;
         }
         // 把綁在這個物件上的 tween 全部清掉
-        imageObj?.DOKill();
+        if(imageObj != null) imageObj.DOKill();
     }
 }

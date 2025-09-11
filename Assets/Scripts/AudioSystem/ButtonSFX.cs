@@ -5,7 +5,7 @@ using AudioSystem.SFX;
 
 //Add this on buttons that require hover, click sound effect
 [RequireComponent(typeof(Button))]
-public class ButtonSFX : MonoBehaviour, IPointerEnterHandler
+public class ButtonSFX : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     void Start()
     {
@@ -24,6 +24,10 @@ public class ButtonSFX : MonoBehaviour, IPointerEnterHandler
         {
             SFXManager.Instance.PlaySound(SoundID.Select);
         }
-        
+        transform.localScale = Vector3.one * 1.1f;
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        transform.localScale = Vector3.one * 1f; 
     }
 }
