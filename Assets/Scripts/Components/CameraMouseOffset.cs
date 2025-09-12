@@ -34,10 +34,9 @@ public class CameraMouseOffset : MonoBehaviour
 
     void LateUpdate()
     {
-        if (playerInput == null) return;
+        if (playerInput == null || follow == null) return;
         if (playerInput.isAiming)
         {
-            Debug.Log("Aiming - cam offset");
             var targetOffset = CalculateCamOffset();
 
             offsetTween?.Kill();

@@ -17,6 +17,8 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
     [SerializeField] float fadeInDuration = 0.5f;
     [SerializeField] float fadeOutDuration = 0.2f;
 
+    [Range(0,1)][SerializeField] float initfadeValue = 1f;
+
     bool isHovering;
     Coroutine delayRoutine;
     Tween currentTween;
@@ -87,7 +89,6 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         yield return new WaitForSeconds(showDelay);
         delayRoutine = null;
-
         if (!isHovering) yield break;
         OnSelectAnim();
     }
@@ -97,10 +98,11 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
         if (imageToSwap == null) return;
 
         currentTween?.Kill();
-
+        Debug.Log("Show img");
         Sequence seq = DOTween.Sequence();
-        seq.Join(imageToSwap.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuad));
-        seq.Join(textToFade.DOFade(0.5f, fadeInDuration).SetEase(Ease.OutQuad)); 
+        seq.Join(imageToSwap.DOFade(initfadeValue, fadeInDuration).SetEase(Ease.OutQuad)).SetUpdate(true);
+        if(textToFade != null) seq.Join(textToFade.DOFade(0.5f, fadeInDuration).SetEase(Ease.OutQuad)).SetUpdate(true); 
+        
 
         currentTween = seq.SetLink(gameObject);
     }
@@ -110,8 +112,8 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
         if (imageToSwap == null) return;
 
         Sequence seq = DOTween.Sequence();
-        seq.Join(imageToSwap.DOFade(0f, fadeOutDuration).SetEase(Ease.OutQuad));
-        seq.Join(textToFade.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuad)); 
+        seq.Join(imageToSwap.DOFade(0f, fadeOutDuration).SetEase(Ease.OutQuad)).SetUpdate(true);
+        if(textToFade != null) seq.Join(textToFade.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuad)).SetUpdate(true); 
 
         currentTween = seq.SetLink(gameObject);
     }

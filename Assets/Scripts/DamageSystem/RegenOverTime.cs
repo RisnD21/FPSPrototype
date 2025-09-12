@@ -96,7 +96,10 @@ public class RegenOverTime : MonoBehaviour
 
     public void InterruptRegen()
     {
-        foreach(var effect in effects) if(effect.canBeDisrupted) effect.remainingAmount = 0;
+        foreach (var effect in effects)
+        {
+            if (effect.canBeDisrupted) effect.remainingAmount = 0;
+        }
     }
 
     void Update()

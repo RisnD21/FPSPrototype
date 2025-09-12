@@ -7,9 +7,4 @@ public class ToTitleScene : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
     }
-
-    public void ResetScore()
-    {
-        PlayerPrefs.DeleteAll();
-    }
 }

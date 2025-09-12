@@ -7,7 +7,7 @@ namespace QuestDialogueSystem
     public class InventorySlot
     {
         public ItemStack stack = ItemStack.Empty;
-        public int slotMaxStack = 99; //(default)
+        public int slotMaxStack = 999; //(default)
 
         ItemStack Clone(ItemStack subject) => new (subject.Item, subject.Count);
 

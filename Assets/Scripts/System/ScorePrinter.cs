@@ -56,6 +56,12 @@ public class ScorePrinter : MonoBehaviour
         lifeTimeDeathText.text = $"總死亡數 {lifeTimeDeath}";
     }
 
+    public void ResetScore()
+    {
+        PlayerPrefs.DeleteAll();
+        PrintScore();
+    }
+
     void CalculateScore()
     {
         

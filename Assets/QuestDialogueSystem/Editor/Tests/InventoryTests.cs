@@ -6,7 +6,7 @@ namespace QuestDialogueSystem
     [TestFixture]
     public class InventoryTests
     {
-        public ItemData CreateItem(string id, int maxStack = 99)
+        public ItemData CreateItem(string id, int maxStack = 999)
         {
             var item = ScriptableObject.CreateInstance<ItemData>();
             item.itemID = id;
