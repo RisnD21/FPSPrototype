@@ -7,9 +7,12 @@ using UnityEngine;
 public class TextHighlightVFX : MonoBehaviour
 {
     TMP_Text targetText;
-    [SerializeField] float fadeDuration = 2f; // 每次淡入淡出的時間
+    [SerializeField] float fadeInDuration = 1;
+    [SerializeField] float waitDuration = 0;
+    [SerializeField] float fadeOutDuration = 1f; // 每次淡入淡出的時間
     [SerializeField] bool loops = true;
     int Loop => loops == true? -1: 0;
+    Tween currentTween;
 
     void Awake() 
     {
@@ -18,12 +21,26 @@ public class TextHighlightVFX : MonoBehaviour
 
     void OnEnable()
     {
-        targetText.alpha = 1f;
+        targetText.alpha = 0f;
 
-        // 建立閃爍效果：1 → 0 → 1
-        targetText.DOFade(0.5f, fadeDuration)
-            .SetLoops(Loop, LoopType.Yoyo)
-            .SetEase(Ease.InOutSine)
-            .SetUpdate(true);
+        Sequence seq = DOTween.Sequence();
+        seq.Append(targetText.DOFade(1f, fadeInDuration)
+                .SetLoops(Loop, LoopType.Yoyo)
+                .SetEase(Ease.InOutSine)
+                .SetUpdate(true));
+        seq.AppendInterval(waitDuration);
+        seq.Append(targetText.DOFade(0f, fadeOutDuration)
+                .SetLoops(Loop, LoopType.Yoyo)
+                .SetEase(Ease.InOutSine)
+                .SetUpdate(true));
+        
+        currentTween = seq.SetLink(gameObject);
+    }
+
+    void OnDisable() 
+    {
+        if(currentTween != null);
+        currentTween?.Kill();
+        currentTween = null;
     }
 }

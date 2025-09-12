@@ -13,6 +13,7 @@ public class ScorePrinter : MonoBehaviour
     float lifeTimeGameLength;
     int lifeTimeKills;
     int lifeTimeDeath;
+    string comment;
 
     [SerializeField] TextMeshProUGUI gameLengthText;
     [SerializeField] TextMeshProUGUI shotsFiredText;
@@ -23,8 +24,9 @@ public class ScorePrinter : MonoBehaviour
     [SerializeField] TextMeshProUGUI lifeTimeGameLengthText;
     [SerializeField] TextMeshProUGUI lifeTimeKillsText;
     [SerializeField] TextMeshProUGUI lifeTimeDeathText;
+    [SerializeField] TextMeshProUGUI commentText;
 
-    void Start()
+    void OnEnable()
     {
         LoadStatistics();
         PrintScore();
@@ -41,6 +43,8 @@ public class ScorePrinter : MonoBehaviour
         lifeTimeGameLength = PlayerPrefs.GetFloat("LifeTimeGameLength", 0);
         lifeTimeKills = PlayerPrefs.GetInt("LifeTimeEnemiesKilled", 0);
         lifeTimeDeath = PlayerPrefs.GetInt("LifeTimeDeath", 0);
+
+        CalculateScore();
     }
 
     void PrintScore()
@@ -54,16 +58,35 @@ public class ScorePrinter : MonoBehaviour
         lifeTimeGameLengthText.text = $"總遊戲時長 {lifeTimeGameLength:F1} s";
         lifeTimeKillsText.text = $"總擊殺數 {lifeTimeKills}";
         lifeTimeDeathText.text = $"總死亡數 {lifeTimeDeath}";
+        commentText.text = comment;
     }
 
     public void ResetScore()
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetFloat("GameLength", 0);
+        PlayerPrefs.SetInt("ShotsFired", 0);
+        PlayerPrefs.SetInt("ShotsHit", 0);
+        PlayerPrefs.SetInt("EnemiesKilled", 0);
+        PlayerPrefs.SetFloat("Accuracy", 0);
+        PlayerPrefs.SetFloat("LifeLoss", 0);
+        PlayerPrefs.SetFloat("LifeRecover", 0);
+        PlayerPrefs.SetFloat("LifeTimeGameLength", 0);
+        PlayerPrefs.SetInt("LifeTimeEnemiesKilled", 0);
+        PlayerPrefs.SetInt("LifeTimeDeath", 0);
+
+        PlayerPrefs.Save();
+
+        LoadStatistics();
         PrintScore();
     }
 
     void CalculateScore()
     {
-        
+        float finalScore = (enemiesKilled * 15) + (accuracy * 500) - (lifeRecover * 5) - gameLength * 0.2f;
+
+        if (finalScore >= 300) comment = "評語：戰神再世";
+        else if (finalScore >= 200) comment = "評語：鎮國將領";
+        else if (finalScore >= 100) comment = "評語：百戰老兵";
+        else comment = "評語：觀光客";
     }
 }

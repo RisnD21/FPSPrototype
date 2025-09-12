@@ -18,6 +18,7 @@ public class ScoreRecorder : MonoBehaviour
     [SerializeField] Weapon firstWeaponToRecord;
     [SerializeField] Weapon secondWeaponToRecord;
     [SerializeField] Damageable bodyToRecord;
+    [SerializeField] Damageable shieldToRecord;
 
     public void HasShot() => shotsFired++;
     public void HasHit() => shotsHit++;
@@ -43,6 +44,7 @@ public class ScoreRecorder : MonoBehaviour
         secondWeaponToRecord.RecordShot += HasShot;
         bodyToRecord.RecordRecover += HasRecoveredLife;
         bodyToRecord.RecordLoss += HasLostLife;
+        shieldToRecord.RecordLoss += HasLostLife;
     }
 
 
@@ -93,5 +95,6 @@ public class ScoreRecorder : MonoBehaviour
         secondWeaponToRecord.RecordShot -= HasShot;
         bodyToRecord.RecordRecover -= HasRecoveredLife;
         bodyToRecord.RecordLoss -= HasLostLife;
+        shieldToRecord.RecordLoss -= HasLostLife;
     }
 }
