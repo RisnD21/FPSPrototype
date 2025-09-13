@@ -5,6 +5,6 @@ public class ToTitleScene : MonoBehaviour
 {
     public void Load()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+        SceneLoader.Instance.LoadScene("TitleScene");   
     }
 }

@@ -5,14 +5,26 @@ using UnityEngine;
 public class Pickable : MonoBehaviour 
 {
     [HideInInspector] public ItemStack stack;
+    [SerializeField] ItemData item;
+    [SerializeField] int count = 1;
     [HideInInspector] public ItemManager Manager;
+
+    void UseCustomSetting() 
+    {   
+        if(stack.IsEmpty)
+        {
+            stack = new ItemStack(item, count);
+            if(ItemManager.Instance != null) Manager = ItemManager.Instance;
+        }    
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            if(stack.IsEmpty) UseCustomSetting();
+            
             if (ItemManager.Instance.TryPickItem(stack, transform.position))
             {
-                Debug.Log($"You've collected {stack}");
                 gameObject.SetActive(false);
             }
         }

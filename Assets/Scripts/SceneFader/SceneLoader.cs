@@ -24,6 +24,7 @@ public class SceneLoader : MonoBehaviour
     {
         ScreenFader.Instance.FadeIn(fadeDuration).OnComplete(() =>
         {
+            Time.timeScale = 1;
             StartCoroutine(LoadRoutine(sceneName, fadeDuration));
         });
     }

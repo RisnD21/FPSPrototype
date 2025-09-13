@@ -35,8 +35,7 @@ public class InGameMenu : MonoBehaviour
 
     public void RestartGame()
     {
-        Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        SceneLoader.Instance.LoadScene("Main");
     }
 
     public void ShowControls()
@@ -46,13 +45,12 @@ public class InGameMenu : MonoBehaviour
 
     public void ToGameScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+        SceneLoader.Instance.LoadScene("Main");   
     }
 
     public void ToTitleScene()
     {
-        Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+        SceneLoader.Instance.LoadScene("TitleScene");   
     }
 
     public void ExitGame()

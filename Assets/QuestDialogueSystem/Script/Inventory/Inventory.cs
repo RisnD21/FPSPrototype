@@ -7,6 +7,7 @@ namespace QuestDialogueSystem
     public class Inventory : MonoBehaviour, IInventory
     {
         [SerializeField] int inventorySize = 8;
+        [SerializeField] List<string> itemsHolding;
         InventoryModel model;
 
         bool hasInitialized;
@@ -25,6 +26,26 @@ namespace QuestDialogueSystem
             model.OnItemRemove += stack => OnItemRemove?.Invoke(stack);
 
             hasInitialized = true;
+        }
+
+        void OnEnable() {
+            model.OnItemAdd += UpdateInventoryPreview;
+            model.OnItemRemove += UpdateInventoryPreview;
+        }
+        void OnDisable() {
+            model.OnItemAdd -= UpdateInventoryPreview;
+            model.OnItemRemove -= UpdateInventoryPreview;
+        }
+
+        void UpdateInventoryPreview(ItemStack _) 
+        {
+            itemsHolding.Clear();
+
+            foreach(var slot in Slots)
+            {
+                string stackInfo = slot.IsEmpty? "Empty" : slot.stack.ToString();
+                itemsHolding.Add(stackInfo);
+            }
         }
 
         public InventoryModel GetModel() => model;
@@ -56,8 +77,6 @@ namespace QuestDialogueSystem
             => model.TryRemoveFromSlot(stack, slot ,ref remainder);
         public event Action<ItemStack> OnItemAdd;
         public event Action<ItemStack> OnItemRemove;
-
-
         public void PrintAllSlots() => model.PrintAllSlots();
     }
 }

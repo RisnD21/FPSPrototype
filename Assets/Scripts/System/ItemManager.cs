@@ -109,8 +109,6 @@ public class ItemManager : MonoBehaviour
             StartCoroutine(CollectItem());
             return true;
         }else return false;
-        
-
     }
 
     //--------------- 私有 Method ---------------//
