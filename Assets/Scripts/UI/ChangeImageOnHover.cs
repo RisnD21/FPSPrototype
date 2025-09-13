@@ -98,7 +98,6 @@ public class ChangeImageOnHover : MonoBehaviour, IPointerEnterHandler, IPointerE
         if (imageToSwap == null) return;
 
         currentTween?.Kill();
-        Debug.Log("Show img");
         Sequence seq = DOTween.Sequence();
         seq.Join(imageToSwap.DOFade(initfadeValue, fadeInDuration).SetEase(Ease.OutQuad)).SetUpdate(true);
         if(textToFade != null) seq.Join(textToFade.DOFade(0.5f, fadeInDuration).SetEase(Ease.OutQuad)).SetUpdate(true); 

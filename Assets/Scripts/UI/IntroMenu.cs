@@ -11,7 +11,7 @@ public class IntroMenu : MonoBehaviour
 
     public void ToGameScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+        SceneLoader.Instance.LoadScene("Main");
     }
 
     public void ExitGame()
