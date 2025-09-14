@@ -43,7 +43,7 @@ namespace AudioSystem.SFX
         [SerializeField] SFXDatabase SFXDB;
         [SerializeField] SoundSrc sourcePrefab;
         [SerializeField] Transform sourceParent;
-        float masterVolume = 1f;
+        public float masterVolume = 1f;
 
         void Awake()
         {

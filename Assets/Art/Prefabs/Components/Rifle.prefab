@@ -92,6 +92,7 @@ MonoBehaviour:
   maxAccuracy: 0.9
   accuracyRecoverPerSec: 0.05
   accuracyDecreasePerTrigger: 0.02
+  minAccuracy: 0.7
   impulser: {fileID: 0}
   canShakeCam: 0
   shakMagnitude: 0
@@ -141,7 +142,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 5812815432129091481, guid: cb381e6356616448d88c7723cbd53ddf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

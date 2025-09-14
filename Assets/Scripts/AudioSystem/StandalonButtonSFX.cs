@@ -23,7 +23,7 @@ public class StandaloneButtonSFX : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        audioSource.PlayOneShot(selectSFX);  
+        // audioSource.PlayOneShot(selectSFX);  I feel like this is annoying
         transform.localScale = Vector3.one * 1.1f;
     }
 

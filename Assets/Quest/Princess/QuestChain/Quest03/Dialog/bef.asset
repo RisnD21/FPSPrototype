@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces:
   - id: 01
-    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portrait: {fileID: 21300000, guid: 68c80f7bf688faa44b3c5f845024f818, type: 3}
     portraitDescription: "\u963F\u7D2B"
     text: "\u539F\u4F86\u4E0D\u662F\u4F60\u5F04\u7684\u554A\uFF01\\n\\n\u9019\u679A\u7384\u9748\u7389\u4F69\u53EF\u662F\u672C\u5C0F\u59D0\u5E7E\u5E74\u524D\u96A8\u624B\u7149\u88FD\u7684\u6CD5\u5BF6\u4E4B\u4E00\uFF0C\u80FD\u6EAB\u990A\u5FC3\u795E\u3001\u589E\u5F37\u9AD4\u9B44\u3002\\n\\n\u53EF\u60DC\u5440\uFF0C\u5982\u4ECA\u788E\u6210\u9019\u6A23\uFF0C\u5927\u6982\u4E5F\u5C31\u5269\u500B\u597D\u770B\u7684\u50F9\u503C\u4E86\u3002\\n"
     audio: {fileID: 0}

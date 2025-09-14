@@ -18,11 +18,12 @@ public class ButtonSFX : MonoBehaviour, IPointerEnterHandler
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    //I feel like this is annoying
+    public void OnPointerEnter(PointerEventData eventData) 
     {
-        if (SFXManager.Instance != null)
-        {
-            SFXManager.Instance.PlaySound(SoundID.Select);
-        }
+        // if (SFXManager.Instance != null)
+        // {
+        //     SFXManager.Instance.PlaySound(SoundID.Select);
+        // }
     }
 }

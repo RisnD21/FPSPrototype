@@ -1294,7 +1294,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624052746}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 040e332eaf6cb4e9cb5caf76d40b0c69, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 9e7a008d4da138942a532c838b8bdb08, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -3183,7 +3183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 1956963469}
-  defaultVolume: 1
+  defaultVolume: 0.5
 --- !u!1001 &2028369930
 PrefabInstance:
   m_ObjectHideFlags: 0

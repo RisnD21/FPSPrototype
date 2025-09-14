@@ -2,8 +2,6 @@ using QuestDialogueSystem;
 using UnityEngine;
 using System.Collections;
 using System;
-using Unity.Mathematics;
-using UnityEngine.InputSystem.XR.Haptics;
 using Unity.Cinemachine;
 using AudioSystem.SFX;
 
@@ -85,6 +83,7 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
+
         mask = LayerMask.GetMask("NPC", "Obstacle", "Player", "Shield");
     }
 
@@ -92,6 +91,7 @@ public class Weapon : MonoBehaviour
     {
         RaycastShotController.Instance.SetGunType(gunType);
         accuracy = maxAccuracy;
+        magazineAmmo = magazineSize;
     }
 
     public void LoadAmmo(IInventory inventory)
