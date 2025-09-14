@@ -482,7 +482,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 313, y: -189}
-  m_SizeDelta: {x: 512.26, y: 116.77501}
+  m_SizeDelta: {x: 600, y: 116.77501}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &289058154
 MonoBehaviour:
@@ -504,10 +504,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: To The Light
+  m_text: "\u5411\u5149\u800C\u884C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b09e70588ebf0436086e1c58d7019e4d, type: 2}
-  m_sharedMaterial: {fileID: -4093992320438757854, guid: b09e70588ebf0436086e1c58d7019e4d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3f7905bbba1f44646b8a64337d9bb193, type: 2}
+  m_sharedMaterial: {fileID: -4831858955924893359, guid: 3f7905bbba1f44646b8a64337d9bb193, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -531,8 +531,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 152
+  m_fontSizeBase: 152
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

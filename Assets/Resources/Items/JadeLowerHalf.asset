@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JadeLowerHalf
   m_EditorClassIdentifier: 
   itemID: Jade02
-  itemName: Fractured Jade (Lower)
+  itemName: "\u7389\u4F69\uFF08\u4E0B\uFF09"
   itemIcon: {fileID: 21300000, guid: 03530303b018948139dbcba73c04fbd8, type: 3}
   description: "<b><size=28>[ \u7384\u9748\u7389\u4F69\uFF08\u4E0B\u534A\uFF09]</size>\\n\u534A\u622A\u4E0D\u77E5\u4F86\u6B77\u7684\u7389\u4F69\u2026
     \u4E0D\u5C0D\uFF0C\u9019\u662F\u963F\u7D2B\u7149\u7684\uFF0C\u4F60\u6709\u4E0A\u534A\u7247\\n\u963F\u7D2B\u5E0C\u671B\u4F60\u5E36\u8457\u9019\u7247\u56DE\u53BB\u627E\u5979</b>"

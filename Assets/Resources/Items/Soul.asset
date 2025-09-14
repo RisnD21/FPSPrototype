@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Soul
   m_EditorClassIdentifier: 
   itemID: soul
-  itemName: Soul
+  itemName: "\u9748\u9B42"
   itemIcon: {fileID: 21300000, guid: 747944daf9f07491ab7e973ed426030d, type: 3}
   description: "<b><size=28>[ \u4E00\u7E37\u9748\u9B42 ]</size>\\n\u4ED6\u88AB\u675F\u7E1B\u5728\u4F60\u9AD4\u5167\uFF0C\u5FAC\u5FA8\u7121\u52A9\\n\u4F60\u80FD\u611F\u89BA\u5230\uFF0C\u53EA\u9700\u4E00\u500B\u610F\u5FF5\u5C31\u80FD\u8B93\u4ED6\u6C38\u9060\u6D88\u6563</b>"
   maxStack: 99

@@ -53,18 +53,19 @@ namespace QuestDialogueSystem
         // --- Inventory notifications ---
         void OnItemAdd(ItemStack stack)
         {
-            PrintInventoryMsg($"Collect {stack}");
+            PrintInventoryMsg($"獲得 {stack}");
         }
 
         void OnItemRemove(ItemStack stack)
         {
-            PrintInventoryMsg($"Remove {stack}");
+            PrintInventoryMsg($"移除 {stack}");
         }
 
         // --- Public API ---
         public void PrintTitleMsg(string text)
         {
-            titleController.PrintText(text);
+            if(titleController != null) titleController.PrintText(text);
+            
         }
 
         public void PrintInventoryMsg(string text)

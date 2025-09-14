@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bandage
   m_EditorClassIdentifier: 
   itemID: bandage
-  itemName: Bandage
+  itemName: "\u7E43\u5E36"
   itemIcon: {fileID: 21300000, guid: 5ddf115eb56bd44ff82ef8ffed756d19, type: 3}
   description: "<b><size=28>[ \u7E43\u5E36 ]</size>\\n\u4FBF\u5B9C\u91CF\u5927\uFF0C\u4F46\u82E5\u5305\u7D2E\u5F8C\u53C8\u53D7\u50B7\uFF0C\u6CBB\u7642\u6548\u679C\u6703\u88AB\u6253\u65B7\u3002</b>"
   maxStack: 5

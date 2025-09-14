@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shield Projector_Enhanced
   m_EditorClassIdentifier: 
   itemID: shield02
-  itemName: Shield Projector
+  itemName: "\u8B77\u76FE\u7522\u751F\u5668\uFF08\u52A0\u5F37\uFF09"
   itemIcon: {fileID: 21300000, guid: 643ede08d98114379b62458f8664bbd0, type: 3}
   description: "<b><size=28>[ \u8B77\u76FE\u7522\u751F\u5668\uFF08\u52A0\u5F37\uFF09]</size>\\n\n\u5B83\u6B63\u6E90\u6E90\u4E0D\u7D55\u5730\u5F9E\u865B\u7A7A\u4E2D\u6C72\u53D6\u80FD\u91CF\uFF0C\u4E26\u5728\u4F60\u8EAB\u5468\u5F62\u6210\u80FD\u91CF\u529B\u5834\\n\u4F60\u6CE8\u610F\u5230\u89D2\u843D\u523B\u4E86\u884C\u5C0F\u5B57\\n
     \u2014\u2014 \u963F\u7D2B\u7149\u5668\uFF0C\u6A23\u6A23\u7CBE\u54C1\\n\u6700\u5927\u8B77\u76FE\u5F37\u5EA6\uFF1A50

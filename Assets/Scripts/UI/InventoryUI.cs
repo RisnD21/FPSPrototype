@@ -129,7 +129,7 @@ public class InventoryUI : MonoBehaviour
         {
             singleButton.onClick.RemoveAllListeners();
             singleButton.onClick.AddListener(UseItem);
-            singleButtonText.text = "Use";
+            singleButtonText.text = "使用";
 
             singleButton.gameObject.SetActive(true);
             dualButtonParent.SetActive(false);
@@ -139,7 +139,7 @@ public class InventoryUI : MonoBehaviour
             singleButton.onClick.RemoveAllListeners();
             dropItemButton.onClick.AddListener(DestroyItem);
 
-            singleButtonText.text = "Discard";
+            singleButtonText.text = "移除";
 
             singleButton.gameObject.SetActive(true);
             dualButtonParent.SetActive(false);
