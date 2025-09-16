@@ -21,7 +21,7 @@ public class SimpleAmbient : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(0f, 20f));
-            dropletBaseVolume = Random.Range(0.1f, 0.3f);
+            dropletBaseVolume = Random.Range(0.3f, 0.5f);
             droplet.volume = dropletBaseVolume * masterSFXVolume;
             droplet.pitch = Random.Range(0.8f, 1.2f);
             droplet.Play();
@@ -33,7 +33,7 @@ public class SimpleAmbient : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(0f, 15f));
-            windHowlingBaseVolume = Random.Range(0.4f, 0.6f);
+            windHowlingBaseVolume = Random.Range(0.5f, 0.7f);
             windHowling.volume = dropletBaseVolume * masterSFXVolume;
             windHowling.pitch = Random.Range(0.8f, 1.2f);
             windHowling.Play();

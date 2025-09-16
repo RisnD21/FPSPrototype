@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -49,13 +50,15 @@ public class ScorePrinter : MonoBehaviour
 
     void PrintScore()
     {
-        gameLengthText.text = $"單局遊戲時長 {gameLength:F1} s";
+        gameLengthText.text = $"單局遊戲時長 {gameLength:F1}s";
         shotsFiredText.text = $"射擊次數 {shotsFired}";
         accuracyText.text = $"命中率 {accuracy:F1} %";
         enemiesKilledText.text = $"擊殺數 {enemiesKilled}";
         lifeLossText.text = $"受到傷害 {lifeLoss:F1}";
         lifeRecoverText.text = $"恢復生命 {lifeRecover:F1}";
-        lifeTimeGameLengthText.text = $"總遊戲時長 {lifeTimeGameLength:F1} s";
+        var ts = TimeSpan.FromSeconds(Mathf.RoundToInt(lifeTimeGameLength)); // 取整秒，可改成 Floor/Ceil
+        int hours = (int)ts.TotalHours; // 不讓小時數在 24 之後歸零
+        lifeTimeGameLengthText.text = $"總遊戲時長 {hours:00}hr {ts.Minutes:00}min {ts.Seconds:00}s";
         lifeTimeKillsText.text = $"總擊殺數 {lifeTimeKills}";
         lifeTimeDeathText.text = $"總死亡數 {lifeTimeDeath}";
         commentText.text = comment;

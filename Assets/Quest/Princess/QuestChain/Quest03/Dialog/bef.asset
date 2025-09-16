@@ -30,7 +30,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   - id: 02
-    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portrait: {fileID: 21300000, guid: 68c80f7bf688faa44b3c5f845024f818, type: 3}
     portraitDescription: "\u963F\u7D2B"
     text: "\u4E0D\u904E\uFF0C\u5982\u679C\u4F60\u60F3\u8981\u7684\u8A71\uFF0C\u6211\u53EF\u4EE5\u5E6B\u4F60\u628A\u9038\u6563\u7684\u9748\u6C23\u88DC\u56DE\u53BB\uFF0C\u6216\u8A31\u9084\u80FD\u52C9\u5F37\u6062\u5FA9\u9EDE\u6548\u7528\u3002\\n\\n\u689D\u4EF6\u662F\u2014\u2014\u4F60\u5F97\u628A\u53E6\u4E00\u534A\u4E5F\u627E\u56DE\u4F86\u3002\u4EBA\u5BB6\u53EF\u4E0D\u60F3\u770B\u8457\u5B83\u843D\u5728\u90A3\u4E9B\u58DE\u4EBA\u624B\u88E1"
     audio: {fileID: 0}
@@ -82,7 +82,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   - id: 03
-    portrait: {fileID: 21300000, guid: b2d3f1a9b5cfbb04f94df10a47129779, type: 3}
+    portrait: {fileID: 21300000, guid: 68c80f7bf688faa44b3c5f845024f818, type: 3}
     portraitDescription: "\u963F\u7D2B"
     text: "<i>\u963F\u7D2B\u7389\u624B\u4E00\u63EE\uFF0C\u4E00\u9053\u6D41\u5149\u9583\u904E\uFF0C\u7389\u4F69\u5149\u83EF\u6D41\u8F49</i>\\n\\n\u6210\u5566\uFF01\u7B49\u4F60\u7684\u597D\u6D88\u606F\u5537\uFF01"
     audio: {fileID: 0}

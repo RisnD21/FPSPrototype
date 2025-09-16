@@ -12,6 +12,7 @@ public class Damageable : MonoBehaviour
     bool isDead;
     public event Action<float> RecordLoss;
     public event Action<float> RecordRecover;
+    public event Action RecordDeath;
 
     void Awake()
     {
@@ -65,7 +66,8 @@ public class Damageable : MonoBehaviour
         if(Current == 0 && !isDead)
         {
             isDead = true;
-            foreach(var l in listeners) l.OnDeath();
+            RecordDeath?.Invoke();
+            foreach (var l in listeners) l.OnDeath();
         }
     }
 

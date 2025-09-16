@@ -504,7 +504,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5411\u5149\u800C\u884C"
+  m_text: "\u5411\u5149"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3f7905bbba1f44646b8a64337d9bb193, type: 2}
   m_sharedMaterial: {fileID: -4831858955924893359, guid: 3f7905bbba1f44646b8a64337d9bb193, type: 2}
@@ -531,8 +531,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 152
-  m_fontSizeBase: 152
+  m_fontSize: 172
+  m_fontSizeBase: 172
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

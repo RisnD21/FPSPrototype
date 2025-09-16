@@ -44,6 +44,7 @@ public class ScoreRecorder : MonoBehaviour
         secondWeaponToRecord.RecordShot += HasShot;
         bodyToRecord.RecordRecover += HasRecoveredLife;
         bodyToRecord.RecordLoss += HasLostLife;
+        bodyToRecord.RecordDeath += HasDead;
         shieldToRecord.RecordLoss += HasLostLife;
     }
 
@@ -89,12 +90,13 @@ public class ScoreRecorder : MonoBehaviour
         CalculateStatistics();
         SaveStatistics();
 
-        AIAgent.RecordHit -= HasHit; 
+        AIAgent.RecordHit -= HasHit;
         AIAgent.RecordDeath -= HasKilled;
         firstWeaponToRecord.RecordShot -= HasShot;
         secondWeaponToRecord.RecordShot -= HasShot;
         bodyToRecord.RecordRecover -= HasRecoveredLife;
         bodyToRecord.RecordLoss -= HasLostLife;
         shieldToRecord.RecordLoss -= HasLostLife;
+        bodyToRecord.RecordDeath -= HasDead;
     }
 }
